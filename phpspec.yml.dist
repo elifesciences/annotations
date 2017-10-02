@@ -1,0 +1,4 @@
+suites:
+    api-client:
+        namespace: eLife\HypothesisClient
+        psr4_prefix: eLife\HypothesisClient

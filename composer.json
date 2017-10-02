@@ -1,0 +1,33 @@
+{
+    "name": "elife/hypothesis-client",
+    "description": "eLife Sciences Hypothes.is client",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "eLife\\HypothesisClient\\": "./src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "spec\\eLife\\HypothesisClient\\": "./spec",
+            "test\\eLife\\HypothesisClient\\": "./test"
+        }
+    },
+    "require": {
+        "guzzlehttp/promises": "^1.3",
+        "psr/http-message": "^1.0",
+        "symfony/serializer": "^3.3"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^4.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "mtdowling/jmespath.php": "^2.4",
+        "phpunit/phpunit": "^5.7",
+        "phpspec/prophecy": "^1.7"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "^6.3, to use the Guzzle6HttpClient adapter",
+        "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"
+    }
+}
