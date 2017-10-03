@@ -4,11 +4,11 @@ namespace eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\HttpClient;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\RequestInterface;
 use Traversable;
 
-final class UserAgentPrependingHttpClientTest extends TestCase
+final class UserAgentPrependingHttpClientTest extends PHPUnit_Framework_TestCase
 {
     private $originalClient;
     private $requests;

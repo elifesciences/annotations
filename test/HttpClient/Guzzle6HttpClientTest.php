@@ -17,11 +17,11 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase;
 use Traversable;
 use function GuzzleHttp\default_user_agent;
 
-final class Guzzle6HttpClientTest extends TestCase
+final class Guzzle6HttpClientTest extends PHPUnit_Framework_TestCase
 {
     private $mock;
     private $history;

@@ -21,13 +21,13 @@ final class AnnotationsClientSpec extends ObjectBehavior
 
     public function it_lists_annotations()
     {
-        $request = new Request('GET', 'search?user=foo&group=__world__&limit=20&order=desc',
+        $request = new Request('GET', 'api/search?user=list&group=__world__&offset=0&limit=20&order=desc',
             ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
 
         $this->httpClient->send($request)->willReturn($response);
 
-        $this->listAnnotations([], 'foo', 1, 20, true, '__world__')
+        $this->listAnnotations([], 'list', 1, 20, true, '__world__')
             ->shouldBeLike($response);
     }
 }
