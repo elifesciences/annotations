@@ -11,15 +11,6 @@ final class AnnotationsClient
 {
     use ApiClient;
 
-  /**
-   * @param array $headers
-   * @param string $user
-   * @param int $page
-   * @param int $perPage
-   * @param bool $descendingOrder
-   * @param string|null $group
-   * @return \GuzzleHttp\Promise\PromiseInterface
-   */
     public function listAnnotations(
         array $headers = [],
         string $user,
@@ -30,16 +21,18 @@ final class AnnotationsClient
     ) : PromiseInterface {
         return $this->getRequest(
             Uri::fromParts([
-                'path' => 'search',
-                'query' => build_query(array_filter([
+                'path' => 'api/search',
+                'query' => build_query([
                     'user' => $user,
                     'group' => $group,
                     'offset' => ($page-1)*$perPage,
                     'limit' => $perPage,
                     'order' => $descendingOrder ? 'desc' : 'asc',
-                ])),
+                ]),
             ]),
             $headers
         );
     }
 }
+
+

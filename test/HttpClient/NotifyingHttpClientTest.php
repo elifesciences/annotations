@@ -5,11 +5,11 @@ namespace eLife\HypothesisClient\HttpClient;
 use eLife\HypothesisClient\HttpClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase;
 use RuntimeException;
 use function GuzzleHttp\Promise\promise_for;
 
-final class NotifyingHttpClientTest extends TestCase
+final class NotifyingHttpClientTest extends PHPUnit_Framework_TestCase
 {
     private $originalClient;
     private $client;

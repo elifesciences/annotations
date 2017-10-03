@@ -10,6 +10,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
             "spec\\eLife\\HypothesisClient\\": "./spec",
             "test\\eLife\\HypothesisClient\\": "./test"
         }
