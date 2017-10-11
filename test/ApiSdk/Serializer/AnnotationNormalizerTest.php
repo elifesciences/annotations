@@ -3,6 +3,7 @@
 namespace test\eLife\ApiSdk\Serializer;
 
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
+use eLife\HypothesisClient\ApiSdk\Model\Links;
 use eLife\HypothesisClient\ApiSdk\Serializer\AnnotationNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -43,7 +44,7 @@ final class AnnotationNormalizerTest extends TestCase
 
     public function canNormalizeProvider() : array
     {
-        $annualReport = new Annotation('id');
+        $annualReport = new Annotation('id', new Links('http://url.incontext'));
 
         return [
             'annotation' => [$annualReport, null, true],
@@ -101,9 +102,15 @@ final class AnnotationNormalizerTest extends TestCase
     {
         return [
             'complete' => [
-                new Annotation('id'),
+                new Annotation('id', new Links('http://url.incontext', 'http://url.json', 'http://url.html'), 'text'),
                 [
                     'id' => 'id',
+                    'links' => [
+                        'incontext' => 'http://url.incontext',
+                        'json' => 'http://url.json',
+                        'html' => 'http://url.html',
+                    ],
+                    'text' => 'text',
                 ],
             ],
         ];

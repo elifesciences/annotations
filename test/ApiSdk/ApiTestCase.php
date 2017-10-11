@@ -104,6 +104,11 @@ abstract class ApiTestCase extends TestCase
     {
         return [
             'id' => $id,
+            'links' => [
+                'incontext' => 'http://url.incontext',
+                'json' => 'http://url.json',
+                'html' => 'http://url.html',
+            ],
         ];
     }
 }
