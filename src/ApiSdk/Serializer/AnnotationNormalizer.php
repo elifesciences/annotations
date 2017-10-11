@@ -3,6 +3,7 @@
 namespace eLife\HypothesisClient\ApiSdk\Serializer;
 
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
+use eLife\HypothesisClient\ApiSdk\Model\Links;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -18,7 +19,9 @@ final class AnnotationNormalizer implements NormalizerInterface, DenormalizerInt
     public function denormalize($data, $class, $format = null, array $context = []) : Annotation
     {
         return new Annotation(
-            $data['id']
+            $data['id'],
+            new Links($data['links']['incontext'], $data['links']['json'] ?? null, $data['links']['html'] ?? null),
+            $data['text'] ?? null
         );
     }
 
@@ -36,6 +39,12 @@ final class AnnotationNormalizer implements NormalizerInterface, DenormalizerInt
     {
         $data = [
             'id' => $object->getId(),
+            'links' => array_filter([
+                'incontext' => $object->getLinks()->getIncontext(),
+                'json' => $object->getLinks()->getJson(),
+                'html' => $object->getLinks()->getHtml(),
+            ]),
+            'text' => $object->getText(),
         ];
 
         return $data;
