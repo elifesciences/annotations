@@ -2,18 +2,26 @@
 
 namespace eLife\HypothesisClient\ApiSdk\Model;
 
-final class Annotation implements Model, HasId
+use DateTimeImmutable;
+
+final class Annotation implements Model, HasId, HasPublishedDate, HasUpdatedDate
 {
     private $id;
+    private $published;
+    private $updated;
     private $links;
     private $text;
 
     public function __construct(
         string $id,
+        DateTimeImmutable $published,
+        DateTimeImmutable $updated = null,
         Links $links,
         $text = null
     ) {
         $this->id = $id;
+        $this->published = $published;
+        $this->updated = $updated;
         $this->links = $links;
         $this->text = $text;
     }
@@ -21,6 +29,19 @@ final class Annotation implements Model, HasId
     public function getId() : string
     {
         return $this->id;
+    }
+
+    public function getPublishedDate() : DateTimeImmutable
+    {
+        return $this->published;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getUpdatedDate()
+    {
+        return $this->updated;
     }
 
     public function getLinks() : Links

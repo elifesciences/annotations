@@ -2,6 +2,9 @@
 
 namespace eLife\HypothesisClient\ApiSdk\Serializer;
 
+use DateTimeImmutable;
+use DateTimeZone;
+use eLife\HypothesisClient\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
 use eLife\HypothesisClient\ApiSdk\Model\Links;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -20,6 +23,8 @@ final class AnnotationNormalizer implements NormalizerInterface, DenormalizerInt
     {
         return new Annotation(
             $data['id'],
+            DateTimeImmutable::createFromFormat(ApiSdk::DATE_FORMAT, $data['created'])->setTimezone(new DateTimeZone('Z')),
+            !empty($data['updated']) ? DateTimeImmutable::createFromFormat(ApiSdk::DATE_FORMAT, $data['updated'])->setTimezone(new DateTimeZone('Z')) : null,
             new Links($data['links']['incontext'], $data['links']['json'] ?? null, $data['links']['html'] ?? null),
             $data['text'] ?? null
         );
@@ -39,13 +44,21 @@ final class AnnotationNormalizer implements NormalizerInterface, DenormalizerInt
     {
         $data = [
             'id' => $object->getId(),
+            'created' => $object->getPublishedDate()->format(ApiSdk::DATE_FORMAT),
             'links' => array_filter([
                 'incontext' => $object->getLinks()->getIncontext(),
                 'json' => $object->getLinks()->getJson(),
                 'html' => $object->getLinks()->getHtml(),
             ]),
-            'text' => $object->getText(),
         ];
+
+        if ($object->getUpdatedDate()) {
+            $data['updated'] = $object->getUpdatedDate()->format(ApiSdk::DATE_FORMAT);
+        }
+
+        if ($object->getText()) {
+            $data['text'] = $object->getText();
+        }
 
         return $data;
     }

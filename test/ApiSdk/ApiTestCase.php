@@ -100,15 +100,25 @@ abstract class ApiTestCase extends TestCase
         return range($firstId, $lastId);
     }
 
-    final private function createAnnotationJson(string $id)
+    final private function createAnnotationJson(string $id, bool $complete = false)
     {
-        return [
+        $annotation = [
             'id' => $id,
+            'created' => '2017-09-15T14:40:52.317491+00:00',
             'links' => [
                 'incontext' => 'http://url.incontext',
-                'json' => 'http://url.json',
-                'html' => 'http://url.html',
             ],
         ];
+
+        if ($complete) {
+            $annotation['updated'] = '2017-09-15T14:42:43.061419+00:00';
+            $annotation['links'] += [
+                'json' => 'http://url.json',
+                'html' => 'http://url.html',
+            ];
+            $annotation['text'] = 'text';
+        }
+
+        return $annotation;
     }
 }
