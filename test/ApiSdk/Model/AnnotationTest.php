@@ -2,6 +2,8 @@
 
 namespace test\eLife\ApiSdk\Model;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
 use eLife\HypothesisClient\ApiSdk\Model\Links;
 use eLife\HypothesisClient\ApiSdk\Model\Model;
@@ -14,7 +16,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_is_a_model()
     {
-        $annotation = new Annotation('id', new Links('http://url.incontext'));
+        $annotation = new Annotation('id', new DateTimeImmutable('now'), null, new Links('http://url.incontext'));
 
         $this->assertInstanceOf(Model::class, $annotation);
     }
@@ -24,7 +26,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_id()
     {
-        $annotation = new Annotation('id', new Links('http://url.incontext'));
+        $annotation = new Annotation('id', new DateTimeImmutable('now'), null, new Links('http://url.incontext'));
 
         $this->assertSame('id', $annotation->getId());
     }
@@ -34,7 +36,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_links()
     {
-        $annotation = new Annotation('id', $links = new Links('http://url.incontext'));
+        $annotation = new Annotation('id', new DateTimeImmutable('now'), null, $links = new Links('http://url.incontext'));
 
         $this->assertEquals($links, $annotation->getLinks());
     }
@@ -44,8 +46,8 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_may_have_text()
     {
-        $with = new Annotation('id', $links = new Links('http://url.incontext'), 'text');
-        $withOut = new Annotation('id', $links = new Links('http://url.incontext'), null);
+        $with = new Annotation('id', new DateTimeImmutable('now'), null, $links = new Links('http://url.incontext'), 'text');
+        $withOut = new Annotation('id', new DateTimeImmutable('now'), null, $links = new Links('http://url.incontext'), null);
 
         $this->assertSame('text', $with->getText());
         $this->assertNull($withOut->getText());

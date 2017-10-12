@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Serializer;
 
 final class ApiSdk
 {
+    const DATE_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     private $httpClient;
     private $annotationsClient;

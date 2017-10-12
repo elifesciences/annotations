@@ -2,6 +2,9 @@
 
 namespace test\eLife\ApiSdk\Serializer;
 
+use DateTimeImmutable;
+use DateTimeZone;
+use eLife\HypothesisClient\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
 use eLife\HypothesisClient\ApiSdk\Model\Links;
 use eLife\HypothesisClient\ApiSdk\Serializer\AnnotationNormalizer;
@@ -44,11 +47,11 @@ final class AnnotationNormalizerTest extends TestCase
 
     public function canNormalizeProvider() : array
     {
-        $annualReport = new Annotation('id', new Links('http://url.incontext'));
+        $annotation = new Annotation('id', new DateTimeImmutable('now', new DateTimeZone('Z')), null, new Links('http://url.incontext'));
 
         return [
-            'annotation' => [$annualReport, null, true],
-            'annotation with format' => [$annualReport, 'foo', true],
+            'annotation' => [$annotation, null, true],
+            'annotation with format' => [$annotation, 'foo', true],
             'non-annotation' => [$this, null, false],
         ];
     }
@@ -57,9 +60,9 @@ final class AnnotationNormalizerTest extends TestCase
      * @test
      * @dataProvider normalizeProvider
      */
-    public function it_normalize_annual_reports(Annotation $annotation, array $expected)
+    public function it_normalize_annotations(Annotation $annotation, array $expected)
     {
-        $this->assertSame($expected, $this->normalizer->normalize($annotation));
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
     /**
@@ -83,7 +86,7 @@ final class AnnotationNormalizerTest extends TestCase
     {
         return [
             'annotation' => [[], Annotation::class, [], true],
-            'non-annual report' => [[], get_class($this), [], false],
+            'non-annotation' => [[], get_class($this), [], false],
         ];
     }
 
@@ -100,11 +103,15 @@ final class AnnotationNormalizerTest extends TestCase
 
     public function normalizeProvider() : array
     {
+        $date = new DateTimeImmutable('yesterday', new DateTimeZone('Z'));
+        $updatedDate = new DateTimeImmutable('now', new DateTimeZone('Z'));
         return [
             'complete' => [
-                new Annotation('id', new Links('http://url.incontext', 'http://url.json', 'http://url.html'), 'text'),
+                new Annotation('id', $date, $updatedDate, new Links('http://url.incontext', 'http://url.json', 'http://url.html'), 'text'),
                 [
                     'id' => 'id',
+                    'created' => $date->format(ApiSdk::DATE_FORMAT),
+                    'updated' => $updatedDate->format(ApiSdk::DATE_FORMAT),
                     'links' => [
                         'incontext' => 'http://url.incontext',
                         'json' => 'http://url.json',
