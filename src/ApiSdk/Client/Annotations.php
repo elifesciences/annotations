@@ -36,9 +36,9 @@ final class Annotations
             private $user;
             private $group;
 
-            public function __construct(AnnotationsClient $highlightsClient, DenormalizerInterface $denormalizer, string $user, string $group)
+            public function __construct(AnnotationsClient $annotationsClient, DenormalizerInterface $denormalizer, string $user, string $group)
             {
-                $this->annotationsClient = $highlightsClient;
+                $this->annotationsClient = $annotationsClient;
                 $this->denormalizer = $denormalizer;
                 $this->user = $user;
                 $this->group = $group;

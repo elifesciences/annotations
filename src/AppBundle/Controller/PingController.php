@@ -14,7 +14,7 @@ class PingController extends Controller
      * @Route("/ping", name="ping")
      * @Method("GET")
      */
-    public function pingAction(Request $request)
+    public function getAction(Request $request)
     {
         return new Response(
             'pong',

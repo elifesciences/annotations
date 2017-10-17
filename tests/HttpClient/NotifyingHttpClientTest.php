@@ -1,8 +1,9 @@
 <?php
 
-namespace eLife\HypothesisClient\HttpClient;
+namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\HttpClient;
+use eLife\HypothesisClient\HttpClient\NotifyingHttpClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
