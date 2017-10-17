@@ -1,6 +1,17 @@
 <?php
 
+use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\HypothesisClient\AppBundle\AppBundle;
+use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
+use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
+use Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle;
+use Symfony\Bundle\DebugBundle\DebugBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
+use Symfony\Bundle\WebServerBundle\WebServerBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -9,22 +20,23 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new FrameworkBundle(),
+            new SecurityBundle(),
+            new TwigBundle(),
+            new MonologBundle(),
+            new SensioFrameworkExtraBundle(),
             new AppBundle(),
+            new CsaGuzzleBundle(),
+            new WebServerBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
-            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
-            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new DebugBundle();
+            $bundles[] = new WebProfilerBundle();
+            $bundles[] = new SensioDistributionBundle();
 
             if ('dev' === $this->getEnvironment()) {
-                $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
-                $bundles[] = new Symfony\Bundle\WebServerBundle\WebServerBundle();
+                $bundles[] = new SensioGeneratorBundle();
             }
         }
 

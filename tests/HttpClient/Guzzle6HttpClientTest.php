@@ -1,11 +1,12 @@
 <?php
 
-namespace eLife\HypothesisClient\HttpClient;
+namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\Exception\ApiException;
 use eLife\HypothesisClient\Exception\ApiTimeout;
 use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Exception\NetworkProblem;
+use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient;
 use eLife\HypothesisClient\Result\HttpResult;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;

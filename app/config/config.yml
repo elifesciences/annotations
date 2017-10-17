@@ -1,12 +1,20 @@
 imports:
-    - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.yml }
+  - resource: parameters.yml
+  - resource: security.yml
+  - resource: services.yml
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+
+csa_guzzle:
+    clients:
+        hypothesis_api:
+            config:
+                base_uri: '%hypothesis_api_url%'
+                connect_timeout: 0.5
+                timeout: 1
 
 framework:
     #esi: ~
@@ -32,8 +40,20 @@ framework:
     assets: ~
     php_errors:
         log: true
+    cache:
+        pools:
+            cache.guzzle:
+                adapter: cache.app
+                clearer: ~
+                default_lifetime: 31536000 # 1 year
+                public: true
+
+monolog:
+    channels:
+      - api
 
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
+    exception_controller: AppBundle:Exception:show
     strict_variables: '%kernel.debug%'

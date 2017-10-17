@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\AppBundle\Controller;
+namespace tests\eLife\HypothesisClient\AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+use tests\eLife\HypothesisClient\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
