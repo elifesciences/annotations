@@ -28,4 +28,10 @@ install:
 
 # Run script
 script:
-  - ./project_tests.sh
+  - ./bin/console cache:clear --env=test --no-warmup
+  - ./vendor/bin/proofreader app/ bin/ src/ web/
+  - ./vendor/bin/proofreader --no-phpcpd tests/
+
+  - ./vendor/bin/phpspec run
+
+  - ./vendor/bin/phpunit
