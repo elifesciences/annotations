@@ -46,20 +46,24 @@ class AnnotationsControllerTest extends WebTestCase
     {
         $by = (array) $by;
         $client = static::createClient(['debug' => false]);
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'https://hypothes.is/api/search?user='.$by[0].'&group=__world__&offset=0&limit=10&order=desc'
-            ),
-            new Response(
-                200,
-                [],
-                json_encode([
-                    'total' => 0,
-                    'rows' => [],
-                ])
-            )
-        );
+        if ($expectedStatus === 200) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'https://hypothes.is/api/search?user='.$by[0].'&group=__world__&offset=0&limit=10&order=desc'
+                ),
+                new Response(
+                    200,
+                    [],
+                    json_encode(
+                        [
+                            'total' => 0,
+                            'rows' => [],
+                        ]
+                    )
+                )
+            );
+        }
         $client->request('GET', '/annotations?by[]='.implode('&by[]=', $by));
         $response = $client->getResponse();
         $this->assertEquals($expectedStatus, $response->getStatusCode());
@@ -111,20 +115,24 @@ class AnnotationsControllerTest extends WebTestCase
     public function it_must_have_a_valid_page_filter($page, $expectedStatus)
     {
         $client = static::createClient(['debug' => false]);
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'https://hypothes.is/api/search?user=user&group=__world__&offset='.(($page - 1) * 10).'&limit=10&order=desc'
-            ),
-            new Response(
-                200,
-                [],
-                json_encode([
-                    'total' => 0,
-                    'rows' => [],
-                ])
-            )
-        );
+        if ($expectedStatus === 200) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'https://hypothes.is/api/search?user=user&group=__world__&offset='.(($page - 1) * 10).'&limit=10&order=desc'
+                ),
+                new Response(
+                    200,
+                    [],
+                    json_encode(
+                        [
+                            'total' => 0,
+                            'rows' => [],
+                        ]
+                    )
+                )
+            );
+        }
         $client->request('GET', '/annotations?by[]=user&page='.$page);
         $response = $client->getResponse();
         $this->assertEquals($expectedStatus, $response->getStatusCode());
@@ -172,20 +180,24 @@ class AnnotationsControllerTest extends WebTestCase
     public function it_must_have_a_valid_per_page_filter($perPage, $expectedStatus)
     {
         $client = static::createClient(['debug' => false]);
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'https://hypothes.is/api/search?user=user&group=__world__&offset=0&limit='.$perPage.'&order=desc'
-            ),
-            new Response(
-                200,
-                [],
-                json_encode([
-                    'total' => 0,
-                    'rows' => [],
-                ])
-            )
-        );
+        if ($expectedStatus === 200) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'https://hypothes.is/api/search?user=user&group=__world__&offset=0&limit='.$perPage.'&order=desc'
+                ),
+                new Response(
+                    200,
+                    [],
+                    json_encode(
+                        [
+                            'total' => 0,
+                            'rows' => [],
+                        ]
+                    )
+                )
+            );
+        }
         $client->request('GET', '/annotations?by[]=user&per-page='.$perPage);
         $response = $client->getResponse();
         $this->assertEquals($expectedStatus, $response->getStatusCode());
@@ -237,20 +249,26 @@ class AnnotationsControllerTest extends WebTestCase
     public function it_must_have_a_valid_order_filter($order, $expectedStatus)
     {
         $client = static::createClient(['debug' => false]);
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'https://hypothes.is/api/search?user=user&group=__world__&offset=0&limit=10&order='.strtolower($order)
-            ),
-            new Response(
-                200,
-                [],
-                json_encode([
-                    'total' => 0,
-                    'rows' => [],
-                ])
-            )
-        );
+        if ($expectedStatus === 200) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'https://hypothes.is/api/search?user=user&group=__world__&offset=0&limit=10&order='.strtolower(
+                        $order
+                    )
+                ),
+                new Response(
+                    200,
+                    [],
+                    json_encode(
+                        [
+                            'total' => 0,
+                            'rows' => [],
+                        ]
+                    )
+                )
+            );
+        }
         $client->request('GET', '/annotations?by[]=user&order='.$order);
         $response = $client->getResponse();
         $this->assertEquals($expectedStatus, $response->getStatusCode());
