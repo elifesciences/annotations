@@ -1,7 +1,6 @@
 /.web-server-pid
 /app/config/parameters.yml
 /build/
-/composer.lock
 /phpunit.xml
 /var/*
 !/var/cache
