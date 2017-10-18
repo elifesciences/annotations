@@ -29,7 +29,7 @@ class AnnotationsController extends Controller
         }
 
         // Check if the order filter is valid.
-        if (in_array(strtolower($order), ['asc', 'desc'])) {
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
             throw new BadRequestHttpException('Invalid order option');
         }
 
@@ -37,8 +37,8 @@ class AnnotationsController extends Controller
         if (empty($by)) {
             throw new BadRequestHttpException('Missing by[] option');
         } elseif (
-            is_array($by) ||
-            empty(array_filter($by, function ($v) {
+            !is_array($by) ||
+            !empty(array_filter($by, function ($v) {
                 return !preg_match('/^[A-Za-z0-9._]{3,30}$/', (string) $v);
             }))
         ) {
