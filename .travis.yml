@@ -29,9 +29,9 @@ install:
 # Run script
 script:
   - ./bin/console cache:clear --env=test --no-warmup
+  # Security check is not working right now.
+  # - ./bin/console security:check
   - ./vendor/bin/proofreader app/ bin/ src/ web/
   - ./vendor/bin/proofreader --no-phpcpd tests/
-
   - ./vendor/bin/phpspec run
-
   - ./vendor/bin/phpunit
