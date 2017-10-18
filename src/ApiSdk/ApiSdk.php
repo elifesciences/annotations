@@ -3,10 +3,10 @@
 namespace eLife\HypothesisClient\ApiSdk;
 
 use eLife\HypothesisClient\ApiClient\AnnotationsClient;
-use eLife\HypothesisClient\HttpClient;
-use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use eLife\HypothesisClient\ApiSdk\Client\Annotations;
 use eLife\HypothesisClient\ApiSdk\Serializer\AnnotationNormalizer;
+use eLife\HypothesisClient\HttpClient;
+use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
