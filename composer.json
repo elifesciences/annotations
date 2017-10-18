@@ -34,11 +34,12 @@
         "twig/twig": "^2.4"
     },
     "require-dev": {
-        "phpspec/phpspec": "^4.0",
+        "elife/proofreader-php": "dev-master",
         "guzzlehttp/guzzle": "^6.3",
         "mtdowling/jmespath.php": "^2.4",
-        "phpunit/phpunit": "^5.7",
+        "phpspec/phpspec": "^4.0",
         "phpspec/prophecy": "^1.7",
+        "phpunit/phpunit": "^5.7",
         "sensio/generator-bundle": "^3.1",
         "symfony/phpunit-bridge": "^3.3"
     },

@@ -3,10 +3,10 @@
 namespace eLife\HypothesisClient\ApiSdk\Client;
 
 use eLife\HypothesisClient\ApiClient\AnnotationsClient;
-use eLife\HypothesisClient\Result;
 use eLife\HypothesisClient\ApiSdk\Collection\PromiseSequence;
 use eLife\HypothesisClient\ApiSdk\Collection\Sequence;
 use eLife\HypothesisClient\ApiSdk\Model\Annotation;
+use eLife\HypothesisClient\Result;
 use Iterator;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 

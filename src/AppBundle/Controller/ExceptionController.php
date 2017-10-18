@@ -2,9 +2,6 @@
 
 namespace eLife\HypothesisClient\AppBundle\Controller;
 
-use eLife\HypothesisClient\AppBundle\Exception\BadRequestHttpException;
-use eLife\HypothesisClient\Exception\ApiTimeout;
-use eLife\HypothesisClient\Exception\NetworkProblem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,24 +19,13 @@ final class ExceptionController extends Controller
         // Cast integers represented as strings to integer. This is required because the status code is a string when previewing the error pages (e.g. /_error/404)
         $statusCode = ($exception->getStatusCode() == (int) $exception->getStatusCode()) ? (int) $exception->getStatusCode() : $exception->getStatusCode();
 
-        if (Response::HTTP_NOT_FOUND === $statusCode) {
-            $response = new Response(json_encode(['title' => $exception->getMessage()]), $exception->getStatusCode());
-        } elseif (in_array($exception->getClass(), [ApiTimeout::class, NetworkProblem::class])) {
-            $response = new Response(json_encode(['title' => 'Service unavailable']), Response::HTTP_GATEWAY_TIMEOUT);
-        } elseif (BadRequestHttpException::class !== $exception->getClass()) {
-            $response = new Response(json_encode(['title' => 'Service unavailable '.get_class($exception)]), Response::HTTP_BAD_GATEWAY);
+        if (in_array($statusCode, [Response::HTTP_OK, Response::HTTP_NOT_FOUND, Response::HTTP_GATEWAY_TIMEOUT, Response::HTTP_BAD_REQUEST])) {
+            $response = new Response(json_encode(['title' => $exception->getMessage()]), $statusCode);
         } else {
-            $response = new Response($exception->getMessage(), $statusCode);
+            $response = new Response(json_encode(['title' => 'Service unavailable']), Response::HTTP_BAD_GATEWAY);
         }
 
         $response->headers->add(['Content-Type' => 'application/problem+json']);
-        $response->setMaxAge($this->getParameter('ttl'));
-        $response->headers->addCacheControlDirective('stale-while-revalidate', $this->getParameter('ttl'));
-        $response->headers->addCacheControlDirective('stale-if-error', 86400);
-        $response->setVary('Accept');
-        $response->setEtag(md5($response->getContent()));
-        $response->setPublic();
-        $response->isNotModified($request);
 
         return $response;
     }
