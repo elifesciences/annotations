@@ -105,6 +105,7 @@ final class AnnotationNormalizerTest extends TestCase
     {
         $date = new DateTimeImmutable('yesterday', new DateTimeZone('Z'));
         $updatedDate = new DateTimeImmutable('now', new DateTimeZone('Z'));
+
         return [
             'complete' => [
                 new Annotation('id', $date, $updatedDate, new Links('http://url.incontext', 'http://url.json', 'http://url.html'), 'text'),

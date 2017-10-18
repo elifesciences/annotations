@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class NetworkProblemTimeoutSubscriberTest extends PHPUnit_Framework_TestCase
+final class NetworkProblemSubscriberTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

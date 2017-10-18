@@ -72,7 +72,7 @@ abstract class ApiTestCase extends TestCase
         $this->storage->save(
             new Request(
                 'GET',
-                'https://hypothes.is/api/search?user='.$user.'&group='.$group.'&offset='.(($page-1)*$perPage).'&limit='.$perPage.'&order='.($descendingOrder ? 'desc' : 'asc')
+                'https://hypothes.is/api/search?user='.$user.'&group='.$group.'&offset='.(($page - 1) * $perPage).'&limit='.$perPage.'&order='.($descendingOrder ? 'desc' : 'asc')
             ),
             new Response(
                 200,

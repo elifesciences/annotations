@@ -61,6 +61,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
             'scheme' => $request->getUri()->getScheme(),
             'headers' => array_diff_key($request->getHeaders(), array_flip($this->requestHeadersBlacklist)),
         ];
+
         return md5(serialize([
             'method' => $request->getMethod(),
             'path' => $request->getUri()->getPath(),
