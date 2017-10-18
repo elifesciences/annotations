@@ -12,7 +12,7 @@ final class AnnotationsClient
     use ApiClient;
 
     public function listAnnotations(
-        array $headers = [],
+        array $headers,
         string $user,
         int $page = 1,
         int $perPage = 20,
@@ -25,7 +25,7 @@ final class AnnotationsClient
                 'query' => build_query([
                     'user' => $user,
                     'group' => $group,
-                    'offset' => ($page-1)*$perPage,
+                    'offset' => ($page - 1) * $perPage,
                     'limit' => $perPage,
                     'order' => $descendingOrder ? 'desc' : 'asc',
                 ]),

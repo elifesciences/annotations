@@ -38,7 +38,9 @@ class AnnotationsController extends Controller
             throw new BadRequestHttpException('Missing by[] option');
         } elseif (
             is_array($by) ||
-            empty(array_filter($by, function ($v) { return !preg_match('/^[A-Za-z0-9._]{3,30}$/', (string) $v); }))
+            empty(array_filter($by, function ($v) {
+                return !preg_match('/^[A-Za-z0-9._]{3,30}$/', (string) $v);
+            }))
         ) {
             throw new BadRequestHttpException('Invalid by[] option');
         } else {
@@ -57,7 +59,7 @@ class AnnotationsController extends Controller
         $serializer = $this->get('elife.hypothesis_client.api_sdk.annotations.serializer');
 
         $list = (new PromiseSequence($annotations
-            ->slice(($page-1)*$perPage, $perPage)))
+            ->slice(($page - 1) * $perPage, $perPage)))
             ->map(function (Annotation $annotation) use ($serializer) {
                 return $serializer->normalize($annotation);
             });

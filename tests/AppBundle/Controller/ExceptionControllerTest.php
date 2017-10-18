@@ -6,7 +6,6 @@ use tests\eLife\HypothesisClient\WebTestCase;
 
 final class ExceptionControllerTest extends WebTestCase
 {
-
     /**
      * @test
      */

@@ -6,7 +6,6 @@ use AppKernel;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Throwable;
 
 trait AppKernelTestCase
 {

@@ -114,7 +114,7 @@ class AnnotationsControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'https://hypothes.is/api/search?user=user&group=__world__&offset='.(($page-1)*10).'&limit=10&order=desc'
+                'https://hypothes.is/api/search?user=user&group=__world__&offset='.(($page - 1) * 10).'&limit=10&order=desc'
             ),
             new Response(
                 200,

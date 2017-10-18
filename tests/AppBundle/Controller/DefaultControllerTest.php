@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\AppBundle\Controller;
 
-
 use tests\eLife\HypothesisClient\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
