@@ -1,0 +1,13 @@
+elifePipeline {
+    def commit
+    stage 'Checkout approved', {
+        checkout scm
+        commit = elifeGitRevision()
+    }
+
+    stage 'Deploy to prod', {
+        elifeDeploySlackNotification 'annotations', 'prod'
+        builderDeployRevision 'annotations--prod', commit
+        builderSmokeTests 'annotations--prod', '/srv/annotations'
+    }
+}

@@ -13,23 +13,23 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        //stage 'End2end tests', {
-        //    elifeSpectrum(
-        //        deploy: [
-        //            stackname: 'annotations--end2end',
-        //            revision: commit,
-        //            folder: '/srv/annotations'
-        //        ],
-        //        marker: 'annotations'
-        //    )
-        //}
+        stage 'End2end tests', {
+            elifeSpectrum(
+                deploy: [
+                    stackname: 'annotations--end2end',
+                    revision: commit,
+                    folder: '/srv/annotations'
+                ],
+                marker: 'annotations'
+            )
+        }
 
-        //stage 'Deploy to continuumtest', {
-        //    lock('annotations--continuumtest') {
-        //        builderDeployRevision 'annotations--continuumtest', commit
-        //        builderSmokeTests 'annotations--continuumtest', '/srv/annotations'
-        //    }
-        //}
+        stage 'Deploy to continuumtest', {
+            lock('annotations--continuumtest') {
+                builderDeployRevision 'annotations--continuumtest', commit
+                builderSmokeTests 'annotations--continuumtest', '/srv/annotations'
+            }
+        }
 
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
