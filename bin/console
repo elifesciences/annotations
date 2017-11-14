@@ -1,27 +1,24 @@
 #!/usr/bin/env php
 <?php
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use eLife\Annotations\Kernel;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Debug\Debug;
 
-// if you don't want to setup permissions the proper way, just uncomment the following PHP line
-// read https://symfony.com/doc/current/setup.html#checking-symfony-application-configuration-and-setup
-// for more information
-//umask(0000);
+require_once __DIR__.'/../vendor/autoload.php';
 
+umask(002);
 set_time_limit(0);
 
-require __DIR__.'/../vendor/autoload.php';
-
 $input = new ArgvInput();
-$env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
-$debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']) && $env !== 'prod';
-
-if ($debug) {
-    Debug::enable();
+$env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'local');
+if (!file_exists($configFile = __DIR__."/../config/$env.php")) {
+    echo 'Environment `'.$env.'` not found. Specify one with --env=$env', PHP_EOL;
+    exit(1);
 }
-
-$kernel = new AppKernel($env, $debug);
-$application = new Application($kernel);
-$application->run($input);
+$config = require $configFile;
+$app = new Kernel($config);
+if (!$app->get('console')) {
+    throw new LogicException('The console service does not exist. Did you forget to register Knp\Provider\ConsoleServiceProvider ?');
+}
+$console = $app->get('console');
+$console->run();

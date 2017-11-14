@@ -8,7 +8,7 @@ elifePipeline {
     stage 'Project tests', {
         lock('annotations--ci') {
             builderDeployRevision 'annotations--ci', commit
-            builderProjectTests 'annotations--ci', '/srv/annotations', ['/srv/annotations/build/phpspec.xml', '/srv/annotations/build/phpunit.xml']
+            builderProjectTests 'annotations--ci', '/srv/annotations', ['/srv/annotations/build/phpunit.xml']
         }
     }
 

@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-. /opt/smoke.sh/smoke.sh
+set -ex
 
-bin/console --version --env=$ENVIRONMENT_NAME
-
-smoke_url_ok $(hostname)/ping
-    smoke_assert_body "pong"
-
-smoke_report
+[ $(curl --write-out %{http_code} --silent --output /dev/null localhost/ping) == 200 ]

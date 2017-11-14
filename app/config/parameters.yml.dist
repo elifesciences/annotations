@@ -1,9 +1,0 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
-parameters:
-    hypothesis_api_url: https://hypothes.is/
-    hypothesis_api_publisher: __world__
-    ttl: 0
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt

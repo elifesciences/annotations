@@ -1,82 +1,48 @@
 {
-    "name": "elife/hypothesis-client",
-    "description": "eLife Sciences Hypothes.is client",
-    "type": "library",
-    "license": "MIT",
     "autoload": {
         "psr-4": {
-            "eLife\\HypothesisClient\\": "./src"
-        },
-        "classmap": [
-            "app/AppKernel.php",
-            "app/AppCache.php"
-        ]
+            "eLife\\": "./src"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
-            "spec\\eLife\\HypothesisClient\\": "./spec",
-            "tests\\eLife\\HypothesisClient\\": "./tests"
+            "tests\\eLife\\": "./tests"
         }
     },
     "require": {
-        "php": ">=7.0",
-        "csa/guzzle-bundle": "^2.2",
-        "guzzlehttp/promises": "^1.3",
-        "incenteev/composer-parameter-handler": "^2.1",
-        "psr/http-message": "^1.0",
-        "sensio/distribution-bundle": "^5.0",
-        "sensio/framework-extra-bundle": "^5.0",
-        "symfony/monolog-bundle": "^3.1",
-        "symfony/polyfill-apcu": "^1.5",
-        "symfony/serializer": "^3.3",
-        "symfony/symfony": "^3.3",
-        "twig/twig": "^2.4"
+        "php": "^7.0",
+        "beberlei/assert": "^2.7",
+        "doctrine/annotations": "1.4.0",
+        "doctrine/cache": "~v1.6.2",
+        "doctrine/instantiator": "~1.0.5",
+        "elife/api-sdk": "^1.0@dev",
+        "elife/bus-sdk": "dev-master",
+        "elife/ping": "^1.0",
+        "guzzlehttp/guzzle": "^6.3",
+        "knplabs/console-service-provider": "^2.1",
+        "silex/silex": "^2.2",
+        "symfony/property-access": "^3.3",
+        "symfony/serializer": "^3.3"
     },
     "require-dev": {
         "elife/proofreader-php": "dev-master",
-        "guzzlehttp/guzzle": "^6.3",
+        "giorgiosironi/eris": "^0.9.0",
         "mtdowling/jmespath.php": "^2.4",
-        "phpspec/phpspec": "^4.0",
-        "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^5.7",
-        "sensio/generator-bundle": "^3.1",
-        "symfony/phpunit-bridge": "^3.3"
-    },
-    "suggest": {
-        "guzzlehttp/guzzle": "^6.3, to use the Guzzle6HttpClient adapter",
-        "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"
+        "silex/web-profiler": "^2.0",
+        "symfony/browser-kit": "^3.3"
     },
     "scripts": {
-        "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-install-cmd": [
-            "@symfony-scripts"
-        ],
-        "post-update-cmd": [
-            "@symfony-scripts"
-        ]
+        "server": "php -S 0.0.0.0:8088 -t web web/app_local.php",
+        "server:dev": "php -S 0.0.0.0:8088 -t web web/app_dev.php",
+        "server:prod": "php -S 0.0.0.0:8088 -t web web/app_prod.php"
     },
+    "suggest": {
+        "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-tests-dir": "tests",
-        "symfony-assets-install": "hard",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "2.1-dev"
-        }
     }
 }

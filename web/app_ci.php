@@ -4,7 +4,7 @@ require_once __DIR__.'/bootstrap.php';
 
 use eLife\Annotations\Kernel;
 
-$config = include __DIR__.'/../config/dev.php';
+$config = include __DIR__.'/../config/ci.php';
 
 $kernel = new Kernel($config);
 
