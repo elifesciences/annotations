@@ -251,7 +251,6 @@ final class Kernel implements MinimalKernel
             'annotations.monitoring' => $app['monitoring'],
             'annotations.api.sdk' => $app['api.sdk'],
             'annotations.sqs' => $app['aws.sqs'],
-            'annotations.sqs.queue' => $app['aws.queue'],
             'annotations.sqs.queue_message_type' => $app['config']['aws']['queue_message_default_type'],
             'annotations.sqs.queue_name' => $app['config']['aws']['queue_name'],
             'annotations.sqs.queue_transformer' => $app['aws.queue_transformer'],
