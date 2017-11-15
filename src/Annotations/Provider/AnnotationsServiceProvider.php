@@ -28,24 +28,24 @@ class AnnotationsServiceProvider implements ServiceProviderInterface
         }
 
         $container->extend('console', function (Application $console) use ($container) {
-            $console->add(new QueueCleanCommand($container['annotations.sqs.queue'], $container['annotations.logger']));
-            $console->add(new QueueCountCommand($container['annotations.sqs.queue']));
-            $console->add(new QueuePushCommand($container['annotations.sqs.queue'], $container['annotations.logger'], $container['annotations.sqs.queue_message_type'] ?? null));
+            $console->add(new QueueCleanCommand($container['aws.queue'], $container['annotations.logger']));
+            $console->add(new QueueCountCommand($container['aws.queue']));
+            $console->add(new QueuePushCommand($container['aws.queue'], $container['annotations.logger'], $container['annotations.sqs.queue_message_type'] ?? null));
             $console->add(new QueueCreateCommand($container['annotations.sqs'], $container['annotations.logger'], $container['annotations.sqs.queue_name'] ?? null, $container['annotations.sqs.region'] ?? null));
             $console->add(new QueueImportCommand(
                 $container['annotations.api.sdk'],
-                $container['annotations.sqs.queue'],
+                $container['aws.queue'],
                 $container['annotations.logger'],
                 $container['annotations.monitoring'],
-                $container['annotations.limit.import']
+                $container['limit.interactive']
             ));
             $console->add(new QueueWatchCommand(
-                $container['annotations.sqs.queue'],
+                $container['aws.queue'],
                 $container['annotations.sqs.queue_transformer'],
                 $container['annotations.hypothesis.sdk'],
                 $container['annotations.logger'],
                 $container['annotations.monitoring'],
-                $container['annotations.limit.watch']
+                $container['limit.long_running']
             ));
 
             return $console;

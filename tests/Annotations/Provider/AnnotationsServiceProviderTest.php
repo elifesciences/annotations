@@ -55,12 +55,12 @@ final class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
         $this->container = [
             'annotations.api.sdk' => new ApiSdk($this->httpClient),
             'annotations.hypothesis.sdk' => new HypothesisApiSdk($this->createMock(HttpClientInterface::class)),
-            'annotations.limit.import' => $this->app->protect($this->createMock(Limit::class)),
-            'annotations.limit.watch' => $this->app->protect($this->createMock(Limit::class)),
+            'limit.interactive' => $this->app->protect($this->createMock(Limit::class)),
+            'limit.long_running' => $this->app->protect($this->createMock(Limit::class)),
             'annotations.logger' => $this->logger,
             'annotations.monitoring' => new Monitoring(),
             'annotations.sqs' => $this->sqs,
-            'annotations.sqs.queue' => $this->queue,
+            'aws.queue' => $this->queue,
             'annotations.sqs.queue_transformer' => $this->createMock(QueueItemTransformer::class),
         ];
     }
