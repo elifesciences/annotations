@@ -37,7 +37,7 @@ class AnnotationsServiceProvider implements ServiceProviderInterface
                 $container['annotations.sqs.queue'],
                 $container['annotations.logger'],
                 $container['annotations.monitoring'],
-                $container['annotations.limit.import']
+                $container['limit.interactive']
             ));
             $console->add(new QueueWatchCommand(
                 $container['annotations.sqs.queue'],
@@ -45,7 +45,7 @@ class AnnotationsServiceProvider implements ServiceProviderInterface
                 $container['annotations.hypothesis.sdk'],
                 $container['annotations.logger'],
                 $container['annotations.monitoring'],
-                $container['annotations.limit.watch']
+                $container['limit.long_running']
             ));
 
             return $console;

@@ -247,8 +247,6 @@ final class Kernel implements MinimalKernel
 
         $app->register(new AnnotationsServiceProvider(), [
             'annotations.hypothesis.sdk' => $app['hypthesis.sdk'],
-            'annotations.limit.import' => $app->protect($app['limit.interactive']),
-            'annotations.limit.watch' => $app->protect($app['limit.long_running']),
             'annotations.logger' => $app['logger'],
             'annotations.monitoring' => $app['monitoring'],
             'annotations.api.sdk' => $app['api.sdk'],
