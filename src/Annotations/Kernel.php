@@ -235,10 +235,6 @@ final class Kernel implements MinimalKernel
             return new SqsMessageTransformer($app['api.sdk']);
         };
 
-        $app['default_controller'] = function (Application $app) {
-            return new AnnotationsController($app['logger'], $app['cache']);
-        };
-
         $app->register(new ConsoleServiceProvider(), [
             'console.name' => 'Annotations console',
             'console.version' => '0.1.0',
