@@ -4,8 +4,7 @@ namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
 use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\Credentials\CredentialsInterface;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
@@ -21,15 +20,23 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
     private $httpClient;
     /** @var UsersClient */
     private $usersClient;
+    /** @var UsersClient */
+    private $usersClientAnonymous;
 
     /**
      * @before
      */
     protected function setUpClient()
     {
-        $this->httpClient = $this->createMock(HttpClientInterface::class);
+        $this->httpClient = $this->createMock(HttpClient::class);
         $this->usersClient = new UsersClient(
             $this->httpClient,
+            new Credentials('client_id', 'secret_key', 'authority'),
+            ['X-Foo' => 'bar']
+        );
+        $this->usersClientAnonymous = new UsersClient(
+            $this->httpClient,
+            null,
             ['X-Foo' => 'bar']
         );
     }
@@ -45,7 +52,7 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A HttpClient is required');
             $this->assertContains(
-                'must implement interface '.HttpClientInterface::class.', string given',
+                'must implement interface '.HttpClient::class.', string given',
                 $error->getMessage()
             );
         }
@@ -70,7 +77,7 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertSame($response, $this->usersClient->getUser([], 'user'));
+        $this->assertSame($response, $this->usersClientAnonymous->getUser([], 'user'));
     }
 
     /**
@@ -80,13 +87,12 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
     {
         // Some operations require credentials, react if they are missing.
         try {
-            $this->usersClient->createUser([], 'userid', 'email@email.com', 'display_name');
+            $this->usersClientAnonymous->createUser([], 'userid', 'email@email.com', 'display_name');
             $this->fail('Credentials are required, if requested');
         } catch (TypeError $error) {
             $this->assertTrue(true, 'Credentials are required, if requested');
-            $this->assertContains(CredentialsInterface::class.', null returned', $error->getMessage());
+            $this->assertContains(Credentials::class.', null returned', $error->getMessage());
         }
-        $this->usersClient->setCredentials(new Credentials('client_id', 'secret_key', 'authority'));
         $request = new Request(
             'POST',
             'users',
@@ -107,7 +113,6 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_modifies_a_user()
     {
-        $this->usersClient->setCredentials(new Credentials('client_id', 'secret_key', 'authority'));
         $request = new Request(
             'PATCH',
             'users/userid',
@@ -135,7 +140,6 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             '{}'
         );
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
-        $this->usersClient->setCredentials(new Credentials('client_id', 'secret_key', 'authority'));
         $this->httpClient
             ->expects($this->once())
             ->method('send')

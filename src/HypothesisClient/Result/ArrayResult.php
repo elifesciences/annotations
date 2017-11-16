@@ -8,7 +8,7 @@ use Iterator;
 use IteratorAggregate;
 use function JmesPath\search;
 
-final class ArrayResult implements IteratorAggregate, ResultInterface
+final class ArrayResult implements IteratorAggregate, Result
 {
     private $data;
 

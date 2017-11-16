@@ -7,7 +7,7 @@ use eLife\HypothesisClient\Exception\ApiTimeout;
 use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Exception\NetworkProblem;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\HttpResult;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
@@ -53,7 +53,7 @@ final class Guzzle6HttpClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_is_a_http_client()
     {
-        $this->assertInstanceOf(HttpClientInterface::class, new Guzzle6HttpClient($this->guzzle));
+        $this->assertInstanceOf(HttpClient::class, new Guzzle6HttpClient($this->guzzle));
     }
 
     /**

@@ -4,7 +4,7 @@ namespace eLife\HypothesisClient\Credentials;
 
 use Serializable;
 
-class Credentials implements CredentialsInterface, Serializable
+class Credentials implements Serializable
 {
     private $clientId;
     private $secret;

@@ -5,12 +5,12 @@ namespace eLife\HypothesisClient\HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 
-final class UserAgentPrependingHttpClient implements HttpClientInterface
+final class UserAgentPrependingHttpClient implements HttpClient
 {
     private $httpClient;
     private $userAgent;
 
-    public function __construct(HttpClientInterface $httpClient, string $userAgent)
+    public function __construct(HttpClient $httpClient, string $userAgent)
     {
         $this->httpClient = $httpClient;
         $this->userAgent = $userAgent;

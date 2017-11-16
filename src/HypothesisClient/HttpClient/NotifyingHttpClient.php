@@ -6,12 +6,12 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 
-final class NotifyingHttpClient implements HttpClientInterface
+final class NotifyingHttpClient implements HttpClient
 {
     private $httpClient;
     private $listeners = [];
 
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }

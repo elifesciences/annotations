@@ -10,9 +10,4 @@ trait ModelTrait
     {
         return $this->new;
     }
-
-    public function setNew()
-    {
-        $this->new = true;
-    }
 }

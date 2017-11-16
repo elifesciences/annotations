@@ -7,10 +7,11 @@ use Aws\Sqs\Exception\SqsException;
 use Aws\Sqs\SqsClient;
 use eLife\Annotations\Command\QueueCreateCommand;
 use PHPUnit_Framework_TestCase;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Debug\BufferingLogger;
 
 /**
  * @covers \eLife\Annotations\Command\QueueCreateCommand
@@ -23,6 +24,7 @@ class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     private $command;
     /** @var CommandTester */
     private $commandTester;
+    /** @var BufferingLogger */
     private $logger;
     private $sqs;
 
@@ -36,9 +38,7 @@ class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getQueueUrl', 'createQueue'])
             ->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods(['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log'])
-            ->getMock();
+        $this->logger = new BufferingLogger();
     }
 
     /**
@@ -56,15 +56,12 @@ class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
      */
     public function it_will_update_the_log()
     {
-        $this->logger
-            ->expects($this->exactly(1))
-            ->method('info');
-        $this->logger
-            ->expects($this->at(0))
-            ->method('info')
-            ->with('Queue "newQueue" created successfully.');
         $this->prepareCommandTester();
         $this->mockNewQueueExpectation('newQueue');
+        $expected_logs = [
+            [LogLevel::INFO, 'Queue "newQueue" created successfully.', []],
+        ];
+        $this->assertEquals($expected_logs, $this->logger->cleanLogs());
     }
 
     /**
@@ -122,7 +119,7 @@ class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->command = new QueueCreateCommand($this->sqs, $this->logger, $queueName, $region);
         $this->application->add($this->command);
-        $this->commandTester = new CommandTester($command = $this->application->get($this->command->getName()));
+        $this->commandTester = new CommandTester($this->application->get($this->command->getName()));
     }
 
     private function mockNewQueueExpectation($sqsQueueName, $sqsRegion = null, $cmdQueueName = null, $cmdRegion = null)

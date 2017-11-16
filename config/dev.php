@@ -1,17 +1,15 @@
 <?php
 
-use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 return [
     'debug' => true,
     'ttl' => 0,
-    'logging_level' => Logger::DEBUG,
-    'api_url' => 'http://localhost:8080/',
+    'logging' => [
+        'level' => LogLevel::DEBUG,
+    ],
     'hypothesis' => [
         'api_url' => 'https://hypothes.is/api',
-        'client_id' => '',
-        'secret_key' => '',
-        'authority' => '',
     ],
     'aws' => [
         'queue_name' => 'annotations--dev',

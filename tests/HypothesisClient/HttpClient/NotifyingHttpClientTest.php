@@ -2,7 +2,7 @@
 
 namespace tests\eLife\HypothesisClient\HttpClient;
 
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -23,7 +23,7 @@ final class NotifyingHttpClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpOriginalClient()
     {
-        $this->originalClient = $this->createMock(HttpClientInterface::class);
+        $this->originalClient = $this->createMock(HttpClient::class);
         $this->client = new NotifyingHttpClient($this->originalClient);
     }
 

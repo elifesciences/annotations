@@ -5,11 +5,11 @@ namespace tests\eLife\Annotations\Command;
 use eLife\Annotations\Command\QueueWatchCommand;
 use eLife\Bus\Limit\CallbackLimit;
 use eLife\Bus\Limit\Limit;
-use eLife\Bus\Queue\BusSqsMessage;
+use eLife\Bus\Queue\InternalSqsMessage;
+use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\QueueItemTransformer;
-use eLife\Bus\Queue\WatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\Logging\Monitoring;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\LoggerInterface;
@@ -34,6 +34,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     /** @var Monitoring */
     private $monitoring;
     private $transformer;
+    /** @var WatchableQueueMock */
     private $queue;
 
     /**
@@ -42,41 +43,38 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     public function prepareDependencies()
     {
         $this->application = new Application();
-        $this->httpClient = $this->getMockBuilder(HttpClientInterface::class)
+        $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['send'])
             ->getMock();
         $this->hypothesisSdk = new HypothesisSdk($this->httpClient);
         $this->limit = $this->limitIterations(1);
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods(['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log'])
-            ->getMock();
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->monitoring = new Monitoring();
-        $this->transformer = $this->getMockBuilder(QueueItemTransformer::class)
-            ->setMethods(['transform'])
-            ->getMock();
-        $this->queue = $this->getMockBuilder(WatchableQueue::class)
-            ->setMethods(['enqueue', 'dequeue', 'commit', 'release', 'clean', 'getName', 'count'])
-            ->getMock();
+        $this->transformer = $this->createMock(QueueItemTransformer::class);
+        $this->transformer
+            ->expects($this->any())
+            ->method('transform')
+            ->will($this->returnValue(['field' => 'value']));
+        $this->queue = new WatchableQueueMock();
     }
 
     /**
      * @test
      */
-    public function it_will_read_an_item_from_on_the_queue()
+    public function it_will_read_an_item_from_the_queue()
     {
         $this->prepareCommandTester();
-        $this->queue
-            ->method('dequeue')
-            ->willReturn(new BusSqsMessage('messageId', 'id', 'type', 'receipt'));
+        $this->queue->enqueue(new InternalSqsMessage('profile', 'id'));
+        $this->assertEquals(1, $this->queue->count());
         $this->commandTesterExecute();
-        $this->assertTrue(true);
+        $this->assertEquals(0, $this->queue->count());
     }
 
     private function prepareCommandTester($serializedTransform = false)
     {
         $this->command = new QueueWatchCommand($this->queue, $this->transformer, $this->hypothesisSdk, $this->logger, $this->monitoring, $this->limit, $serializedTransform);
         $this->application->add($this->command);
-        $this->commandTester = new CommandTester($command = $this->application->get($this->command->getName()));
+        $this->commandTester = new CommandTester($this->application->get($this->command->getName()));
     }
 
     private function commandTesterExecute()

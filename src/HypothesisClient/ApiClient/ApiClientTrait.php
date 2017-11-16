@@ -2,8 +2,8 @@
 
 namespace eLife\HypothesisClient\ApiClient;
 
-use eLife\HypothesisClient\Credentials\CredentialsInterface;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
@@ -15,19 +15,22 @@ trait ApiClientTrait
     private $headers;
     private $credentials;
 
-    public function __construct(HttpClientInterface $httpClient, array $headers = [])
+    public function __construct(HttpClient $httpClient, $credentials = null, array $headers = [])
     {
         $this->httpClient = new UserAgentPrependingHttpClient($httpClient, 'HypothesisClient');
         $this->headers = $headers;
+        if (!is_null($credentials)) {
+            $this->setCredentials($credentials);
+        }
     }
 
-    final public function setCredentials(CredentialsInterface $credentials)
+    private function setCredentials(Credentials $credentials)
     {
         $this->credentials = $credentials;
         $this->headers['Authorization'] = 'Basic '.base64_encode($credentials->getClientId().':'.$credentials->getSecretKey());
     }
 
-    final public function getCredentials() : CredentialsInterface
+    final public function getCredentials() : Credentials
     {
         return $this->credentials;
     }

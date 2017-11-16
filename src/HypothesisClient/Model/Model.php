@@ -2,7 +2,7 @@
 
 namespace eLife\HypothesisClient\Model;
 
-interface ModelInterface
+interface Model
 {
     public function isNew(): bool;
 }

@@ -5,7 +5,7 @@ namespace tests\eLife\HypothesisClient;
 use eLife\HypothesisClient\ApiSdk;
 use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -19,21 +19,12 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException \BadMethodCallException
-     */
-    public function ensure_missing_method_throws_exception()
-    {
-        (new ApiSdk($this->getMockBuilder(HttpClientInterface::class)->getMock()))->foo();
-    }
-
-    /**
-     * @test
      */
     public function it_creates_a_users_client()
     {
         $this->assertInstanceOf(
             Users::class,
-            (new ApiSdk($this->getMockBuilder(HttpClientInterface::class)->getMock()))->users()
+            (new ApiSdk($this->getMockBuilder(HttpClient::class)->getMock()))->users()
         );
     }
 
@@ -42,7 +33,7 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
      */
     public function it_may_have_credentials()
     {
-        $httpClient = $this->getMockBuilder(HttpClientInterface::class)
+        $httpClient = $this->getMockBuilder(HttpClient::class)
             ->getMock();
         $credentials = $this->getMockBuilder(Credentials::class)
             ->setConstructorArgs(['client_id', 'secret_key', 'authority'])

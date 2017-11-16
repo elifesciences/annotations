@@ -7,7 +7,7 @@ use IteratorAggregate;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
-final class HttpResult implements IteratorAggregate, ResultInterface
+final class HttpResult implements IteratorAggregate, Result
 {
     private $result;
     private $response;
@@ -18,7 +18,7 @@ final class HttpResult implements IteratorAggregate, ResultInterface
         $this->response = $response;
     }
 
-    public static function fromResponse(ResponseInterface $response) : ResultInterface
+    public static function fromResponse(ResponseInterface $response) : Result
     {
         $data = json_decode($response->getBody(), true);
         if (JSON_ERROR_NONE !== json_last_error()) {

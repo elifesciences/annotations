@@ -1,7 +1,15 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+use eLife\Annotations\AppKernel;
+use Symfony\Component\HttpFoundation\Request;
 
-$config = include __DIR__.'/../config/prod.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-(new eLife\Annotations\Kernel($config))->run();
+$app = new AppKernel('prod');
+
+$request = Request::createFromGlobals();
+
+$response = $app->handle($request);
+$response->send();
+
+$app->terminate($request, $response);

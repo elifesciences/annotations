@@ -2,7 +2,7 @@
 
 namespace tests\eLife\HypothesisClient\Model;
 
-use eLife\HypothesisClient\Model\ModelInterface;
+use eLife\HypothesisClient\Model\Model;
 use eLife\HypothesisClient\Model\User;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -19,17 +19,17 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $user = new User('username', 'email@email.com', 'Display Name');
 
-        $this->assertInstanceOf(ModelInterface::class, $user);
+        $this->assertInstanceOf(Model::class, $user);
     }
 
     /**
      * @test
      */
-    public function it_has_an_id()
+    public function it_has_an_username()
     {
         $user = new User('username', 'email@email.com', 'Display Name');
 
-        $this->assertEquals('username', $user->getId());
+        $this->assertEquals('username', $user->getUsername());
     }
 
     /**
@@ -39,26 +39,26 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $user = new User('username', 'email@email.com', 'Display Name');
 
-        $this->assertEquals('username', $user->getId());
+        $this->assertEquals('username', $user->getUsername());
     }
 
     /**
      * @test
-     * @dataProvider providerInvalidUserIds
+     * @dataProvider providerInvalidUsernames
      */
-    public function it_rejects_invalid_user_ids($id, $message = null)
+    public function it_rejects_invalid_usernames($username, $message = null)
     {
         $this->expectException(InvalidArgumentException::class);
         $this->executeExceptionMessageRegExp($message);
-        new User($id, 'email@email.com', 'display_name');
+        new User($username, 'email@email.com', 'display_name');
     }
 
-    public function providerInvalidUserIds()
+    public function providerInvalidUsernames()
     {
-        yield 'id too short' => ['aa', 'must be between 3 and 30 characters'];
-        yield 'id too long' => ['zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', 'must be between 3 and 30 characters'];
-        yield 'id with spaces' => ['aa a', 'does not match expression'];
-        yield 'id with invalid punctuation' => ['!!', ['must be between 3 and 30 characters', 'does not match expression']];
+        yield 'username too short' => ['aa', 'must be between 3 and 30 characters'];
+        yield 'username too long' => ['zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', 'must be between 3 and 30 characters'];
+        yield 'username with spaces' => ['aa a', 'does not match expression'];
+        yield 'username with invalid punctuation' => ['!!', ['must be between 3 and 30 characters', 'does not match expression']];
     }
 
     /**
@@ -69,7 +69,7 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageRegExp('/was expected to be a valid e-mail address\./');
-        new User('userid', $email, 'display_name');
+        new User('username', $email, 'display_name');
     }
 
     public function providerInvalidEmails()
@@ -86,7 +86,7 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->executeExceptionMessageRegExp($message);
-        new User('userid', 'email@email.com', $display_name);
+        new User('username', 'email@email.com', $display_name);
     }
 
     public function providerInvalidDisplayNames()
@@ -103,25 +103,14 @@ final class UserTest extends PHPUnit_Framework_TestCase
         $email = 'invalid';
         $display_name = 'This display name is too long!!';
         $messages = [
-            '1) User id: Value "!" must be between 3 and 30 characters.',
-            '2) User id: Value "!" does not match expression /^[A-Za-z0-9._]+$/.',
+            '1) Username: Value "!" must be between 3 and 30 characters.',
+            '2) Username: Value "!" does not match expression /^[A-Za-z0-9._]+$/.',
             '3) User e-mail: Value "invalid" was expected to be a valid e-mail address.',
             '4) User display name: Value "This display name is too long!!" must be between 1 and 30 characters.',
         ];
         $this->expectException(InvalidArgumentException::class);
         $this->executeExceptionMessageRegExp($messages);
         new User($id, $email, $display_name);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_be_flagged_as_new()
-    {
-        $user = new User('username', 'email@email.com', 'Display Name');
-        $this->assertFalse($user->isNew());
-        $user->setNew();
-        $this->assertTrue($user->isNew());
     }
 
     private function executeExceptionMessageRegExp($message = null, $glue = '.*\n.*')

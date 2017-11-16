@@ -4,11 +4,11 @@ namespace eLife\HypothesisClient\Model;
 
 use Assert\Assert;
 
-final class User implements ModelInterface, CanBeValidated
+final class User implements Model
 {
     use ModelTrait;
 
-    protected $username;
+    private $username;
     private $email;
     private $displayName;
 
@@ -18,15 +18,17 @@ final class User implements ModelInterface, CanBeValidated
     public function __construct(
         string $username,
         string $email,
-        string $displayName
+        string $displayName,
+        bool $new = false
     ) {
         $this->username = $username;
         $this->email = $email;
         $this->displayName = $displayName;
+        $this->new = $new;
         $this->validate();
     }
 
-    public function getId() : string
+    public function getUsername() : string
     {
         return $this->username;
     }
@@ -40,25 +42,22 @@ final class User implements ModelInterface, CanBeValidated
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getDisplayName() : string
     {
         return $this->displayName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validate() : bool
+    private function validate() : bool
     {
         return Assert::lazy()
             // Id must be between 3 and 30 characters.
-            ->that($this->getId(), 'User id')
+            ->that($this->getUsername(), 'Username')
             ->minLength(3, 'Value "%s" must be between 3 and 30 characters.')
             ->maxLength(30, 'Value "%s" must be between 3 and 30 characters.')
             // Id is limited to a small set of characters.
-            ->that($this->getId(), 'User id')
+            ->that($this->getUsername(), 'Username')
             ->regex('/^[A-Za-z0-9._]+$/', 'Value "%s" does not match expression /^[A-Za-z0-9._]+$/.')
             ->that(array_filter([$this->getEmail(), $this->getDisplayName()]), 'User e-mail and display name')
             ->notEmpty('Either an e-mail address or display name is required.')

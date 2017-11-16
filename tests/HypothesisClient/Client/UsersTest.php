@@ -3,11 +3,11 @@
 namespace tests\eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
-use eLife\HypothesisClient\Client\ClientInterface;
+use eLife\HypothesisClient\Client\Client;
 use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Credentials\Credentials;
 use eLife\HypothesisClient\Exception\BadResponse;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -32,8 +32,12 @@ class UsersTest extends PHPUnit_Framework_TestCase
     private $secretKey;
     /** @var Users */
     private $users;
+    /** @var Users */
+    private $usersAnonymous;
     /** @var UsersClient */
     private $usersClient;
+    /** @var UsersClient */
+    private $usersClientAnonymous;
 
     /**
      * @before
@@ -48,10 +52,12 @@ class UsersTest extends PHPUnit_Framework_TestCase
         $this->denormalizer = $this->getMockBuilder(DenormalizerInterface::class)
             ->setMethods(['denormalize', 'supportsDenormalization'])
             ->getMock();
-        $this->httpClient = $this->getMockBuilder(HttpClientInterface::class)
+        $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['send'])
             ->getMock();
-        $this->usersClient = new UsersClient($this->httpClient);
+        $this->usersClientAnonymous = new UsersClient($this->httpClient);
+        $this->usersClient = new UsersClient($this->httpClient, $this->credentials);
+        $this->usersAnonymous = new Users($this->usersClientAnonymous, $this->denormalizer);
         $this->users = new Users($this->usersClient, $this->denormalizer);
     }
 
@@ -60,7 +66,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
      */
     public function it_is_a_client()
     {
-        $this->assertInstanceOf(ClientInterface::class, $this->users);
+        $this->assertInstanceOf(Client::class, $this->users);
     }
 
     /**
@@ -90,7 +96,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($user, $this->users->get('username')->wait());
+        $this->assertEquals($user, $this->usersAnonymous->get('username')->wait());
     }
 
     /**
@@ -113,14 +119,12 @@ class UsersTest extends PHPUnit_Framework_TestCase
         );
         $response = new FulfilledPromise(new ArrayResult($response_data));
         $user = new User('username', 'email@email.com', 'Display Name');
-        $this->usersClient
-            ->setCredentials($this->credentials);
+        $this->usersClient;
+        $expectedUser = new User('username', 'email@email.com', 'Display Name', true);
         $this->denormalizer
             ->method('denormalize')
-            ->with($response->wait()->toArray(), User::class)
-            ->willReturn($user);
-        $expectedUser = clone $user;
-        $expectedUser->setNew();
+            ->with($response->wait()->toArray() + ['new' => true], User::class)
+            ->willReturn($expectedUser);
         $this->httpClient
             ->expects($this->once())
             ->method('send')
@@ -149,8 +153,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
         );
         $response = new FulfilledPromise(new ArrayResult($response_data));
         $user = new User('username', 'email@email.com', 'Display Name');
-        $this->usersClient
-            ->setCredentials($this->credentials);
+        $this->usersClient;
         $this->denormalizer
             ->method('denormalize')
             ->with($response->wait()->toArray(), User::class)
@@ -169,7 +172,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_will_store_a_new_user()
+    public function it_will_upsert_a_new_user()
     {
         $data = [
             'authority' => 'authority',
@@ -186,28 +189,26 @@ class UsersTest extends PHPUnit_Framework_TestCase
         );
         $response = new FulfilledPromise(new ArrayResult($response_data));
         $user = new User('username', 'email@email.com', 'Display Name');
-        $this->usersClient
-            ->setCredentials($this->credentials);
+        $this->usersClient;
+        $expectedUser = new User('username', 'email@email.com', 'Display Name', true);
         $this->denormalizer
             ->method('denormalize')
-            ->with($response->wait()->toArray(), User::class)
-            ->willReturn($user);
-        $expectedUser = clone $user;
-        $expectedUser->setNew();
+            ->with($response->wait()->toArray() + ['new' => true], User::class)
+            ->willReturn($expectedUser);
         $this->httpClient
             ->expects($this->once())
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $storedUser = $this->users->store($user)->wait();
-        $this->assertTrue($storedUser->isNew());
-        $this->assertEquals($expectedUser, $storedUser);
+        $upsertedUser = $this->users->upsert($user)->wait();
+        $this->assertTrue($upsertedUser->isNew());
+        $this->assertEquals($expectedUser, $upsertedUser);
     }
 
     /**
      * @test
      */
-    public function it_will_store_an_existing_user()
+    public function it_will_upsert_an_existing_user()
     {
         $post_data = [
             'authority' => 'authority',
@@ -237,8 +238,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
         $patch_response_data = $post_data + ['userid' => sprintf('%s@%s', $post_data['username'], $post_data['authority'])];
         $patch_response = new FulfilledPromise(new ArrayResult($patch_response_data));
         $user = new User('username', 'email@email.com', 'Display Name');
-        $this->usersClient
-            ->setCredentials($this->credentials);
+        $this->usersClient;
         $this->httpClient
             ->expects($this->at(0))
             ->method('send')
@@ -254,8 +254,8 @@ class UsersTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($patch_request))
             ->willReturn($patch_response);
-        $storedUser = $this->users->store($user)->wait();
-        $this->assertFalse($storedUser->isNew());
-        $this->assertEquals($expectedUser, $storedUser);
+        $upsertedUser = $this->users->upsert($user)->wait();
+        $this->assertFalse($upsertedUser->isNew());
+        $this->assertEquals($expectedUser, $upsertedUser);
     }
 }

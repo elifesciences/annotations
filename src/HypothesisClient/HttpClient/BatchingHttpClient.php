@@ -6,13 +6,13 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use function GuzzleHttp\Promise\all;
 
-final class BatchingHttpClient implements HttpClientInterface
+final class BatchingHttpClient implements HttpClient
 {
     private $httpClient;
     private $batchSize;
     private $batch = [];
 
-    public function __construct(HttpClientInterface $httpClient, int $batchSize = 10)
+    public function __construct(HttpClient $httpClient, int $batchSize = 10)
     {
         $this->httpClient = $httpClient;
         $this->batchSize = $batchSize;

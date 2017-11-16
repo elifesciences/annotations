@@ -4,7 +4,7 @@ namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\AnnotationsClient;
 use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
@@ -20,14 +20,17 @@ final class AnnotationsClientTest extends PHPUnit_Framework_TestCase
     private $httpClient;
     /** @var AnnotationsClient */
     private $annotationsClient;
+    /** @var AnnotationsClient */
+    private $annotationsClientAnonymous;
 
     /**
      * @before
      */
     protected function setUpClient()
     {
-        $this->httpClient = $this->createMock(HttpClientInterface::class);
-        $this->annotationsClient = new AnnotationsClient($this->httpClient, ['X-Foo' => 'bar']);
+        $this->httpClient = $this->createMock(HttpClient::class);
+        $this->annotationsClient = new AnnotationsClient($this->httpClient, new Credentials('client_id', 'secret_key', 'authority'), ['X-Foo' => 'bar']);
+        $this->annotationsClientAnonymous = new AnnotationsClient($this->httpClient, null, ['X-Foo' => 'bar']);
     }
 
     /**
@@ -40,7 +43,7 @@ final class AnnotationsClientTest extends PHPUnit_Framework_TestCase
             $this->fail('A HttpClient is required');
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A HttpClient is required');
-            $this->assertContains('must implement interface '.HttpClientInterface::class.', string given', $error->getMessage());
+            $this->assertContains('must implement interface '.HttpClient::class.', string given', $error->getMessage());
         }
     }
 
@@ -57,7 +60,7 @@ final class AnnotationsClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->annotationsClient->listAnnotations([], 'list', 1, 20, true, '__world__'));
+        $this->assertEquals($response, $this->annotationsClientAnonymous->listAnnotations([], 'list', 1, 20, true, '__world__'));
     }
 
     /**
@@ -68,7 +71,6 @@ final class AnnotationsClientTest extends PHPUnit_Framework_TestCase
         $request = new Request('GET', 'search?user=list&group=__world__&offset=0&limit=20&order=desc',
             ['X-Foo' => 'bar', 'Authorization' => 'Basic '.base64_encode('client_id:secret_key'), 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
-        $this->annotationsClient->setCredentials(new Credentials('client_id', 'secret_key', 'authority'));
         $this->httpClient
             ->expects($this->once())
             ->method('send')

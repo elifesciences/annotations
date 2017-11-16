@@ -3,25 +3,26 @@
 namespace tests\eLife\Annotations\Provider;
 
 use Aws\Sqs\SqsClient;
-use eLife\Annotations\Provider\AnnotationsServiceProvider;
+use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiSdk\ApiSdk;
 use eLife\Bus\Limit\Limit;
 use eLife\Bus\Queue\QueueItemTransformer;
 use eLife\Bus\Queue\WatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient as HypothesisHttpClient;
 use eLife\Logging\Monitoring;
 use Knp\Console\Application as ConsoleApplication;
 use Knp\Provider\ConsoleServiceProvider;
+use LogicException;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\LoggerInterface;
 use Silex\Application;
 
 /**
- * @covers \eLife\Annotations\Provider\AnnotationsServiceProvider
+ * @covers \eLife\Annotations\Provider\QueueCommandsProvider
  */
-final class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
+final class QueueCommandsProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Application
@@ -53,15 +54,15 @@ final class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
             ->setMethods(['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log'])
             ->getMock();
         $this->container = [
-            'annotations.api.sdk' => new ApiSdk($this->httpClient),
-            'annotations.hypothesis.sdk' => new HypothesisApiSdk($this->createMock(HttpClientInterface::class)),
+            'api.sdk' => new ApiSdk($this->httpClient),
+            'hypothesis.sdk' => new HypothesisApiSdk($this->createMock(HypothesisHttpClient::class)),
             'limit.interactive' => $this->app->protect($this->createMock(Limit::class)),
             'limit.long_running' => $this->app->protect($this->createMock(Limit::class)),
-            'annotations.logger' => $this->logger,
-            'annotations.monitoring' => new Monitoring(),
-            'annotations.sqs' => $this->sqs,
+            'logger' => $this->logger,
+            'monitoring' => new Monitoring(),
+            'aws.sqs' => $this->sqs,
             'aws.queue' => $this->queue,
-            'annotations.sqs.queue_transformer' => $this->createMock(QueueItemTransformer::class),
+            'aws.queue_transformer' => $this->createMock(QueueItemTransformer::class),
         ];
     }
 
@@ -71,7 +72,7 @@ final class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
     public function commands_are_registered()
     {
         $this->app->register(new ConsoleServiceProvider());
-        $this->app->register(new AnnotationsServiceProvider(), $this->container);
+        $this->app->register(new QueueCommandsProvider(), $this->container);
         /** @var ConsoleApplication $console */
         $console = $this->app['console'];
         $this->assertTrue($console->has('queue:count'));
@@ -84,11 +85,11 @@ final class AnnotationsServiceProviderTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \LogicException
-     * @expectedExceptionMessage You must register the ConsoleServiceProvider to use the AnnotationsServiceProvider.
      */
     public function registration_fails_if_no_console_provider()
     {
-        $this->app->register(new AnnotationsServiceProvider(), $this->container);
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('You must register the ConsoleServiceProvider to use the QueueCommandsProvider');
+        $this->app->register(new QueueCommandsProvider(), $this->container);
     }
 }

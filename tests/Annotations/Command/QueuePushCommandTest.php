@@ -5,7 +5,7 @@ namespace tests\eLife\Annotations\Command;
 use eLife\Annotations\Command\QueueImportCommand;
 use eLife\Annotations\Command\QueuePushCommand;
 use eLife\Bus\Queue\InternalSqsMessage;
-use eLife\Bus\Queue\WatchableQueue;
+use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -24,6 +24,7 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     /** @var CommandTester */
     private $commandTester;
     private $logger;
+    /** @var WatchableQueueMock */
     private $queue;
 
     /**
@@ -32,12 +33,8 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     public function prepareDependencies()
     {
         $this->application = new Application();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->setMethods(['emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log'])
-            ->getMock();
-        $this->queue = $this->getMockBuilder(WatchableQueue::class)
-            ->setMethods(['enqueue', 'dequeue', 'commit', 'release', 'clean', 'getName', 'count'])
-            ->getMock();
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->queue = new WatchableQueueMock();
     }
 
     /**
@@ -46,11 +43,10 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     public function it_will_push_to_the_queue()
     {
         $this->prepareCommandTester();
-        $this->queue
-            ->expects($this->exactly(1))
-            ->method('enqueue')
-            ->with(new InternalSqsMessage('profiles', 'id'));
+        $this->assertEmpty($this->queue->count());
         $this->commandTesterExecute('id', 'profiles');
+        $this->assertEquals(1, $this->queue->count());
+        $this->assertEquals(new InternalSqsMessage('profiles', 'id'), $this->queue->dequeue());
     }
 
     /**
@@ -81,11 +77,8 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     public function it_may_have_a_default_type()
     {
         $this->prepareCommandTester('defaultType');
-        $this->queue
-            ->expects($this->exactly(1))
-            ->method('enqueue')
-            ->with(new InternalSqsMessage('defaultType', 'id'));
         $this->commandTesterExecute('id', null);
+        $this->assertEquals(new InternalSqsMessage('defaultType', 'id'), $this->queue->dequeue());
     }
 
     /**
@@ -94,18 +87,15 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     public function it_may_override_the_default_type()
     {
         $this->prepareCommandTester('defaultType');
-        $this->queue
-            ->expects($this->exactly(1))
-            ->method('enqueue')
-            ->with(new InternalSqsMessage('overrideType', 'id'));
         $this->commandTesterExecute('id', 'overrideType');
+        $this->assertEquals(new InternalSqsMessage('overrideType', 'id'), $this->queue->dequeue());
     }
 
     private function prepareCommandTester($type = null)
     {
         $this->command = new QueuePushCommand($this->queue, $this->logger, $type);
         $this->application->add($this->command);
-        $this->commandTester = new CommandTester($command = $this->application->get($this->command->getName()));
+        $this->commandTester = new CommandTester($this->application->get($this->command->getName()));
     }
 
     private function commandTesterExecute($id, $type)

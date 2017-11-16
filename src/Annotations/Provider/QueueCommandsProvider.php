@@ -14,7 +14,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use ReflectionClass;
 
-class AnnotationsServiceProvider implements ServiceProviderInterface
+class QueueCommandsProvider implements ServiceProviderInterface
 {
     /**
      * Registers the annotations service console commands.
@@ -28,23 +28,23 @@ class AnnotationsServiceProvider implements ServiceProviderInterface
         }
 
         $container->extend('console', function (Application $console) use ($container) {
-            $console->add(new QueueCleanCommand($container['aws.queue'], $container['annotations.logger']));
+            $console->add(new QueueCleanCommand($container['aws.queue'], $container['logger']));
             $console->add(new QueueCountCommand($container['aws.queue']));
-            $console->add(new QueuePushCommand($container['aws.queue'], $container['annotations.logger'], $container['annotations.sqs.queue_message_type'] ?? null));
-            $console->add(new QueueCreateCommand($container['annotations.sqs'], $container['annotations.logger'], $container['annotations.sqs.queue_name'] ?? null, $container['annotations.sqs.region'] ?? null));
+            $console->add(new QueuePushCommand($container['aws.queue'], $container['logger'], $container['sqs.queue_message_type'] ?? null));
+            $console->add(new QueueCreateCommand($container['aws.sqs'], $container['logger'], $container['sqs.queue_name'] ?? null, $container['sqs.region'] ?? null));
             $console->add(new QueueImportCommand(
-                $container['annotations.api.sdk'],
+                $container['api.sdk'],
                 $container['aws.queue'],
-                $container['annotations.logger'],
-                $container['annotations.monitoring'],
+                $container['logger'],
+                $container['monitoring'],
                 $container['limit.interactive']
             ));
             $console->add(new QueueWatchCommand(
                 $container['aws.queue'],
-                $container['annotations.sqs.queue_transformer'],
-                $container['annotations.hypothesis.sdk'],
-                $container['annotations.logger'],
-                $container['annotations.monitoring'],
+                $container['aws.queue_transformer'],
+                $container['hypothesis.sdk'],
+                $container['logger'],
+                $container['monitoring'],
                 $container['limit.long_running']
             ));
 

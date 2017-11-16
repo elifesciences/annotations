@@ -3,9 +3,9 @@
 namespace tests\eLife\Annotations;
 
 /**
- * @covers \eLife\Annotations\KernelTest
+ * @covers \eLife\Annotations\AppKernel
  */
-final class KernelTest extends WebTestCase
+final class AppKernelTest extends WebTestCase
 {
     /**
      * @test

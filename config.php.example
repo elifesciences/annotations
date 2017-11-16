@@ -1,12 +1,6 @@
 <?php
 
-use Monolog\Logger;
-
 return [
-    'debug' => true,
-    'ttl' => 0,
-    'logging_level' => Logger::DEBUG,
-    'api_url' => 'http://localhost:8080/',
     'hypothesis' => [
         'api_url' => 'https://hypothes.is/api',
         'client_id' => '',
@@ -14,10 +8,9 @@ return [
         'authority' => '',
     ],
     'aws' => [
-        'queue_name' => 'annotations--travis',
+        'queue_name' => 'annotations--queue',
         'queue_message_default_type' => 'profile',
-        'key' => '-----------------------',
-        'secret' => '-------------------------------',
+        'credential_file' => true,
         'region' => 'us-east-1',
         'endpoint' => 'http://localhost:4100',
     ],

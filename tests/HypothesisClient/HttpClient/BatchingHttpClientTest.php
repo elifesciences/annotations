@@ -23,7 +23,7 @@ class BatchingHttpClientTest extends PHPUnit_Framework_TestCase
 
     public function testRandomSequenceOfSendAndWaits()
     {
-        $originalClient = $this->createMock(HttpClientInterface::class);
+        $originalClient = $this->createMock(HttpClient::class);
         $originalClient
             ->expects($this->any())
             ->method('send')

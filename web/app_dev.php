@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__.'/bootstrap.php';
+use eLife\Annotations\AppKernel;
+use Symfony\Component\HttpFoundation\Request;
 
-use eLife\Annotations\Kernel;
+require_once __DIR__.'/../vendor/autoload.php';
 
-$config = include __DIR__.'/../config/dev.php';
+$app = new AppKernel('dev');
 
-$kernel = new Kernel($config);
+$request = Request::createFromGlobals();
 
-$kernel->withApp(function ($app) use ($config) {
-    $app['debug'] = $config['debug'] ?? false;
-});
+$response = $app->handle($request);
+$response->send();
 
-$kernel->run();
+$app->terminate($request, $response);

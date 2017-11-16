@@ -2,7 +2,7 @@
 
 namespace tests\eLife\HypothesisClient\HttpClient;
 
-use eLife\HypothesisClient\HttpClient\HttpClientInterface;
+use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient;
 use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Psr7\Request;
@@ -25,7 +25,7 @@ final class UserAgentPrependingHttpClientTest extends PHPUnit_Framework_TestCase
     {
         $this->requests = [];
 
-        $this->originalClient = new NotifyingHttpClient($this->createMock(HttpClientInterface::class));
+        $this->originalClient = new NotifyingHttpClient($this->createMock(HttpClient::class));
 
         $this->originalClient->addRequestListener(function (RequestInterface $request) {
             $this->requests[] = $request;

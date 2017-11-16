@@ -5,12 +5,12 @@ namespace eLife\HypothesisClient\Client;
 use eLife\HypothesisClient\ApiClient\UsersClient;
 use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Model\User;
-use eLife\HypothesisClient\Result\ResultInterface;
+use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use function GuzzleHttp\Promise\exception_for;
 
-final class Users implements ClientInterface
+final class Users implements Client
 {
     private $normalizer;
     private $usersClient;
@@ -28,24 +28,32 @@ final class Users implements ClientInterface
                 [],
                 $id
             )
-            ->then(function (ResultInterface $result) {
+            ->then(function (Result $result) {
                 return $this->normalizer->denormalize($result->toArray(), User::class);
             });
     }
 
     /**
-     * Store the user by create first then, if user already detected, modify.
+     * Upsert the user by create first then, if user already detected, update.
      *
      * @param User $user
      *
      * @return PromiseInterface
      */
-    public function store(User $user) : PromiseInterface
+    public function upsert(User $user) : PromiseInterface
     {
         return $this->create($user)
             ->otherwise(function ($reason) use ($user) {
                 $exception = exception_for($reason);
-                if ($exception instanceof BadResponse && preg_match('/user with username [^\s]+ already exists/', (string) $exception->getResponse()->getBody())) {
+                /*
+                 * The most likely cause of BadResponse is if the username
+                 * already exists. Because this can only be determined by the
+                 * text in the response, it is considered a bit fragile. Until
+                 * Hypothesis set an error code in their response we will treat
+                 * all BadResponse's as if they are for a known username and
+                 * attempt an update request.
+                 */
+                if ($exception instanceof BadResponse) {
                     return $this->update($user);
                 } else {
                     throw $exception;
@@ -58,15 +66,12 @@ final class Users implements ClientInterface
         return $this->usersClient
             ->createUser(
                 [],
-                $user->getId(),
+                $user->getUsername(),
                 $user->getEmail(),
                 $user->getDisplayName()
             )
-            ->then(function (ResultInterface $result) {
-                $user = $this->normalizer->denormalize($result->toArray(), User::class);
-                $user->setNew();
-
-                return $user;
+            ->then(function (Result $result) {
+                return $this->normalizer->denormalize($result->toArray() + ['new' => true], User::class);
             });
     }
 
@@ -75,11 +80,11 @@ final class Users implements ClientInterface
         return $this->usersClient
             ->updateUser(
                 [],
-                $user->getId(),
+                $user->getUsername(),
                 $user->getEmail(),
                 $user->getDisplayName()
             )
-            ->then(function (ResultInterface $result) {
+            ->then(function (Result $result) {
                 return $this->normalizer->denormalize($result->toArray(), User::class);
             });
     }
