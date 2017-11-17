@@ -142,6 +142,8 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $stack->push(
                     Middleware::mapResponse(function ($response) use ($logger) {
                         $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+
+                        return $response;
                     })
                 );
             }
@@ -184,9 +186,16 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             if ($app['debug']) {
                 $stack->push(
                     Middleware::mapRequest(function ($request) use ($logger) {
-                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}");
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
                         return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+
+                        return $response;
                     })
                 );
             }
