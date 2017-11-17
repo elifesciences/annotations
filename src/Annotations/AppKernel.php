@@ -273,9 +273,4 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
     {
         return isset($this->app[$id]);
     }
-
-    public function getApp() : Application
-    {
-        return $this->app;
-    }
 }
