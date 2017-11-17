@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
+use function GuzzleHttp\Psr7\str;
 
 final class AppKernel implements ContainerInterface, HttpKernelInterface, TerminableInterface
 {
@@ -134,9 +135,14 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             if ($app['debug']) {
                 $stack->push(
                     Middleware::mapRequest(function ($request) use ($logger) {
-                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}");
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
                         return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
                     })
                 );
             }
