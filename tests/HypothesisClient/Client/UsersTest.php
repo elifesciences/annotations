@@ -3,7 +3,6 @@
 namespace tests\eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
-use eLife\HypothesisClient\Client\Client;
 use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Credentials\Credentials;
 use eLife\HypothesisClient\Exception\BadResponse;

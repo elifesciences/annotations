@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Exception;
 
-use ArgumentCountError;
 use eLife\HypothesisClient\Exception\ApiException;
 use eLife\HypothesisClient\Exception\HttpProblem;
 use Exception;

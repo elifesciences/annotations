@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Exception;
 
-use ArgumentCountError;
 use eLife\HypothesisClient\Exception\ApiException;
 use Exception;
 use PHPUnit_Framework_TestCase;
