@@ -7,6 +7,7 @@ use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Promise\rejection_for;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use function GuzzleHttp\Promise\exception_for;
 
@@ -44,7 +45,6 @@ final class Users
     {
         return $this->create($user)
             ->otherwise(function ($reason) use ($user) {
-                $exception = exception_for($reason);
                 /*
                  * The most likely cause of BadResponse is if the username
                  * already exists. Because this can only be determined by the
@@ -53,11 +53,11 @@ final class Users
                  * all BadResponse's as if they are for a known username and
                  * attempt an update request.
                  */
-                if ($exception instanceof BadResponse) {
+                if (exception_for($reason) instanceof BadResponse) {
                     return $this->update($user);
-                } else {
-                    throw $exception;
                 }
+
+                return rejection_for($reason);
             });
     }
 
