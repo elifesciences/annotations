@@ -8,7 +8,6 @@ use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\rejection_for;
 
 final class Users
@@ -53,7 +52,7 @@ final class Users
                  * all BadResponse's as if they are for a known username and
                  * attempt an update request.
                  */
-                if (exception_for($reason) instanceof BadResponse) {
+                if ($reason instanceof BadResponse) {
                     return $this->update($user);
                 }
 
