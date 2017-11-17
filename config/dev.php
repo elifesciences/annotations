@@ -4,7 +4,6 @@ use Psr\Log\LogLevel;
 
 return [
     'debug' => true,
-    'ttl' => 0,
     'logging' => [
         'level' => LogLevel::DEBUG,
     ],

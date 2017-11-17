@@ -13,7 +13,7 @@ abstract class WebTestCase extends SilexWebTestCase
 
     public function createApplication() : HttpKernelInterface
     {
-        $this->kernel = new AppKernel();
+        $this->kernel = new AppKernel('ci');
 
         return $this->kernel;
     }

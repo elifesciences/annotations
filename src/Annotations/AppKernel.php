@@ -53,7 +53,6 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
-            'ttl' => $config['ttl'] ?? 300,
             'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
             'logging.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
