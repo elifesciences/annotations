@@ -7,9 +7,9 @@ use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\rejection_for;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use function GuzzleHttp\Promise\exception_for;
+use function GuzzleHttp\Promise\rejection_for;
 
 final class Users
 {
