@@ -6,9 +6,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 use function GuzzleHttp\Psr7\build_query;
 
-final class AnnotationsClient implements ApiClient
+final class AnnotationsClient
 {
-    use ApiClientTrait;
+    use ApiClient;
 
     public function listAnnotations(
         array $headers,

@@ -24,10 +24,6 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
         try {
             $this->getMockBuilder(BadResponse::class)->getMock();
             $this->fail('A message is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A message is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A message is required');
             $this->assertContains('must be of the type string', $error->getMessage());
@@ -46,10 +42,6 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
                 ->setConstructorArgs(['foo'])
                 ->getMock();
             $this->fail('A request is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A request is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A request is required');
             $this->assertContains('none given', $error->getMessage());
@@ -69,10 +61,6 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
                 ->setConstructorArgs(['foo', $this->createMock(RequestInterface::class)])
                 ->getMock();
             $this->fail('A response is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A response is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A response is required');
             $this->assertContains('none given', $error->getMessage());

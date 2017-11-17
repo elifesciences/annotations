@@ -10,14 +10,12 @@
         }
     },
     "require": {
-        "php": "^7.0",
         "beberlei/assert": "^2.7",
-        "doctrine/annotations": "1.4.0",
-        "doctrine/cache": "~v1.6.2",
-        "doctrine/instantiator": "~1.0.5",
+        "elife/api-client": "^1.0@dev",
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
-        "elife/bus-sdk": "dev-master",
+        "elife/bus-sdk": "^1.0@dev",
+        "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
@@ -26,22 +24,20 @@
         "symfony/serializer": "^3.3"
     },
     "require-dev": {
-        "elife/proofreader-php": "dev-master",
         "giorgiosironi/eris": "^0.9.0",
         "mtdowling/jmespath.php": "^2.4",
         "phpunit/phpunit": "^5.7",
         "silex/web-profiler": "^2.0",
         "symfony/browser-kit": "^3.3"
     },
-    "scripts": {
-        "server": "php -S 0.0.0.0:8088 -t web web/app_dev.php",
-        "server:prod": "php -S 0.0.0.0:8088 -t web web/app_prod.php"
-    },
     "suggest": {
         "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
     "config": {
         "sort-packages": true
     }

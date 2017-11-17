@@ -22,10 +22,6 @@ class ApiExceptionTest extends PHPUnit_Framework_TestCase
         try {
             $this->getMockBuilder(ApiException::class)->getMock();
             $this->fail('A message is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A message is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A message is required');
             $this->assertContains('must be of the type string', $error->getMessage());

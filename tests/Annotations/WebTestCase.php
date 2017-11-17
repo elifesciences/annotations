@@ -15,6 +15,6 @@ abstract class WebTestCase extends SilexWebTestCase
     {
         $this->kernel = new AppKernel();
 
-        return $this->kernel->getApp();
+        return $this->kernel;
     }
 }

@@ -4,6 +4,7 @@ namespace tests\eLife\HypothesisClient\Credentials;
 
 use eLife\HypothesisClient\Credentials\Credentials;
 use PHPUnit_Framework_TestCase;
+use Serializable;
 
 /**
  * @covers \eLife\HypothesisClient\Credentials\Credentials
@@ -15,25 +16,24 @@ class CredentialsTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_getters()
     {
-        $creds = new Credentials('foo', 'baz', 'authority');
-        $this->assertEquals('foo', $creds->getClientId());
-        $this->assertEquals('baz', $creds->getSecretKey());
-        $this->assertEquals('authority', $creds->getAuthority());
+        $credentials = new Credentials('foo', 'baz', 'authority');
+        $this->assertEquals('foo', $credentials->getClientId());
+        $this->assertEquals('baz', $credentials->getSecretKey());
+        $this->assertEquals('authority', $credentials->getAuthority());
         $this->assertEquals([
             'clientId' => 'foo',
             'secret' => 'baz',
             'authority' => 'authority',
-        ], $creds->toArray());
+        ], $credentials->toArray());
     }
 
-    public function it_may_not_have_an_authority()
+    /**
+     * @test
+     */
+    public function it_can_be_serialized()
     {
-        $creds = new Credentials('foo', 'baz');
-        $this->assertNull($creds->getAuthority());
-        $this->assertEquals([
-            'clientId' => 'foo',
-            'secret' => 'baz',
-            'authority' => null,
-        ], $creds->toArray());
+        $credentials = new Credentials('foo', 'baz', 'authority');
+        $this->assertInstanceOf(Serializable::class, $credentials);
+        $this->assertEquals($credentials, unserialize(serialize($credentials)));
     }
 }

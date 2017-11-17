@@ -2,7 +2,7 @@
 
 namespace eLife\HypothesisClient\Model;
 
-trait ModelTrait
+trait CanBeNew
 {
     protected $new = false;
 

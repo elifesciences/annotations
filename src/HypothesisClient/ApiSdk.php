@@ -18,10 +18,7 @@ final class ApiSdk
     private $httpClient;
     /** @var SerializerAwareInterface */
     private $normalizer;
-
-    /**
-     * @var Users
-     */
+    /** @var Users */
     private $users;
 
     public function __construct(HttpClient $httpClient, Credentials $credentials = null)
@@ -29,16 +26,11 @@ final class ApiSdk
         $this->httpClient = $httpClient;
         $this->credentials = $credentials;
         $this->normalizer = new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter());
-        $this->users();
+        $this->users = new Users(new UsersClient($this->httpClient, $this->credentials, []), $this->normalizer);
     }
 
     public function users() : Users
     {
-        if (empty($this->users)) {
-            $usersClient = new UsersClient($this->httpClient, $this->credentials, []);
-            $this->users = new Users($usersClient, $this->normalizer);
-        }
-
         return $this->users;
     }
 }

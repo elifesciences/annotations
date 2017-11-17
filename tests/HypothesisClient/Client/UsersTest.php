@@ -64,14 +64,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_is_a_client()
-    {
-        $this->assertInstanceOf(Client::class, $this->users);
-    }
-
-    /**
-     * @test
-     */
     public function it_will_get_a_user()
     {
         $request = new Request(

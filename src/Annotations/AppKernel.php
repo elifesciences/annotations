@@ -3,7 +3,6 @@
 namespace eLife\Annotations;
 
 use Aws\Sqs\SqsClient;
-use Doctrine\Common\Cache\FilesystemCache;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -87,11 +86,6 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'profiler.mount_prefix' => '/_profiler',
             ]);
         }
-
-        // General cache.
-        $this->app['cache'] = function () {
-            return new FilesystemCache(__DIR__.'/../../var/cache');
-        };
 
         $this->app['logger'] = function (Application $app) {
             $factory = new LoggingFactory($app['logging.path'], 'annotations', $app['logging.level']);
@@ -254,11 +248,6 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'sqs.queue_name' => $this->app['aws']['queue_name'],
             'sqs.region' => $this->app['aws']['region'],
         ]);
-
-        // Cache.
-        if ($this->app['ttl'] > 0) {
-            $this->app->after([$this, 'cache'], 3);
-        }
     }
 
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true) : Response

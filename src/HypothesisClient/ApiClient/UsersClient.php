@@ -5,9 +5,9 @@ namespace eLife\HypothesisClient\ApiClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 
-final class UsersClient implements ApiClient
+final class UsersClient
 {
-    use ApiClientTrait;
+    use ApiClient;
 
     public function getUser(
         array $headers,

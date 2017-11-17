@@ -6,7 +6,7 @@ use Assert\Assert;
 
 final class User implements Model
 {
-    use ModelTrait;
+    use CanBeNew;
 
     private $username;
     private $email;

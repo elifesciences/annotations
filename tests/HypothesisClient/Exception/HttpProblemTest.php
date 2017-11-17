@@ -23,10 +23,6 @@ class HttpProblemTest extends PHPUnit_Framework_TestCase
         try {
             $this->getMockBuilder(HttpProblem::class)->getMock();
             $this->fail('A message is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A message is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A message is required');
             $this->assertContains('none given', $error->getMessage());
@@ -47,10 +43,6 @@ class HttpProblemTest extends PHPUnit_Framework_TestCase
                 ->setConstructorArgs(['foo'])
                 ->getMockForAbstractClass();
             $this->fail('A request is required');
-        } catch (ArgumentCountError $error) {
-            // ArgumentCountError ^7.1
-            $this->assertTrue(true, 'A request is required');
-            $this->assertContains('Too few arguments', $error->getMessage());
         } catch (TypeError $error) {
             $this->assertTrue(true, 'A request is required');
             $this->assertContains('none given', $error->getMessage());

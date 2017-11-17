@@ -10,7 +10,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use function GuzzleHttp\Promise\exception_for;
 
-final class Users implements Client
+final class Users
 {
     private $normalizer;
     private $usersClient;

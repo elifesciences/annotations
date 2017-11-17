@@ -13,16 +13,11 @@ use tests\eLife\Annotations\WebTestCase;
 final class QueueCommandsProviderTest extends WebTestCase
 {
     /**
-     * @var Application
-     */
-    protected $app;
-
-    /**
      * @test
      */
     public function commands_are_registered()
     {
-        $console = $this->app['console'];
+        $console = $this->kernel->get('console');
         $this->assertTrue($console->has('queue:count'));
         $this->assertTrue($console->has('queue:clean'));
         $this->assertTrue($console->has('queue:create'));

@@ -36,8 +36,7 @@ final class QueueImportCommand extends Command
         WatchableQueue $queue,
         LoggerInterface $logger,
         Monitoring $monitoring,
-        Limit $limit,
-        $supports = []
+        Limit $limit
     ) {
         parent::__construct(null);
 
@@ -47,11 +46,7 @@ final class QueueImportCommand extends Command
         $this->logger = $logger;
         $this->monitoring = $monitoring;
         $this->limit = $limit;
-        $supports = array_intersect(self::$supports, (array) $supports);
-        if (!empty($supports)) {
-            self::$supports = $supports = array_intersect(self::$supports, $supports);
-        }
-        $this->addArgument('entity', (count(self::$supports) === 1) ? InputArgument::OPTIONAL : InputArgument::REQUIRED, 'Must be one of the following <comment>[all, '.implode(', ', self::$supports).']</comment>', (count(self::$supports) === 1) ? self::$supports[0] : null);
+        $this->addArgument('entity', InputArgument::OPTIONAL, 'Must be one of the following <comment>[all, '.implode(', ', self::$supports).']</comment>', self::$supports[0]);
     }
 
     protected function configure()
