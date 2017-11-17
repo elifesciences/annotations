@@ -59,7 +59,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'api.requests_batch' => $config['api_requests_batch'] ?? 10,
             'process_memory_limit' => $config['process_memory_limit'] ?? 256,
             'aws' => ($config['aws'] ?? []) + [
-                'queue_name' => 'annotations--queue',
+                'queue_name' => 'annotations--prod',
                 'queue_message_default_type' => 'profile',
                 'credential_file' => true,
                 'region' => 'us-east-1',
