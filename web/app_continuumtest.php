@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$app = new AppKernel('dev');
+$app = new AppKernel('continuumtest');
 
 $request = Request::createFromGlobals();
 
