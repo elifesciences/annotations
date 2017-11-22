@@ -52,8 +52,8 @@ final class QueueWatchCommand extends QueueCommand
                 $email = $id.'@hypothesis.elifesciences.org';
             }
             $user = new User($id, $email, $display_name);
-            $store = $this->hypothesisSdk->users()->store($user)->wait();
-            $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $store->getId(), ($store->isNew() ? 'created' : 'updated')));
+            $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
+            $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
         }
     }
 }
