@@ -10,6 +10,7 @@ use eLife\Bus\Limit\CallbackLimit;
 use eLife\Bus\Limit\Limit;
 use eLife\Bus\Queue\InternalSqsMessage;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
+use eLife\Bus\Queue\QueueItem;
 use eLife\Bus\Queue\QueueItemTransformer;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Credentials\Credentials;
@@ -70,29 +71,6 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->monitoring = new Monitoring();
         $this->transformer = $this->createMock(QueueItemTransformer::class);
-        $data = [
-            'authority' => 'authority',
-            'username' => 'username',
-            'email' => 'username@hypothesis.elifesciences.org',
-            'display_name' => 'Preferred Name',
-        ];
-        $profile = new Profile($data['username'], new PersonDetails($data['display_name'], 'IndexName'), new ArraySequence([]), new ArraySequence([]));
-        $this->transformer
-            ->expects($this->any())
-            ->method('transform')
-            ->will($this->returnValue($profile));
-        $request = new Request(
-            'POST',
-            'users',
-            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
-            json_encode($data)
-        );
-        $response = new FulfilledPromise(new ArrayResult($data));
-        $this->httpClient
-            ->expects($this->once())
-            ->method('send')
-            ->with(RequestConstraint::equalTo($request))
-            ->willReturn($response);
         $this->queue = new WatchableQueueMock();
     }
 
@@ -101,11 +79,70 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
      */
     public function it_will_read_an_item_from_the_queue()
     {
+        $this->transformer
+            ->expects($this->once())
+            ->method('transform')
+            ->will($this->returnValue(['foo' => 'bar']));
         $this->prepareCommandTester();
         $this->queue->enqueue(new InternalSqsMessage('profile', 'username'));
         $this->assertEquals(1, $this->queue->count());
         $this->commandTesterExecute();
         $this->assertEquals(0, $this->queue->count());
+    }
+
+    /**
+     * @test
+     * @dataProvider providerProfiles
+     */
+    public function it_will_process_an_item_in_the_queue(QueueItem $item, Profile $profile, $data)
+    {
+        $data = [
+            'authority' => $this->authority,
+        ] + $data;
+        $this->transformer
+            ->expects($this->once())
+            ->method('transform')
+            ->with($item)
+            ->will($this->returnValue($profile));
+        $request = new Request(
+            'POST',
+            'users',
+            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
+            json_encode($data)
+        );
+        $response = new FulfilledPromise(new ArrayResult($data + ['userid' => 'acct:'.$data['username'].'@test.elifesciences.org']));
+        $this->httpClient
+            ->expects($this->once())
+            ->method('send')
+            ->with(RequestConstraint::equalTo($request))
+            ->willReturn($response);
+        $this->prepareCommandTester();
+        $this->queue->enqueue($item);
+        $this->assertEquals(1, $this->queue->count());
+        $this->commandTesterExecute();
+        $this->assertEquals(0, $this->queue->count());
+    }
+
+    public function providerProfiles()
+    {
+        yield 'standard' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new ArraySequence([]), new ArraySequence([])),
+            [
+                'username' => 'username',
+                'email' => 'username@hypothesis.elifesciences.org',
+                'display_name' => 'PreferredName',
+            ]
+        ];
+        yield 'display_name too long' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile('username', new PersonDetails('This display name is way too long', 'IndexName'), new ArraySequence([]), new ArraySequence([])),
+            [
+                'username' => 'username',
+                'email' => 'username@hypothesis.elifesciences.org',
+                'display_name' => 'This display name is way too l',
+            ]
+        ];
     }
 
     private function prepareCommandTester($serializedTransform = false)

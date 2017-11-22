@@ -51,7 +51,7 @@ final class QueueWatchCommand extends QueueCommand
                 $this->logger->info(sprintf('No email address for profile "%s", backup email address created.', $id));
                 $email = $id.'@hypothesis.elifesciences.org';
             }
-            $user = new User($id, $email, $display_name);
+            $user = new User($id, $email, substr($display_name, 0, User::DISPLAY_NAME_MAX_LENGTH));
             $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
             $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
         }
