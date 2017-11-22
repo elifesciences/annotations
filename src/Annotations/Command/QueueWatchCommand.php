@@ -51,7 +51,13 @@ final class QueueWatchCommand extends QueueCommand
                 $this->logger->info(sprintf('No email address for profile "%s", backup email address created.', $id));
                 $email = $id.'@hypothesis.elifesciences.org';
             }
-            $user = new User($id, $email, $display_name);
+            if (strlen($display_name) > User::DISPLAY_NAME_MAX_LENGTH) {
+                $sanitized_display_name = substr($display_name, 0, User::DISPLAY_NAME_MAX_LENGTH);
+                $this->logger->info(sprintf('The display name for profile "%s" is too long and has been truncated from "%s" to "%s".', $id, $display_name, $sanitized_display_name));
+            } else {
+                $sanitized_display_name = $display_name;
+            }
+            $user = new User($id, $email, $sanitized_display_name);
             $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
             $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
         }
