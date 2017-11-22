@@ -3,7 +3,7 @@
 namespace tests\eLife\Annotations\Command;
 
 use eLife\Annotations\Command\QueueWatchCommand;
-use eLife\ApiSdk\Collection\ArraySequence;
+use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Profile;
 use eLife\Bus\Limit\CallbackLimit;
@@ -127,7 +127,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     {
         yield 'standard' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new ArraySequence([]), new ArraySequence([])),
+            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new EmptySequence()),
             [
                 'username' => 'username',
                 'email' => 'username@hypothesis.elifesciences.org',
@@ -136,7 +136,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         ];
         yield 'display_name too long' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('This display name is way too long', 'IndexName'), new ArraySequence([]), new ArraySequence([])),
+            new Profile('username', new PersonDetails('This display name is way too long', 'IndexName'), new EmptySequence(), new EmptySequence()),
             [
                 'username' => 'username',
                 'email' => 'username@hypothesis.elifesciences.org',
