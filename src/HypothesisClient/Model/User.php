@@ -59,8 +59,7 @@ final class User implements Model
         return Assert::lazy()
             // Id must be between 3 and 30 characters.
             ->that($this->getUsername(), 'Username')
-            ->minLength(self::USERNAME_MIN_LENGTH, 'Value "%s" must be between '.self::USERNAME_MIN_LENGTH.' and '.self::USERNAME_MAX_LENGTH.' characters.')
-            ->maxLength(self::USERNAME_MAX_LENGTH, 'Value "%s" must be between '.self::USERNAME_MIN_LENGTH.' and '.self::USERNAME_MAX_LENGTH.' characters.')
+            ->betweenLength(self::USERNAME_MIN_LENGTH, self::USERNAME_MAX_LENGTH, 'Value "%s" must be between '.self::USERNAME_MIN_LENGTH.' and '.self::USERNAME_MAX_LENGTH.' characters.')
             // Id is limited to a small set of characters.
             ->that($this->getUsername(), 'Username')
             ->regex('/^[A-Za-z0-9._]+$/', 'Value "%s" does not match expression /^[A-Za-z0-9._]+$/.')
@@ -73,8 +72,7 @@ final class User implements Model
             // Display name must be no more than 30 characters long.
             ->that($this->getDisplayName(), 'User display name')
             ->nullOr()
-            ->minLength(self::DISPLAY_NAME_MIN_LENGTH, 'Value "%s" must be between '.self::DISPLAY_NAME_MIN_LENGTH.' and '.self::DISPLAY_NAME_MAX_LENGTH.' characters.')
-            ->maxLength(self::DISPLAY_NAME_MAX_LENGTH, 'Value "%s" must be between '.self::DISPLAY_NAME_MIN_LENGTH.' and '.self::DISPLAY_NAME_MAX_LENGTH.' characters.')
+            ->betweenLength(self::DISPLAY_NAME_MIN_LENGTH, self::DISPLAY_NAME_MAX_LENGTH, 'Value "%s" must be between '.self::DISPLAY_NAME_MIN_LENGTH.' and '.self::DISPLAY_NAME_MAX_LENGTH.' characters.')
             ->verifyNow();
     }
 }
