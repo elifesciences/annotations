@@ -132,7 +132,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username' => 'username',
                 'email' => 'username@hypothesis.elifesciences.org',
                 'display_name' => 'PreferredName',
-            ]
+            ],
         ];
         yield 'display_name too long' => [
             new InternalSqsMessage('profile', 'username'),
@@ -141,7 +141,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username' => 'username',
                 'email' => 'username@hypothesis.elifesciences.org',
                 'display_name' => 'This display name is way too l',
-            ]
+            ],
         ];
     }
 
