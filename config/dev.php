@@ -8,7 +8,7 @@ return [
         'level' => LogLevel::DEBUG,
     ],
     'hypothesis' => [
-        'api_url' => 'https://hypothes.is/api',
+        'api_url' => 'https://hypothes.is/api/',
     ],
     'aws' => [
         'queue_name' => 'annotations--dev',

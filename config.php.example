@@ -2,7 +2,7 @@
 
 return [
     'hypothesis' => [
-        'api_url' => 'https://hypothes.is/api',
+        'api_url' => 'https://hypothes.is/api/',
         'client_id' => '',
         'secret_key' => '',
         'authority' => '',
