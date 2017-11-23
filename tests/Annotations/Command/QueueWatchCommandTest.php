@@ -97,7 +97,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider providerProfiles
      */
-    public function it_will_process_an_item_in_the_queue(QueueItem $item, Profile $profile, $data, $logs_whitelist = [], $logs_blacklist = [])
+    public function it_will_process_an_item_in_the_queue(QueueItem $item, Profile $profile, $data, $logs = [])
     {
         $data = [
             'authority' => $this->authority,
@@ -126,16 +126,9 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->queue->count());
         $actual_logs = $this->logger->cleanLogs();
         $this->assertContains([LogLevel::INFO, 'Hypothesis user "username" successfully created.', []], $actual_logs);
-        if (!empty($logs_whitelist) || !empty($logs_blacklist)) {
-            if (!empty($logs_whitelist)) {
-                foreach ($logs_whitelist as $log) {
-                    $this->assertContains($log, $actual_logs);
-                }
-            }
-            if (!empty($logs_blacklist)) {
-                foreach ($logs_blacklist as $log) {
-                    $this->assertNotContains($log, $actual_logs);
-                }
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                $this->assertContains($log, $actual_logs);
             }
         }
     }
@@ -175,10 +168,6 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'email' => 'username@email.com',
                 'display_name' => 'PreferredName',
             ],
-            [],
-            [
-                [LogLevel::INFO, 'No email address for profile "username", backup email address created.', []],
-            ],
         ];
         yield 'with multiple emails' => [
             new InternalSqsMessage('profile', 'username'),
@@ -187,10 +176,6 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username' => 'username',
                 'email' => 'another@email.com',
                 'display_name' => 'PreferredName',
-            ],
-            [],
-            [
-                [LogLevel::INFO, 'No email address for profile "username", backup email address created.', []],
             ],
         ];
     }
