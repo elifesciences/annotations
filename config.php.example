@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'api_url' => 'https://api.elifesciences.org/',
     'hypothesis' => [
         'api_url' => 'https://hypothes.is/api/',
         'client_id' => '',
