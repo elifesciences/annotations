@@ -131,22 +131,20 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             // Create default HandlerStack
             $stack = HandlerStack::create();
             $logger = $app['logger'];
-            if ($app['debug']) {
-                $stack->push(
-                    Middleware::mapRequest(function ($request) use ($logger) {
-                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+            $stack->push(
+                Middleware::mapRequest(function ($request) use ($logger) {
+                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
-                        return $request;
-                    })
-                );
-                $stack->push(
-                    Middleware::mapResponse(function ($response) use ($logger) {
-                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+                    return $request;
+                })
+            );
+            $stack->push(
+                Middleware::mapResponse(function ($response) use ($logger) {
+                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
 
-                        return $response;
-                    })
-                );
-            }
+                    return $response;
+                })
+            );
 
             return new Client([
                 'base_uri' => $app['hypothesis']['api_url'],
@@ -183,22 +181,20 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             // Create default HandlerStack
             $stack = HandlerStack::create();
             $logger = $app['logger'];
-            if ($app['debug']) {
-                $stack->push(
-                    Middleware::mapRequest(function ($request) use ($logger) {
-                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+            $stack->push(
+                Middleware::mapRequest(function ($request) use ($logger) {
+                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
-                        return $request;
-                    })
-                );
-                $stack->push(
-                    Middleware::mapResponse(function ($response) use ($logger) {
-                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+                    return $request;
+                })
+            );
+            $stack->push(
+                Middleware::mapResponse(function ($response) use ($logger) {
+                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
 
-                        return $response;
-                    })
-                );
-            }
+                    return $response;
+                })
+            );
 
             return new Client([
                 'base_uri' => $app['api.url'],
