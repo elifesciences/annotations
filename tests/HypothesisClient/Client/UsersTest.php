@@ -249,4 +249,33 @@ class UsersTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($upsertedUser->isNew());
         $this->assertEquals($expectedUser, $upsertedUser);
     }
+
+    /**
+     * @test
+     */
+    public function it_will_fail_fast_on_errors_that_do_not_indicate_existing_users()
+    {
+        $post_data = [
+            'authority' => 'authority',
+            'username' => 'username',
+            'email' => 'email@email.com',
+            'display_name' => 'Display Name',
+        ];
+        $post_request = new Request(
+            'POST',
+            'users',
+            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
+            json_encode($post_data)
+        );
+        $post_response = new Response(405);
+        $rejected_post_response = new RejectedPromise(new BadResponse('', $post_request, $post_response));
+        $user = new User('username', 'email@email.com', 'Display Name');
+        $this->usersClient;
+        $this->httpClient
+            ->expects($this->once())
+            ->method('send')
+            ->willReturn($rejected_post_response);
+        $this->setExpectedException(BadResponse::class);
+        $this->users->upsert($user)->wait();
+    }
 }
