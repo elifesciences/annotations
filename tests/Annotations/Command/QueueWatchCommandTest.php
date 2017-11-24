@@ -3,6 +3,7 @@
 namespace tests\eLife\Annotations\Command;
 
 use eLife\Annotations\Command\QueueWatchCommand;
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Profile;
@@ -20,9 +21,10 @@ use eLife\Logging\Monitoring;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit_Framework_TestCase;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Debug\BufferingLogger;
 use tests\eLife\HypothesisClient\RequestConstraint;
 
 /**
@@ -44,6 +46,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     /** @var HypothesisSdk */
     private $hypothesisSdk;
     private $limit;
+    /** @var BufferingLogger */
     private $logger;
     /** @var Monitoring */
     private $monitoring;
@@ -68,7 +71,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->hypothesisSdk = new HypothesisSdk($this->httpClient, $this->credentials);
         $this->limit = $this->limitIterations(1);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = new BufferingLogger();
         $this->monitoring = new Monitoring();
         $this->transformer = $this->createMock(QueueItemTransformer::class);
         $this->queue = new WatchableQueueMock();
@@ -94,7 +97,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider providerProfiles
      */
-    public function it_will_process_an_item_in_the_queue(QueueItem $item, Profile $profile, $data)
+    public function it_will_process_an_item_in_the_queue(QueueItem $item, Profile $profile, $data, $logs = [])
     {
         $data = [
             'authority' => $this->authority,
@@ -121,6 +124,13 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->queue->count());
         $this->commandTesterExecute();
         $this->assertEquals(0, $this->queue->count());
+        $actual_logs = $this->logger->cleanLogs();
+        $this->assertContains([LogLevel::INFO, 'Hypothesis user "username" successfully created.', []], $actual_logs);
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                $this->assertContains($log, $actual_logs);
+            }
+        }
     }
 
     public function providerProfiles()
@@ -133,6 +143,9 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'email' => 'username@hypothesis.elifesciences.org',
                 'display_name' => 'PreferredName',
             ],
+            [
+                [LogLevel::INFO, 'No email address for profile "username", backup email address created.', []],
+            ],
         ];
         yield 'display_name too long' => [
             new InternalSqsMessage('profile', 'username'),
@@ -141,6 +154,28 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username' => 'username',
                 'email' => 'username@hypothesis.elifesciences.org',
                 'display_name' => 'This display name is way too l',
+            ],
+            [
+                [LogLevel::INFO, 'The display name for profile "username" is too long and has been truncated from "This display name is way too long" to "This display name is way too l".', []],
+                [LogLevel::INFO, 'No email address for profile "username", backup email address created.', []],
+            ],
+        ];
+        yield 'with single email' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new ArraySequence(['username@email.com'])),
+            [
+                'username' => 'username',
+                'email' => 'username@email.com',
+                'display_name' => 'PreferredName',
+            ],
+        ];
+        yield 'with multiple emails' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new ArraySequence(['another@email.com', 'username@email.com'])),
+            [
+                'username' => 'username',
+                'email' => 'another@email.com',
+                'display_name' => 'PreferredName',
             ],
         ];
     }
