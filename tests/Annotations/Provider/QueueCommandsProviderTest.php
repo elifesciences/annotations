@@ -3,6 +3,7 @@
 namespace tests\eLife\Annotations\Provider;
 
 use eLife\Annotations\Provider\QueueCommandsProvider;
+use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use LogicException;
 use Silex\Application;
 use tests\eLife\Annotations\WebTestCase;
@@ -12,6 +13,16 @@ use tests\eLife\Annotations\WebTestCase;
  */
 final class QueueCommandsProviderTest extends WebTestCase
 {
+    /**
+     * @before
+     */
+    public function setupSqs()
+    {
+        $this->kernel->override('aws.queue', function () {
+            return new WatchableQueueMock();
+        });
+    }
+
     /**
      * @test
      */

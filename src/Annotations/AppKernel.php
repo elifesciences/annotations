@@ -283,4 +283,14 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
     {
         return isset($this->app[$id]);
     }
+
+    /**
+     * Use only in integration tests.
+     *
+     * @internal
+     */
+    public function override($id, callable $factory)
+    {
+        $this->app[$id] = $factory;
+    }
 }
