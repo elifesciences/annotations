@@ -13,6 +13,7 @@ use eLife\Bus\Limit\CompositeLimit;
 use eLife\Bus\Limit\LoggingLimit;
 use eLife\Bus\Limit\MemoryLimit;
 use eLife\Bus\Limit\SignalsLimit;
+use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
@@ -64,6 +65,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'credential_file' => true,
                 'region' => 'us-east-1',
                 'endpoint' => 'http://localhost:4100',
+                'stub' => false,
             ],
             'hypothesis' => ($config['hypothesis'] ?? []) + [
                 'api_url' => 'https://hypothes.is/api/',
@@ -240,7 +242,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         };
 
         $this->app['aws.queue'] = function (Application $app) {
-            return new SqsWatchableQueue($app['aws.sqs'], $app['aws']['queue_name']);
+            if ($app['aws']['stub']) {
+                return new WatchableQueueMock();
+            } else {
+                return new SqsWatchableQueue($app['aws.sqs'], $app['aws']['queue_name']);
+            }
         };
 
         $this->app['aws.queue_transformer'] = function (Application $app) {
