@@ -53,7 +53,9 @@ final class Users
                  * attempt an update request.
                  */
                 if ($reason instanceof BadResponse) {
-                    return $this->update($user);
+                    if ($reason->getResponse()->getStatusCode() == 400) {
+                        return $this->update($user);
+                    }
                 }
 
                 return rejection_for($reason);
