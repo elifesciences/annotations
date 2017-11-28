@@ -140,7 +140,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new EmptySequence()),
             [
                 'username' => 'username',
-                'email' => 'username@hypothesis.elifesciences.org',
+                'email' => 'username@blackhole.elifesciences.org',
                 'display_name' => 'PreferredName',
             ],
             [
@@ -152,7 +152,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             new Profile('username', new PersonDetails('This display name is way too long', 'IndexName'), new EmptySequence(), new EmptySequence()),
             [
                 'username' => 'username',
-                'email' => 'username@hypothesis.elifesciences.org',
+                'email' => 'username@blackhole.elifesciences.org',
                 'display_name' => 'This display name is way too l',
             ],
             [

@@ -49,7 +49,7 @@ final class QueueWatchCommand extends QueueCommand
                 $email = $emails[0];
             } else {
                 $this->logger->info(sprintf('No email address for profile "%s", backup email address created.', $id));
-                $email = $id.'@hypothesis.elifesciences.org';
+                $email = $id.'@blackhole.elifesciences.org';
             }
             if (strlen($display_name) > User::DISPLAY_NAME_MAX_LENGTH) {
                 $sanitized_display_name = substr($display_name, 0, User::DISPLAY_NAME_MAX_LENGTH);
