@@ -2,6 +2,7 @@
 
 namespace eLife\Annotations\Command;
 
+use eLife\ApiSdk\Model\AccessControl;
 use eLife\ApiSdk\Model\Profile;
 use eLife\Bus\Command\QueueCommand;
 use eLife\Bus\Limit\Limit;
@@ -43,7 +44,9 @@ final class QueueWatchCommand extends QueueCommand
     {
         if ($entity instanceof Profile) {
             $id = $entity->getIdentifier()->getId();
-            $emails = $entity->getEmailAddresses();
+            $emails = $entity->getEmailAddresses()->map(function (AccessControl $accessControl) {
+                return $accessControl->getValue();
+            });
             $display_name = $entity->getDetails()->getPreferredName();
             if (count($emails) > 0) {
                 $email = $emails[0];
