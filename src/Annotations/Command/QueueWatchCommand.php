@@ -47,7 +47,7 @@ final class QueueWatchCommand extends QueueCommand
             $emails = $entity
                 ->getEmailAddresses()
                 ->filter(function (AccessControl $accessControl) {
-                    return $accessControl->getAccess() == AccessControl::ACCESS_PUBLIC;
+                    return $accessControl->getAccess() === AccessControl::ACCESS_PUBLIC;
                 })
                 ->map(function (AccessControl $accessControl) {
                     return $accessControl->getValue();
