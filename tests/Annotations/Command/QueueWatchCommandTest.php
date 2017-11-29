@@ -137,10 +137,15 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     {
         yield 'standard' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new EmptySequence()),
+            new Profile(
+                'username',
+                new PersonDetails('PreferredName', 'IndexName'),
+                new EmptySequence(),
+                new EmptySequence()
+            ),
             [
                 'username' => 'username',
-                'email' => 'username@hypothesis.elifesciences.org',
+                'email' => 'username@blackhole.elifesciences.org',
                 'display_name' => 'PreferredName',
             ],
             [
@@ -149,10 +154,15 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         ];
         yield 'display_name too long' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('This display name is way too long', 'IndexName'), new EmptySequence(), new EmptySequence()),
+            new Profile(
+                'username',
+                new PersonDetails('This display name is way too long', 'IndexName'),
+                new EmptySequence(),
+                new EmptySequence()
+            ),
             [
                 'username' => 'username',
-                'email' => 'username@hypothesis.elifesciences.org',
+                'email' => 'username@blackhole.elifesciences.org',
                 'display_name' => 'This display name is way too l',
             ],
             [
@@ -162,7 +172,12 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         ];
         yield 'with single email' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new ArraySequence(['username@email.com'])),
+            new Profile(
+                'username',
+                new PersonDetails('PreferredName', 'IndexName'),
+                new EmptySequence(),
+                new ArraySequence(['username@email.com'])
+            ),
             [
                 'username' => 'username',
                 'email' => 'username@email.com',
@@ -171,7 +186,12 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         ];
         yield 'with multiple emails' => [
             new InternalSqsMessage('profile', 'username'),
-            new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new ArraySequence(['another@email.com', 'username@email.com'])),
+            new Profile(
+                'username',
+                new PersonDetails('PreferredName', 'IndexName'),
+                new EmptySequence(),
+                new ArraySequence(['another@email.com', 'username@email.com'])
+            ),
             [
                 'username' => 'username',
                 'email' => 'another@email.com',
