@@ -204,6 +204,23 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'display_name' => 'PreferredName',
             ],
         ];
+        yield 'with restricted emails (in case authenticated API requests are used)' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile(
+                'username',
+                new PersonDetails('PreferredName', 'IndexName'),
+                new EmptySequence(),
+                new ArraySequence([
+                    new AccessControl('restricted@email.com', AccessControl::ACCESS_RESTRICTED),
+                    new AccessControl('public@email.com', AccessControl::ACCESS_PUBLIC),
+                ])
+            ),
+            [
+                'username' => 'username',
+                'email' => 'public@email.com',
+                'display_name' => 'PreferredName',
+            ],
+        ];
     }
 
     private function prepareCommandTester($serializedTransform = false)

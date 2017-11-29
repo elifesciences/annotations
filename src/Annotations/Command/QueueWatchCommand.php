@@ -44,9 +44,14 @@ final class QueueWatchCommand extends QueueCommand
     {
         if ($entity instanceof Profile) {
             $id = $entity->getIdentifier()->getId();
-            $emails = $entity->getEmailAddresses()->map(function (AccessControl $accessControl) {
-                return $accessControl->getValue();
-            });
+            $emails = $entity
+                ->getEmailAddresses()
+                ->filter(function (AccessControl $accessControl) {
+                    return $accessControl->getAccess() == AccessControl::ACCESS_PUBLIC;
+                })
+                ->map(function (AccessControl $accessControl) {
+                    return $accessControl->getValue();
+                });
             $display_name = $entity->getDetails()->getPreferredName();
             if (count($emails) > 0) {
                 $email = $emails[0];
