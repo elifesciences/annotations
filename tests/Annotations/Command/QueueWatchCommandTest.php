@@ -5,6 +5,7 @@ namespace tests\eLife\Annotations\Command;
 use eLife\Annotations\Command\QueueWatchCommand;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
+use eLife\ApiSdk\Model\AccessControl;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Profile;
 use eLife\Bus\Limit\CallbackLimit;
@@ -176,7 +177,9 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username',
                 new PersonDetails('PreferredName', 'IndexName'),
                 new EmptySequence(),
-                new ArraySequence(['username@email.com'])
+                new ArraySequence([
+                    new AccessControl('username@email.com', AccessControl::ACCESS_PUBLIC),
+                ])
             ),
             [
                 'username' => 'username',
@@ -190,11 +193,31 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
                 'username',
                 new PersonDetails('PreferredName', 'IndexName'),
                 new EmptySequence(),
-                new ArraySequence(['another@email.com', 'username@email.com'])
+                new ArraySequence([
+                    new AccessControl('another@email.com', AccessControl::ACCESS_PUBLIC),
+                    new AccessControl('username@email.com', AccessControl::ACCESS_PUBLIC),
+                ])
             ),
             [
                 'username' => 'username',
                 'email' => 'another@email.com',
+                'display_name' => 'PreferredName',
+            ],
+        ];
+        yield 'with restricted emails (in case authenticated API requests are used)' => [
+            new InternalSqsMessage('profile', 'username'),
+            new Profile(
+                'username',
+                new PersonDetails('PreferredName', 'IndexName'),
+                new EmptySequence(),
+                new ArraySequence([
+                    new AccessControl('restricted@email.com', AccessControl::ACCESS_RESTRICTED),
+                    new AccessControl('public@email.com', AccessControl::ACCESS_PUBLIC),
+                ])
+            ),
+            [
+                'username' => 'username',
+                'email' => 'public@email.com',
                 'display_name' => 'PreferredName',
             ],
         ];
