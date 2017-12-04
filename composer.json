@@ -18,7 +18,7 @@
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
         "elife/bus-sdk": "^1.0@dev",
-        "elife/logging-sdk": "^1.0@dev",
+        "elife/logging-sdk": "dev-logging_containerized as 1.0",
         "elife/ping": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
