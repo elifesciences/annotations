@@ -14,6 +14,5 @@ services:
     php:
         build: .
         volumes:
-            # the permissions of these are going to be a recurring problem
-            - ./var/logs:/srv/annotations/var/logs
+            - ./config/container.php:/srv/annotations/config.php
 

@@ -54,6 +54,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
+            'containerized' => $config['containerized'] ?? false,
             'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
             'logging.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
@@ -90,7 +91,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         }
 
         $this->app['logger'] = function (Application $app) {
-            $factory = LoggingFactory::containerized('annotations', $app['logging.level']);
+            if ($app['containerized']) {
+                $factory = LoggingFactory::containerized('annotations', $app['logging.level']);
+            } else {
+                $factory = new LoggingFactory($app['logging.path'], 'annotations', $app['logging.level']);
+            }
 
             return $factory->logger();
         };
