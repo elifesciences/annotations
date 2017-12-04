@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:1.13.7
+        ports:
+            - "8080:80"
+        volumes:
+            - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
+            # can we avoid this by removing try_files?
+            - ./web:/srv/annotations/web
+        depends_on:
+            - php
+    php:
+        build: .
+        volumes:
+            # the permissions of these are going to be a recurring problem
+            - ./var/logs:/srv/annotations/var/logs
+
