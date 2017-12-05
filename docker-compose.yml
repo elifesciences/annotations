@@ -45,6 +45,8 @@ services:
         command: tail -f /logs/all.json
         depends_on:
             - cli
+    # TODO: api-dummy
+    # TODO: hypothesis-dummy
 
 volumes:
     logs:
