@@ -1,0 +1,7 @@
+Local:
+  Host: goaws
+  Port: 4100                        # port to listen on.
+  LogMessages: true                 # Log messages (true/false)
+  LogFile: ./goaws_messages.log  # Log filename (for message logging
+  Queues:
+    - Name: annotations--dev

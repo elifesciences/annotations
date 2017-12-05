@@ -51,8 +51,8 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
     {
         $configFile = __DIR__.'/../../config.php';
         $config = array_merge(
-            file_exists($configFile) ? require $configFile : [],
-            require __DIR__."/../../config/{$environment}.php"
+            require __DIR__."/../../config/{$environment}.php",
+            file_exists($configFile) ? require $configFile : []
         );
 
         $this->app = new Application([
