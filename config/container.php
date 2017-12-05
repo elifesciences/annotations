@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'containerized' => true,
     'aws' => [
         'queue_name' => 'annotations--dev',
         'queue_message_default_type' => 'profile',
