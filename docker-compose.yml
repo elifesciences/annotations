@@ -17,4 +17,13 @@ services:
             dockerfile: Dockerfile.fpm
         volumes:
             - ./config/container.php:/srv/annotations/config.php
-
+        env_file:
+            - dev.env
+    cli:
+        build: 
+            context: .
+            dockerfile: Dockerfile.cli
+        volumes:
+            - ./config/container.php:/srv/annotations/config.php
+        env_file:
+            - dev.env
