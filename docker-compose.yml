@@ -10,9 +10,11 @@ services:
             # can we avoid this by removing try_files?
             - ./web:/srv/annotations/web
         depends_on:
-            - php
-    php:
-        build: .
+            - fpm
+    fpm:
+        build: 
+            context: .
+            dockerfile: Dockerfile.fpm
         volumes:
             - ./config/container.php:/srv/annotations/config.php
 

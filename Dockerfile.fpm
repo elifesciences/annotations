@@ -9,4 +9,3 @@ COPY composer.json composer.lock /srv/annotations/
 RUN composer install
 
 COPY . /srv/annotations
-

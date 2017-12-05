@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t annotations .
+docker build -f Dockerfile.fpm -t annotations .
