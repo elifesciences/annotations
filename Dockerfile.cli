@@ -1,6 +1,8 @@
 FROM php:7.0.26-cli-jessie
 RUN docker-php-ext-install pcntl
 RUN apt-get update && apt-get install -y git-core zip
+# try apt-get clean
+
 # replace with multi-stage build using the composer official image?
 RUN curl https://getcomposer.org/download/1.5.2/composer.phar -o /usr/local/bin/composer && chmod +x /usr/local/bin/composer 
 
