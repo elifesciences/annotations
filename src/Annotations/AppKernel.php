@@ -93,7 +93,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         }
 
         $this->app['logger'] = function (Application $app) {
-			$factory = new LoggingFactory($app['logging.path'], 'annotations', $app['logging.level']);
+            $factory = new LoggingFactory($app['logging.path'], 'annotations', $app['logging.level']);
 
             return $factory->logger();
         };
