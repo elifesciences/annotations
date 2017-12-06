@@ -11,3 +11,5 @@ COPY composer.json composer.lock /srv/annotations/
 RUN composer install
 
 COPY . /srv/annotations
+RUN mkdir -p var/logs && chown www-data:www-data var/logs
+USER www-data
