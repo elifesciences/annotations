@@ -16,7 +16,7 @@ final class AppKernelTest extends WebTestCase
 
         $client->request('GET', '/ping');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $client->getResponse()->getStatusCode(), var_export($client->getResponse()->getContent(), true));
         $this->assertSame('text/plain; charset=UTF-8', $client->getResponse()->headers->get('Content-Type'));
         $this->assertSame('pong', $client->getResponse()->getContent());
         $this->assertFalse($client->getResponse()->isCacheable());
