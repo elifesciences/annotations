@@ -35,8 +35,6 @@ use Silex\Application;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\VarDumperServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -82,14 +80,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         $this->app->register(new PingControllerProvider());
 
         if ($this->app['debug']) {
-            $this->app->register(new VarDumperServiceProvider());
             $this->app->register(new HttpFragmentServiceProvider());
             $this->app->register(new ServiceControllerServiceProvider());
             $this->app->register(new TwigServiceProvider());
-            $this->app->register(new WebProfilerServiceProvider(), [
-                'profiler.cache_dir' => __DIR__.'/../../var/cache/profiler',
-                'profiler.mount_prefix' => '/_profiler',
-            ]);
         }
 
         $this->app['logger'] = function (Application $app) {
