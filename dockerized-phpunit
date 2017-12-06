@@ -6,4 +6,4 @@ docker run \
     -v /srv/annotations/var/logs \
     -t \
     annotations-cli \
-    /usr/bin/env php /srv/annotations/vendor/bin/phpunit
+    /usr/bin/env php /srv/annotations/vendor/bin/phpunit $@
