@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+# -u: needs to write to vendor/
+
+docker run \
+    -v $(pwd):/srv/annotations \
+    -v /srv/annotations/var/logs \
+    -u $(id -u) \
+    -t \
+    annotations-cli \
+    composer $@
