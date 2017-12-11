@@ -1,4 +1,4 @@
-FROM php:7.0.26-fpm-jessie
+FROM php:7.0-fpm-jessie
 
 RUN apt-get update && apt-get install -y git-core zip
 # try apt-get clean
