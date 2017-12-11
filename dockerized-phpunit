@@ -5,5 +5,5 @@ docker run \
     -v $(pwd):/srv/annotations \
     -v /srv/annotations/var/logs \
     -t \
-    annotations-cli \
+    annotations_cli \
     /usr/bin/env php /srv/annotations/vendor/bin/phpunit $@

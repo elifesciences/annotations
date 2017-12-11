@@ -10,5 +10,5 @@ docker run \
     -v /srv/annotations/var/logs \
     -u $(id -u) \
     -t \
-    annotations-cli \
+    annotations_cli \
     composer $@
