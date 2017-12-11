@@ -1,4 +1,6 @@
-build/*
+build/**/*
 .git
+config.php
 docker-compose.yml
 var/
+vendor/
