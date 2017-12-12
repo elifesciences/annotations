@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-docker run \
-    -v $(pwd):/srv/annotations \
-    -v /srv/annotations/var/logs \
-    -t \
-    annotations_cli \
+docker-compose run \
+    cli \
     /usr/bin/env php $@
