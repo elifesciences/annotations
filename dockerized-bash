@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+docker run \
+    -v $(pwd):/srv/annotations \
+    -v /srv/annotations/var/logs \
+    -it \
+    annotations_cli \
+    /bin/bash $@
