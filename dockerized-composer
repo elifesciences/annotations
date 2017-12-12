@@ -5,10 +5,7 @@ set -e
 # Composer prints some warning when git-cloning
 # due to the user not being in /etc/passwd
 
-docker run \
-    -v $(pwd):/srv/annotations \
-    -v /srv/annotations/var/logs \
+docker-compose run \
     -u $(id -u) \
-    -t \
-    annotations_cli \
+    cli \
     composer $@
