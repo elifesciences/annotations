@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c29a00416a950f6ba57a581f406ac4de",
+    "content-hash": "8d110c998e5c812fa4f6decc163ae9f7",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -495,7 +495,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2017-10-23T09:04:22+00:00"
+            "time": "2017-10-23 09:04:22"
         },
         {
             "name": "elife/api-problem",
@@ -590,7 +590,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-11-29T14:31:36+00:00"
+            "time": "2017-11-29 14:31:36"
         },
         {
             "name": "elife/bus-sdk",
@@ -638,7 +638,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences Bus SDK",
-            "time": "2017-11-16T13:04:40+00:00"
+            "time": "2017-11-16 13:04:40"
         },
         {
             "name": "elife/logging-sdk",
@@ -681,7 +681,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2017-09-19T06:46:12+00:00"
+            "time": "2017-09-19 06:46:12"
         },
         {
             "name": "elife/ping",
@@ -732,6 +732,52 @@
             ],
             "description": "eLife Sciences ping controller",
             "time": "2017-10-11T09:27:00+00:00"
+        },
+        {
+            "name": "firebase/php-jwt",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "reference": "9984a4d3a32ae7673d6971ea00bae9d0a1abba0e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": " 4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2017-06-27T22:17:23+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

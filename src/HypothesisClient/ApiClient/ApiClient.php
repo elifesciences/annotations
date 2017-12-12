@@ -13,7 +13,7 @@ trait ApiClient
 {
     private $httpClient;
     private $headers;
-    private $credentials;
+    private $credentials = null;
 
     public function __construct(HttpClient $httpClient, $credentials = null, array $headers = [])
     {
@@ -27,12 +27,19 @@ trait ApiClient
     private function setCredentials(Credentials $credentials)
     {
         $this->credentials = $credentials;
-        $this->headers['Authorization'] = 'Basic '.base64_encode($credentials->getClientId().':'.$credentials->getSecretKey());
     }
 
-    private function getCredentials() : Credentials
+    /**
+     * @return Credentials|null
+     */
+    private function getCredentials()
     {
         return $this->credentials;
+    }
+
+    private function getAuthorizationBasic() : array
+    {
+        return ($this->getCredentials() instanceof Credentials) ? ['Authorization' => $this->getCredentials()->getAuthorizationBasic()] : [];
     }
 
     final protected function deleteRequest(

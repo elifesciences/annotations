@@ -2,29 +2,31 @@
 
 namespace eLife\HypothesisClient\Credentials;
 
-use Serializable;
+use Firebase\JWT\JWT;
 
-class Credentials implements Serializable
+class Credentials
 {
-    private $clientId;
-    private $secret;
+    private $userManagement;
+    private $jwtSigning;
     private $authority;
+    private $group;
 
-    public function __construct(string $clientId, string $secret, string $authority)
+    public function __construct(UserManagementCredential $userManagement, JWTSigningCredential $jwtSigning, string $authority, string $group)
     {
-        $this->clientId = trim($clientId);
-        $this->secret = trim($secret);
+        $this->userManagement = $userManagement;
+        $this->jwtSigning = $jwtSigning;
         $this->authority = trim($authority);
+        $this->group = trim($group);
     }
 
-    public function getClientId() : string
+    public function userManagement() : UserManagementCredential
     {
-        return $this->clientId;
+        return $this->userManagement;
     }
 
-    public function getSecretKey() : string
+    public function jwtSigning() : JWTSigningCredential
     {
-        return $this->secret;
+        return $this->jwtSigning;
     }
 
     public function getAuthority() : string
@@ -32,26 +34,29 @@ class Credentials implements Serializable
         return $this->authority;
     }
 
-    public function toArray() : array
+    public function getGroup() : string
     {
-        return [
-            'clientId' => $this->getClientId(),
-            'secret' => $this->getSecretKey(),
-            'authority' => $this->getAuthority(),
+        return $this->group;
+    }
+
+    public function getAuthorizationBasic() : string
+    {
+        return 'Basic '.base64_encode($this->userManagement()->getClientId().':'.$this->userManagement()->getSecretKey());
+    }
+
+    public function getJWT($id)
+    {
+        $now = time();
+        $sub = "acct:{$id}@".$this->getAuthority();
+
+        $payload = [
+            'aud' => 'hypothes.is',
+            'iss' => $this->jwtSigning()->getClientId(),
+            'sub' => $sub,
+            'nbf' => $now,
+            'exp' => $now + $this->jwtSigning()->getExpire(),
         ];
-    }
 
-    public function serialize() : string
-    {
-        return json_encode($this->toArray());
-    }
-
-    public function unserialize($serialized)
-    {
-        $data = json_decode($serialized, true);
-
-        $this->clientId = $data['clientId'];
-        $this->secret = $data['secret'];
-        $this->authority = $data['authority'];
+        return JWT::encode($payload, $this->jwtSigning()->getSecretKey(), 'HS256');
     }
 }

@@ -5,6 +5,8 @@ namespace tests\eLife\HypothesisClient\Client;
 use eLife\HypothesisClient\ApiClient\UsersClient;
 use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Credentials\JWTSigningCredential;
+use eLife\HypothesisClient\Credentials\UserManagementCredential;
 use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\User;
@@ -27,6 +29,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
     private $clientId;
     private $credentials;
     private $denormalizer;
+    private $group;
     private $httpClient;
     private $secretKey;
     /** @var Users */
@@ -46,8 +49,9 @@ class UsersTest extends PHPUnit_Framework_TestCase
         $this->clientId = 'client_id';
         $this->secretKey = 'secret_key';
         $this->authority = 'authority';
+        $this->group = 'group';
         $this->authorization = sprintf('Basic %s', base64_encode($this->clientId.':'.$this->secretKey));
-        $this->credentials = new Credentials($this->clientId, $this->secretKey, $this->authority);
+        $this->credentials = new Credentials(new UserManagementCredential($this->clientId, $this->secretKey), new JWTSigningCredential($this->clientId, $this->secretKey), $this->authority, $this->group);
         $this->denormalizer = $this->getMockBuilder(DenormalizerInterface::class)
             ->setMethods(['denormalize', 'supportsDenormalization'])
             ->getMock();
