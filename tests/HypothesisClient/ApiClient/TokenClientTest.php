@@ -3,6 +3,7 @@
 namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
+use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
@@ -16,6 +17,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
  */
 final class TokenClientTest extends PHPUnit_Framework_TestCase
 {
+    private $clock;
     private $credentials;
     private $httpClient;
     /** @var TokenClient */
@@ -27,7 +29,7 @@ final class TokenClientTest extends PHPUnit_Framework_TestCase
     protected function setUpClient()
     {
         $this->credentials = $this->getMockBuilder(JWTSigningCredentials::class)
-            ->setConstructorArgs(['client_id', 'secret_key', 'authority', 600])
+            ->setConstructorArgs(['client_id', 'secret_key', 'authority', new Clock(), 600])
             ->getMock();
         $this->httpClient = $this->createMock(HttpClient::class);
         $this->tokenClient = new TokenClient(

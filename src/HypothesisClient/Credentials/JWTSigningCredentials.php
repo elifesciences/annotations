@@ -2,30 +2,29 @@
 
 namespace eLife\HypothesisClient\Credentials;
 
+use eLife\HypothesisClient\Clock\Clock;
 use Firebase\JWT\JWT;
 
 class JWTSigningCredentials extends Credentials
 {
+    private $clock;
     private $expire;
-    private $startTime;
 
-    public function __construct(string $clientId, string $clientSecret, string $authority, int $expire = 600, int $startTime = null)
+    public function __construct(string $clientId, string $clientSecret, string $authority, Clock $clock, int $expire = 600)
     {
         parent::__construct($clientId, $clientSecret, $authority);
+        $this->clock = $clock;
         $this->expire = $expire;
-        $this->startTime = $startTime;
     }
 
-    public function getExpireTime() : int
+    public function getExpire() : int
     {
-        return $this->getStartTime() + $this->expire;
+        return $this->expire;
     }
 
     public function getStartTime() : int
     {
-        $this->startTime = $this->startTime ?? time();
-
-        return $this->startTime;
+        return $this->clock->time();
     }
 
     public function getJWT(string $username) : string
@@ -38,24 +37,9 @@ class JWTSigningCredentials extends Credentials
             'iss' => $this->getClientId(),
             'sub' => $sub,
             'nbf' => $now,
-            'exp' => $this->getExpireTime(),
+            'exp' => $now + $this->getExpire(),
         ];
 
         return JWT::encode($payload, $this->getClientSecret(), 'HS256');
-    }
-
-    public function toArray() : array
-    {
-        return parent::toArray() + [
-            'expire' => $this->expire,
-        ];
-    }
-
-    public function unserialize($serialized)
-    {
-        parent::unserialize($serialized);
-        $data = json_decode($serialized, true);
-
-        $this->expire = $data['expire'];
     }
 }

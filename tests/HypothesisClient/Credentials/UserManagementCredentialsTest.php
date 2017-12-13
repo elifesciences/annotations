@@ -4,23 +4,12 @@ namespace tests\eLife\HypothesisClient\Credentials;
 
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use PHPUnit_Framework_TestCase;
-use Serializable;
 
 /**
  * @covers \eLife\HypothesisClient\Credentials\UserManagementCredentials
  */
 class UserManagementCredentialsTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function it_can_be_serialized()
-    {
-        $credentials = new UserManagementCredentials('foo', 'baz', 'authority');
-        $this->assertInstanceOf(Serializable::class, $credentials);
-        $this->assertEquals($credentials, unserialize(serialize($credentials)));
-    }
-
     /**
      * @test
      */

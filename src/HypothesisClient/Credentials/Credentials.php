@@ -2,9 +2,7 @@
 
 namespace eLife\HypothesisClient\Credentials;
 
-use Serializable;
-
-abstract class Credentials implements Serializable
+abstract class Credentials
 {
     private $authority;
     private $clientId;
@@ -30,28 +28,5 @@ abstract class Credentials implements Serializable
     public function getAuthority() : string
     {
         return $this->authority;
-    }
-
-    public function toArray() : array
-    {
-        return [
-            'clientId' => $this->getClientId(),
-            'clientSecret' => $this->getClientSecret(),
-            'authority' => $this->getAuthority(),
-        ];
-    }
-
-    public function serialize() : string
-    {
-        return json_encode($this->toArray());
-    }
-
-    public function unserialize($serialized)
-    {
-        $data = json_decode($serialized, true);
-
-        $this->clientId = $data['clientId'];
-        $this->clientSecret = $data['clientSecret'];
-        $this->authority = $data['authority'];
     }
 }
