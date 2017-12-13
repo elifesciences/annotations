@@ -24,6 +24,7 @@ class JWTSigningCredentials extends Credentials
     public function getStartTime() : int
     {
         $this->startTime = $this->startTime ?? time();
+
         return $this->startTime;
     }
 
