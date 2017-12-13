@@ -7,21 +7,29 @@ use Firebase\JWT\JWT;
 class JWTSigningCredentials extends Credentials
 {
     private $expire;
+    private $startTime;
 
-    public function __construct(string $clientId, string $clientSecret, string $authority, int $expire = 600)
+    public function __construct(string $clientId, string $clientSecret, string $authority, int $expire = 600, int $startTime = null)
     {
         parent::__construct($clientId, $clientSecret, $authority);
         $this->expire = $expire;
+        $this->startTime = $startTime;
     }
 
-    public function getExpire() : int
+    public function getExpireTime() : int
     {
-        return $this->expire;
+        return $this->getStartTime() + $this->expire;
+    }
+
+    public function getStartTime() : int
+    {
+        $this->startTime = $this->startTime ?? time();
+        return $this->startTime;
     }
 
     public function getJWT(string $username) : string
     {
-        $now = $_SERVER['REQUEST_TIME'];
+        $now = $this->getStartTime();
         $sub = "acct:{$username}@".$this->getAuthority();
 
         $payload = [
@@ -29,7 +37,7 @@ class JWTSigningCredentials extends Credentials
             'iss' => $this->getClientId(),
             'sub' => $sub,
             'nbf' => $now,
-            'exp' => $now + $this->getExpire(),
+            'exp' => $this->getExpireTime(),
         ];
 
         return JWT::encode($payload, $this->getClientSecret(), 'HS256');
@@ -38,7 +46,7 @@ class JWTSigningCredentials extends Credentials
     public function toArray() : array
     {
         return parent::toArray() + [
-            'expire' => $this->getExpire(),
+            'expire' => $this->expire,
         ];
     }
 

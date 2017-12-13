@@ -28,9 +28,21 @@ class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
     public function it_may_have_an_expire_time()
     {
         $credentials = new JWTSigningCredentials('foo', 'baz', 'authority');
-        $this->assertGreaterThan(0, $credentials->getExpire());
+        $this->assertGreaterThan(0, $credentials->getExpireTime() - $credentials->getStartTime());
         $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', 100);
-        $this->assertEquals(100, $credentials->getExpire());
+        $this->assertEquals(100, $credentials->getExpireTime() - $credentials->getStartTime());
+    }
+
+    /**
+     * @test
+     */
+    public function it_may_have_a_start_time()
+    {
+        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority');
+        $this->assertGreaterThanOrEqual(time(), $credentials->getStartTime());
+        $start_time = time();
+        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', 100, $start_time);
+        $this->assertEquals($start_time, $credentials->getStartTime());
     }
 
     /**
@@ -38,8 +50,7 @@ class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_generate_a_jwt_token()
     {
-        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', 300);
-        $now = $_SERVER['REQUEST_TIME'];
+        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', 300, $now = time());
         $payload = [
             'aud' => 'hypothes.is',
             'iss' => 'foo',
