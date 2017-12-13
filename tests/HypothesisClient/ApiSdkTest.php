@@ -4,9 +4,7 @@ namespace tests\eLife\HypothesisClient;
 
 use eLife\HypothesisClient\ApiSdk;
 use eLife\HypothesisClient\Client\Users;
-use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\Credentials\JWTSigningCredential;
-use eLife\HypothesisClient\Credentials\UserManagementCredential;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\ArrayResult;
@@ -37,15 +35,15 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
     {
         $httpClient = $this->getMockBuilder(HttpClient::class)
             ->getMock();
-        $credentials = $this->getMockBuilder(Credentials::class)
-            ->setConstructorArgs([new UserManagementCredential('client_id', 'secret_key'), new JWTSigningCredential('client_id', 'secret_key'), 'authority', 'group'])
+        $userManagement = $this->getMockBuilder(UserManagementCredentials::class)
+            ->setConstructorArgs(['client_id', 'secret_key', 'authority'])
             ->getMock();
 
-        $credentials->expects($this->atLeastOnce())->method('getAuthorizationBasic')->willReturn('Basic '.base64_encode('client_id:secret_key'));
+        $userManagement->expects($this->atLeastOnce())->method('getAuthorizationBasic')->willReturn('Basic '.base64_encode('client_id:secret_key'));
 
         $sdk = (new ApiSdk(
             $httpClient,
-            $credentials
+            $userManagement
         ));
 
         $request = new Request(

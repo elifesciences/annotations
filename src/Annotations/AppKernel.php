@@ -18,8 +18,7 @@ use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
 use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\Credentials\JWTSigningCredential;
-use eLife\HypothesisClient\Credentials\UserManagementCredential;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient as HypothesisGuzzle6HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient as HypothesisNotifyingHttpClient;
@@ -173,14 +172,13 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 });
             }
 
-            $credentials = new Credentials(
-                new UserManagementCredential($app['hypothesis']['user_management']['client_id'], $app['hypothesis']['user_management']['secret_key']),
-                new JWTSigningCredential($app['hypothesis']['jwt_signing']['client_id'], $app['hypothesis']['jwt_signing']['secret_key'], $app['hypothesis']['jwt_signing']['expire']),
-                $app['hypothesis']['authority'],
-                $app['hypothesis']['group']
+            $userManagement = new UserManagementCredentials(
+                $app['hypothesis']['user_management']['client_id'],
+                $app['hypothesis']['user_management']['secret_key'],
+                $app['hypothesis']['authority']
             );
 
-            return new HypothesisApiSdk($notifyingHttpClient, $credentials);
+            return new HypothesisApiSdk($notifyingHttpClient, $userManagement);
         };
 
         $this->app['guzzle'] = function (Application $app) {

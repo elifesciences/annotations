@@ -3,9 +3,7 @@
 namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
-use eLife\HypothesisClient\Credentials\Credentials;
-use eLife\HypothesisClient\Credentials\JWTSigningCredential;
-use eLife\HypothesisClient\Credentials\UserManagementCredential;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -32,8 +30,8 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpClient()
     {
-        $this->credentials = $this->getMockBuilder(Credentials::class)
-            ->setConstructorArgs([new UserManagementCredential('client_id', 'secret_key'), new JWTSigningCredential('client_id', 'secret_key'), 'authority', 'group'])
+        $this->credentials = $this->getMockBuilder(UserManagementCredentials::class)
+            ->setConstructorArgs(['client_id', 'secret_key', 'authority'])
             ->getMock();
         $this->credentials
             ->method('getAuthorizationBasic')
@@ -139,66 +137,6 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
         $this->assertEquals($response, $this->usersClient->updateUser([], 'userid', 'email@email.com'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_claim_a_token()
-    {
-        $this->credentials
-            ->method('getJWT')
-            ->willReturn('jwt');
-        $request = new Request(
-            'POST',
-            'token',
-            ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient'],
-            json_encode([
-                'form_params' => [
-                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion' => 'jwt',
-                ],
-            ])
-        );
-        $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
-        $this->httpClient
-            ->expects($this->once())
-            ->method('send')
-            ->with(RequestConstraint::equalTo($request))
-            ->willReturn($response);
-        $this->assertEquals($response, $this->usersClient->getUserToken([], 'userid'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_lists_annotations_public()
-    {
-        $request = new Request('GET', 'search?user=list&group=__world__&offset=0&limit=20&order=desc',
-            ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient']);
-        $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
-        $this->httpClient
-            ->expects($this->once())
-            ->method('send')
-            ->with(RequestConstraint::equalTo($request))
-            ->willReturn($response);
-        $this->assertEquals($response, $this->usersClientAnonymous->getUserAnnotations([], 'list', null, 1, 20, true, '__world__', false));
-    }
-
-    /**
-     * @test
-     */
-    public function it_lists_annotations_restricted()
-    {
-        $request = new Request('GET', 'search?user=list&group=__world__&offset=0&limit=20&order=desc',
-            ['X-Foo' => 'bar', 'Authorization' => 'Bearer token', 'User-Agent' => 'HypothesisClient']);
-        $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
-        $this->httpClient
-            ->expects($this->once())
-            ->method('send')
-            ->with(RequestConstraint::equalTo($request))
-            ->willReturn($response);
-        $this->assertEquals($response, $this->usersClientAnonymous->getUserAnnotations([], 'list', 'token', 1, 20, true, '__world__', true));
     }
 
     /**

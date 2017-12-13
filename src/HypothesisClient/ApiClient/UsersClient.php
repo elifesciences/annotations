@@ -2,21 +2,45 @@
 
 namespace eLife\HypothesisClient\ApiClient;
 
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
+use eLife\HypothesisClient\HttpClient\HttpClient;
+use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
-use function GuzzleHttp\Psr7\build_query;
 
 final class UsersClient
 {
     use ApiClient;
 
+    private $credentials;
+
+    public function __construct(HttpClient $httpClient, UserManagementCredentials $credentials = null, array $headers = [])
+    {
+        $this->httpClient = new UserAgentPrependingHttpClient($httpClient, 'HypothesisClient');
+        $this->headers = $headers;
+        $this->credentials = $credentials;
+    }
+
+    /**
+     * @return UserManagementCredentials|null
+     */
+    private function getCredentials()
+    {
+        return $this->credentials;
+    }
+
+    private function getAuthorizationBasic() : array
+    {
+        return ($this->getCredentials() instanceof UserManagementCredentials) ? ['Authorization' => $this->getCredentials()->getAuthorizationBasic()] : [];
+    }
+
     public function getUser(
         array $headers,
-        string $id
+        string $username
     ) : PromiseInterface {
         return $this->patchRequest(
             Uri::fromParts([
-                'path' => 'users/'.$id,
+                'path' => 'users/'.$username,
             ]),
             $this->getAuthorizationBasic() + $headers,
             '{}'
@@ -25,7 +49,7 @@ final class UsersClient
 
     public function createUser(
         array $headers,
-        string $id,
+        string $username,
         string $email,
         string $display_name
     ) : PromiseInterface {
@@ -36,7 +60,7 @@ final class UsersClient
             $this->getAuthorizationBasic() + $headers,
             json_encode([
                 'authority' => $this->getCredentials()->getAuthority(),
-                'username' => $id,
+                'username' => $username,
                 'email' => $email,
                 'display_name' => $display_name,
             ])
@@ -45,62 +69,19 @@ final class UsersClient
 
     public function updateUser(
         array $headers,
-        string $id,
+        string $username,
         string $email = null,
         string $display_name = null
     ) : PromiseInterface {
         return $this->patchRequest(
             Uri::fromParts([
-                'path' => 'users/'.$id,
+                'path' => 'users/'.$username,
             ]),
             $this->getAuthorizationBasic() + $headers,
             json_encode(array_filter([
                 'email' => $email,
                 'display_name' => $display_name,
             ]))
-        );
-    }
-
-    public function getUserToken(
-        array $headers,
-        string $id
-    ) : PromiseInterface {
-        return $this->postRequest(
-            Uri::fromParts([
-                'path' => 'token',
-            ]),
-            $headers,
-            json_encode([
-                'form_params' => [
-                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion' => $this->getCredentials()->getJWT($id),
-                ],
-            ])
-        );
-    }
-
-    public function getUserAnnotations(
-        array $headers,
-        string $user,
-        $token = null,
-        int $page = 1,
-        int $perPage = 20,
-        bool $descendingOrder = true,
-        $group = '__world__',
-        $restricted = false
-    ) : PromiseInterface {
-        return $this->getRequest(
-            Uri::fromParts([
-                'path' => 'search',
-                'query' => build_query([
-                    'user' => $user,
-                    'group' => $group,
-                    'offset' => ($page - 1) * $perPage,
-                    'limit' => $perPage,
-                    'order' => $descendingOrder ? 'desc' : 'asc',
-                ]),
-            ]),
-            (($restricted && $token) ? ['Authorization' => 'Bearer '.$token] : []) + $headers
         );
     }
 }

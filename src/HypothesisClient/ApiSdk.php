@@ -4,7 +4,7 @@ namespace eLife\HypothesisClient;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
 use eLife\HypothesisClient\Client\Users;
-use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -12,8 +12,8 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 
 final class ApiSdk
 {
-    /** @var Credentials */
-    private $credentials;
+    /** @var UserManagementCredentials */
+    private $userManagement;
     /** @var HttpClient */
     private $httpClient;
     /** @var SerializerAwareInterface */
@@ -21,12 +21,12 @@ final class ApiSdk
     /** @var Users */
     private $users;
 
-    public function __construct(HttpClient $httpClient, Credentials $credentials = null)
+    public function __construct(HttpClient $httpClient, UserManagementCredentials $userManagement = null)
     {
         $this->httpClient = $httpClient;
-        $this->credentials = $credentials;
+        $this->userManagement = $userManagement;
         $this->normalizer = new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter());
-        $this->users = new Users(new UsersClient($this->httpClient, $this->credentials, []), $this->normalizer);
+        $this->users = new Users(new UsersClient($this->httpClient, $this->userManagement, []), $this->normalizer);
     }
 
     public function users() : Users
