@@ -6,11 +6,11 @@ return [
         'api_url' => 'https://hypothes.is/api/',
         'user_management' => [
             'client_id' => '',
-            'secret_key' => '',
+            'client_secret' => '',
         ],
         'jwt_signing' => [
             'client_id' => '',
-            'secret_key' => '',
+            'client_secret' => '',
             'expire' => 600,
         ],
         'authority' => '',

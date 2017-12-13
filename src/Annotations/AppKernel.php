@@ -70,11 +70,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'api_url' => 'https://hypothes.is/api/',
                 'user_management' => [
                     'client_id' => '',
-                    'secret_key' => '',
+                    'client_secret' => '',
                 ],
                 'jwt_signing' => [
                     'client_id' => '',
-                    'secret_key' => '',
+                    'client_secret' => '',
                     'expire' => 600,
                 ],
                 'authority' => '',
@@ -174,7 +174,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             $userManagement = new UserManagementCredentials(
                 $app['hypothesis']['user_management']['client_id'],
-                $app['hypothesis']['user_management']['secret_key'],
+                $app['hypothesis']['user_management']['client_secret'],
                 $app['hypothesis']['authority']
             );
 

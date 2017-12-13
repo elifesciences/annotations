@@ -8,9 +8,9 @@ class JWTSigningCredentials extends Credentials
 {
     private $expire;
 
-    public function __construct(string $clientId, string $secret, string $authority, int $expire = 600)
+    public function __construct(string $clientId, string $clientSecret, string $authority, int $expire = 600)
     {
-        parent::__construct($clientId, $secret, $authority);
+        parent::__construct($clientId, $clientSecret, $authority);
         $this->expire = $expire;
     }
 
@@ -32,7 +32,7 @@ class JWTSigningCredentials extends Credentials
             'exp' => $now + $this->getExpire(),
         ];
 
-        return JWT::encode($payload, $this->getSecretKey(), 'HS256');
+        return JWT::encode($payload, $this->getClientSecret(), 'HS256');
     }
 
     public function toArray() : array

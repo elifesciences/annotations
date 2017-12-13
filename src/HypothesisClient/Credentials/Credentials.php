@@ -8,12 +8,12 @@ abstract class Credentials implements Serializable
 {
     private $authority;
     private $clientId;
-    private $secret;
+    private $clientSecret;
 
-    public function __construct(string $clientId, string $secret, string $authority)
+    public function __construct(string $clientId, string $clientSecret, string $authority)
     {
         $this->clientId = trim($clientId);
-        $this->secret = trim($secret);
+        $this->clientSecret = trim($clientSecret);
         $this->authority = trim($authority);
     }
 
@@ -22,9 +22,9 @@ abstract class Credentials implements Serializable
         return $this->clientId;
     }
 
-    public function getSecretKey() : string
+    public function getClientSecret() : string
     {
-        return $this->secret;
+        return $this->clientSecret;
     }
 
     public function getAuthority() : string
@@ -36,7 +36,7 @@ abstract class Credentials implements Serializable
     {
         return [
             'clientId' => $this->getClientId(),
-            'secret' => $this->getSecretKey(),
+            'clientSecret' => $this->getClientSecret(),
             'authority' => $this->getAuthority(),
         ];
     }
@@ -51,7 +51,7 @@ abstract class Credentials implements Serializable
         $data = json_decode($serialized, true);
 
         $this->clientId = $data['clientId'];
-        $this->secret = $data['secret'];
+        $this->clientSecret = $data['clientSecret'];
         $this->authority = $data['authority'];
     }
 }
