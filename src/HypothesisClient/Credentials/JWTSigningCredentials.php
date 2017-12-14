@@ -17,19 +17,9 @@ class JWTSigningCredentials extends Credentials
         $this->expire = $expire;
     }
 
-    public function getExpire() : int
-    {
-        return $this->expire;
-    }
-
-    public function getStartTime() : int
-    {
-        return $this->clock->time();
-    }
-
     public function getJWT(string $username) : string
     {
-        $now = $this->getStartTime();
+        $now = $this->clock->time();
         $sub = "acct:{$username}@".$this->getAuthority();
 
         $payload = [
@@ -37,7 +27,7 @@ class JWTSigningCredentials extends Credentials
             'iss' => $this->getClientId(),
             'sub' => $sub,
             'nbf' => $now,
-            'exp' => $now + $this->getExpire(),
+            'exp' => $now + $this->expire,
         ];
 
         return JWT::encode($payload, $this->getClientSecret(), 'HS256');

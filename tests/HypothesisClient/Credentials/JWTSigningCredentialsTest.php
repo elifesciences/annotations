@@ -15,26 +15,6 @@ class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_will_have_a_start_time()
-    {
-        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', new Clock());
-        $this->assertGreaterThanOrEqual(time(), $credentials->getStartTime());
-    }
-
-    /**
-     * @test
-     */
-    public function it_may_have_an_expire_time()
-    {
-        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', new Clock());
-        $this->assertGreaterThan(0, $credentials->getExpire());
-        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', new Clock(), 100);
-        $this->assertEquals(100, $credentials->getExpire());
-    }
-
-    /**
-     * @test
-     */
     public function it_can_generate_a_jwt_token()
     {
         $now = 1500000000;
