@@ -44,13 +44,19 @@ class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
             ->method('time')
             ->willReturn($now);
         $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', $clock, 300);
-        $payload = [
-            'aud' => 'hypothes.is',
-            'iss' => 'foo',
-            'sub' => 'acct:username@authority',
-            'nbf' => $now,
-            'exp' => $now + 300,
-        ];
-        $this->assertEquals(JWT::encode($payload, 'baz', 'HS256'), $credentials->getJWT('username'));
+
+        $generatedToken = $credentials->getJWT('username');
+
+        JWT::$timestamp = $now;
+        $this->assertEquals(
+            [
+                'aud' => 'hypothes.is',
+                'iss' => 'foo',
+                'sub' => 'acct:username@authority',
+                'nbf' => $now,
+                'exp' => $now + 300,
+            ],
+            (array) JWT::decode($generatedToken, 'baz', ['HS256'])
+        );
     }
 }
