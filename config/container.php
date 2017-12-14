@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'hypothesis' => [
+        // TODO: should be hypothesis-dummy
+        'api_url' => 'https://hypothes.is/api/',
+    ],
     'aws' => [
         'queue_name' => 'annotations--dev',
         'queue_message_default_type' => 'profile',
