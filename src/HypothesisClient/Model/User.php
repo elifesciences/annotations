@@ -4,7 +4,7 @@ namespace eLife\HypothesisClient\Model;
 
 use Assert\Assert;
 
-final class User implements Model
+final class User
 {
     use CanBeNew;
 

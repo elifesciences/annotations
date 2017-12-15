@@ -15,16 +15,6 @@ final class UserTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_is_a_model()
-    {
-        $user = new User('username', 'email@email.com', 'Display Name');
-
-        $this->assertInstanceOf(Model::class, $user);
-    }
-
-    /**
-     * @test
-     */
     public function it_has_an_username()
     {
         $user = new User('username', 'email@email.com', 'Display Name');
