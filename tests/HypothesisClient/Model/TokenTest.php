@@ -13,14 +13,23 @@ use PHPUnit_Framework_TestCase;
  */
 final class TokenTest extends PHPUnit_Framework_TestCase
 {
+    /** @var Token */
+    private $token;
+
+    /**
+     * @before
+     */
+    public function prepare_token()
+    {
+        $this->token = new Token('access_token', 'token_type', 1000, 'refresh_token');
+    }
+
     /**
      * @test
      */
     public function it_has_an_access_token()
     {
-        $token = new Token('access_token', 'token_type', 1000, 'refresh_token');
-
-        $this->assertEquals('access_token', $token->getAccessToken());
+        $this->assertEquals('access_token', $this->token->getAccessToken());
     }
 
     /**
@@ -28,9 +37,7 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_token_type()
     {
-        $token = new Token('access_token', 'token_type', 1000, 'refresh_token');
-
-        $this->assertEquals('token_type', $token->getTokenType());
+        $this->assertEquals('token_type', $this->token->getTokenType());
     }
 
     /**
@@ -38,9 +45,7 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_expires_in_value()
     {
-        $token = new Token('access_token', 'token_type', 1000, 'refresh_token');
-
-        $this->assertEquals(1000, $token->getExpiresIn());
+        $this->assertEquals(1000, $this->token->getExpiresIn());
     }
 
     /**
@@ -48,8 +53,6 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_refresh_token()
     {
-        $token = new Token('access_token', 'token_type', 1000, 'refresh_token');
-
-        $this->assertEquals('refresh_token', $token->getRefreshToken());
+        $this->assertEquals('refresh_token', $this->token->getRefreshToken());
     }
 }
