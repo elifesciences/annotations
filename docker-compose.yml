@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:1.13.7
+        ports:
+            - "8080:80"
+        volumes:
+            - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
+            # can we avoid this by removing try_files?
+            - ./web:/srv/annotations/web
+        depends_on:
+            - fpm
+    fpm:
+        build: 
+            context: .
+            dockerfile: Dockerfile.fpm
+        volumes:
+            - ./:/srv/annotations
+            - ./config/container.php:/srv/annotations/config.php
+            - logs:/srv/annotations/var/logs
+        env_file:
+            - dev.env
+    cli:
+        build: 
+            context: .
+            dockerfile: Dockerfile.cli
+        volumes:
+            - ./:/srv/annotations
+            - ./config/container.php:/srv/annotations/config.php
+            - logs:/srv/annotations/var/logs
+        env_file:
+            - dev.env
+        depends_on:
+            - goaws
+    goaws:
+        image: elifealfreduser/goaws:20171024
+        ports:
+            - 4100:4100
+        volumes:
+            - ./config/goaws.yaml:/conf/goaws.yaml
+    logger:
+        image: busybox:1.27.2
+        volumes:
+            - logs:/logs
+        # be careful, this will only tail alredy existing files
+        command: tail -f /logs/all.json
+        depends_on:
+            - cli
+    # TODO: api-dummy
+    # TODO: hypothesis-dummy
+
+volumes:
+    logs:

@@ -1,0 +1,15 @@
+FROM php:7.0-fpm-jessie
+
+RUN apt-get update && apt-get install -y git-core zip
+# try apt-get clean
+
+COPY scripts/ /root/scripts
+RUN /root/scripts/install-composer.sh
+
+WORKDIR /srv/annotations
+COPY composer.json composer.lock /srv/annotations/
+RUN composer install
+
+COPY . /srv/annotations
+RUN mkdir -p var/logs && chown www-data:www-data var/logs
+USER www-data
