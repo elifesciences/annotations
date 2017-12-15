@@ -18,6 +18,7 @@ use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
 use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient as HypothesisGuzzle6HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient as HypothesisNotifyingHttpClient;
@@ -67,9 +68,17 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             ],
             'hypothesis' => ($config['hypothesis'] ?? []) + [
                 'api_url' => 'https://hypothes.is/api/',
-                'client_id' => '',
-                'secret_key' => '',
+                'user_management' => [
+                    'client_id' => '',
+                    'client_secret' => '',
+                ],
+                'jwt_signing' => [
+                    'client_id' => '',
+                    'client_secret' => '',
+                    'expire' => 600,
+                ],
                 'authority' => '',
+                'group' => '',
             ],
         ]);
 
@@ -163,13 +172,13 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 });
             }
 
-            $credentials = new Credentials(
-                $app['hypothesis']['client_id'],
-                $app['hypothesis']['secret_key'],
+            $userManagement = new UserManagementCredentials(
+                $app['hypothesis']['user_management']['client_id'],
+                $app['hypothesis']['user_management']['client_secret'],
                 $app['hypothesis']['authority']
             );
 
-            return new HypothesisApiSdk($notifyingHttpClient, $credentials);
+            return new HypothesisApiSdk($notifyingHttpClient, $userManagement);
         };
 
         $this->app['guzzle'] = function (Application $app) {

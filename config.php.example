@@ -4,9 +4,17 @@ return [
     'api_url' => 'https://api.elifesciences.org/',
     'hypothesis' => [
         'api_url' => 'https://hypothes.is/api/',
-        'client_id' => '',
-        'secret_key' => '',
+        'user_management' => [
+            'client_id' => '',
+            'client_secret' => '',
+        ],
+        'jwt_signing' => [
+            'client_id' => '',
+            'client_secret' => '',
+            'expire' => 600,
+        ],
         'authority' => '',
+        'group' => '',
     ],
     'aws' => [
         'queue_name' => 'annotations--queue',

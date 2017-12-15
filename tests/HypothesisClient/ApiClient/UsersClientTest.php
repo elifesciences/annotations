@@ -3,13 +3,14 @@
 namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\UsersClient;
-use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit_Framework_TestCase;
 use tests\eLife\HypothesisClient\RequestConstraint;
+use Throwable;
 use TypeError;
 
 /**
@@ -17,6 +18,7 @@ use TypeError;
  */
 final class UsersClientTest extends PHPUnit_Framework_TestCase
 {
+    private $credentials;
     private $httpClient;
     /** @var UsersClient */
     private $usersClient;
@@ -28,10 +30,19 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpClient()
     {
+        $this->credentials = $this->getMockBuilder(UserManagementCredentials::class)
+            ->setConstructorArgs(['client_id', 'secret_key', 'authority'])
+            ->getMock();
+        $this->credentials
+            ->method('getAuthorizationBasic')
+            ->willReturn('Basic '.base64_encode('client_id:secret_key'));
+        $this->credentials
+            ->method('getAuthority')
+            ->willReturn('authority');
         $this->httpClient = $this->createMock(HttpClient::class);
         $this->usersClient = new UsersClient(
             $this->httpClient,
-            new Credentials('client_id', 'secret_key', 'authority'),
+            $this->credentials,
             ['X-Foo' => 'bar']
         );
         $this->usersClientAnonymous = new UsersClient(
@@ -89,9 +100,9 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
         try {
             $this->usersClientAnonymous->createUser([], 'userid', 'email@email.com', 'display_name');
             $this->fail('Credentials are required, if requested');
-        } catch (TypeError $error) {
+        } catch (Throwable $error) {
             $this->assertTrue(true, 'Credentials are required, if requested');
-            $this->assertContains(Credentials::class.', null returned', $error->getMessage());
+            $this->assertContains('Call to a member function getAuthority() on null', $error->getMessage());
         }
         $request = new Request(
             'POST',

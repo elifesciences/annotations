@@ -20,6 +20,7 @@
         "elife/bus-sdk": "^1.0@dev",
         "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
+        "firebase/php-jwt": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
         "silex/silex": "^2.2",

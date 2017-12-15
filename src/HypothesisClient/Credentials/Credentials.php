@@ -2,18 +2,16 @@
 
 namespace eLife\HypothesisClient\Credentials;
 
-use Serializable;
-
-class Credentials implements Serializable
+abstract class Credentials
 {
-    private $clientId;
-    private $secret;
     private $authority;
+    private $clientId;
+    private $clientSecret;
 
-    public function __construct(string $clientId, string $secret, string $authority)
+    public function __construct(string $clientId, string $clientSecret, string $authority)
     {
         $this->clientId = trim($clientId);
-        $this->secret = trim($secret);
+        $this->clientSecret = trim($clientSecret);
         $this->authority = trim($authority);
     }
 
@@ -22,36 +20,13 @@ class Credentials implements Serializable
         return $this->clientId;
     }
 
-    public function getSecretKey() : string
+    public function getClientSecret() : string
     {
-        return $this->secret;
+        return $this->clientSecret;
     }
 
     public function getAuthority() : string
     {
         return $this->authority;
-    }
-
-    public function toArray() : array
-    {
-        return [
-            'clientId' => $this->getClientId(),
-            'secret' => $this->getSecretKey(),
-            'authority' => $this->getAuthority(),
-        ];
-    }
-
-    public function serialize() : string
-    {
-        return json_encode($this->toArray());
-    }
-
-    public function unserialize($serialized)
-    {
-        $data = json_decode($serialized, true);
-
-        $this->clientId = $data['clientId'];
-        $this->secret = $data['secret'];
-        $this->authority = $data['authority'];
     }
 }
