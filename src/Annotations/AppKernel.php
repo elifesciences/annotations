@@ -17,7 +17,8 @@ use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
-use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Clock\Clock;
+use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient as HypothesisGuzzle6HttpClient;
@@ -181,7 +182,14 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $app['hypothesis']['authority']
             );
 
-            return new HypothesisApiSdk($notifyingHttpClient, $userManagement);
+            $jwtSigning = new JWTSigningCredentials(
+                $app['hypothesis']['jwt_signing']['client_id'],
+                $app['hypothesis']['jwt_signing']['client_secret'],
+                $app['hypothesis']['authority'],
+                new Clock()
+            );
+
+            return new HypothesisApiSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
         };
 
         $this->app['guzzle'] = function (Application $app) {

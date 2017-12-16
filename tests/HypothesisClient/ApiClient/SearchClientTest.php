@@ -64,7 +64,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->searchClient->query([], 'username', null, 1, 20, true));
+        $this->assertEquals($response, $this->searchClient->query([], 'username', null, 0, 20, true));
     }
 
     /**
@@ -80,6 +80,6 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->searchClient->query([], 'username', 'token', 1, 20, true));
+        $this->assertEquals($response, $this->searchClient->query([], 'username', 'token', 0, 20, true));
     }
 }
