@@ -52,11 +52,9 @@ final class TokenClientTest extends PHPUnit_Framework_TestCase
             'POST',
             'token',
             ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient'],
-            json_encode([
-                'form_params' => [
-                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion' => 'jwt',
-                ],
+            http_build_query([
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion' => 'jwt',
             ])
         );
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));

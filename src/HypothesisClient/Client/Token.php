@@ -27,7 +27,6 @@ final class Token
                 $username
             )
             ->then(function (Result $result) {
-                $tmp = $this->normalizer->denormalize($result->toArray(), ModelToken::class);
                 return $this->normalizer->denormalize($result->toArray(), ModelToken::class);
             });
     }

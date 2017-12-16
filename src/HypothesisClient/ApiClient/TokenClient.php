@@ -33,16 +33,15 @@ final class TokenClient
         array $headers,
         string $username
     ) : PromiseInterface {
+        $jwt = $this->getCredentials()->getJWT($username);
         return $this->postRequest(
             Uri::fromParts([
                 'path' => 'token',
             ]),
             $headers,
-            json_encode([
-                'form_params' => [
-                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion' => $this->getCredentials()->getJWT($username),
-                ],
+            http_build_query([
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion' => $jwt,
             ])
         );
     }
