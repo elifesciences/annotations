@@ -13,4 +13,4 @@ RUN composer install
 COPY . /srv/annotations
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 USER www-data
-CMD php bin/console queue:watch
+CMD ["php", "bin/console", "queue:watch"]
