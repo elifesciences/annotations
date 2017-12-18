@@ -20,8 +20,14 @@ final class Search
         $this->normalizer = $normalizer;
     }
 
-    public function query(string $username = null, string $accessToken = null, int $offset = 5, int $limit = 20, bool $descendingOrder = true) : PromiseInterface
-    {
+    public function query(
+        string $username = null,
+        string $accessToken = null,
+        int $offset = 5,
+        int $limit = 20,
+        bool $descendingOrder = true,
+        bool $updatedSortBy = true
+    ) : PromiseInterface {
         return $this->searchClient
             ->query(
                 [],
@@ -29,7 +35,8 @@ final class Search
                 $accessToken,
                 $offset,
                 $limit,
-                $descendingOrder
+                $descendingOrder,
+                $updatedSortBy
             )
             ->then(function (Result $result) {
                 $this->count = $result['total'];

@@ -18,6 +18,7 @@
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
         "elife/bus-sdk": "^1.0@dev",
+        "elife/content-negotiator": "^1.0",
         "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -25,7 +26,8 @@
         "knplabs/console-service-provider": "^2.1",
         "silex/silex": "^2.2",
         "symfony/property-access": "^3.3",
-        "symfony/serializer": "^3.3"
+        "symfony/serializer": "^3.3",
+        "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
         "giorgiosironi/eris": "^0.9.0",

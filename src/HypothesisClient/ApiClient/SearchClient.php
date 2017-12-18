@@ -27,7 +27,8 @@ final class SearchClient
         string $token = null,
         int $offset = 0,
         int $limit = 20,
-        bool $descendingOrder = true
+        bool $descendingOrder = true,
+        bool $updatedSortBy = true
     ) : PromiseInterface {
         $query = [];
         if ($username) {
@@ -38,6 +39,7 @@ final class SearchClient
             'offset' => $offset,
             'limit' => $limit,
             'order' => $descendingOrder ? 'desc' : 'asc',
+            'sort' => $updatedSortBy ? 'updated' : 'created',
         ];
         return $this->getRequest(
             Uri::fromParts([

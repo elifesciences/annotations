@@ -3,6 +3,7 @@
 namespace eLife\Annotations;
 
 use Aws\Sqs\SqsClient;
+use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -16,6 +17,7 @@ use eLife\Bus\Limit\SignalsLimit;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
+use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
 use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
@@ -87,6 +89,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         ]);
 
         $this->app->register(new ApiProblemProvider());
+        $this->app->register(new ContentNegotiationProvider());
         $this->app->register(new PingControllerProvider());
 
         if ($this->app['debug']) {
@@ -272,11 +275,27 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'console.project_directory' => __DIR__.'/../..',
         ]);
 
-        $this->app->register(new QueueCommandsProvider(), [
-            'sqs.queue_message_type' => $this->app['aws']['queue_message_default_type'],
-            'sqs.queue_name' => $this->app['aws']['queue_name'],
-            'sqs.region' => $this->app['aws']['region'],
-        ]);
+//        $this->app->register(new QueueCommandsProvider(), [
+//            'sqs.queue_message_type' => $this->app['aws']['queue_message_default_type'],
+//            'sqs.queue_name' => $this->app['aws']['queue_name'],
+//            'sqs.region' => $this->app['aws']['region'],
+//        ]);
+
+        $this->app['controllers.annotations'] = function () {
+            return new AnnotationsController($this->app['hypothesis.sdk'], $this->app['api.sdk']);
+        };
+
+        $this->app->get('/annotations', 'controllers.annotations:annotationsAction')
+            ->before($this->app['negotiate.accept'](
+                'application/vnd.elife.annotations+json; version=1'
+            ));
+
+        $this->app->after(function (Request $request, Response $response, Application $app) {
+            if ($response->isCacheable()) {
+                $response->headers->set('ETag', md5($response->getContent()));
+                $response->isNotModified($request);
+            }
+        });
     }
 
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true) : Response
