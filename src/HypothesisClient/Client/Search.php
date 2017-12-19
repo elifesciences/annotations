@@ -11,13 +11,13 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 final class Search
 {
     private $count;
-    private $normalizer;
+    private $serializer;
     private $searchClient;
 
-    public function __construct(SearchClient $searchClient, DenormalizerInterface $normalizer)
+    public function __construct(SearchClient $searchClient, DenormalizerInterface $serializer)
     {
         $this->searchClient = $searchClient;
-        $this->normalizer = $normalizer;
+        $this->serializer = $serializer;
     }
 
     public function query(
@@ -44,7 +44,7 @@ final class Search
             })
             ->then(function (Result $result) {
                 return array_map(function (array $annotation) {
-                    return $this->normalizer->denormalize($annotation, Annotation::class);
+                    return $this->serializer->denormalize($annotation, Annotation::class);
                 }, $result['rows']);
             });
     }

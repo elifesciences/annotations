@@ -10,13 +10,13 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class Token
 {
-    private $normalizer;
+    private $serializer;
     private $tokenClient;
 
-    public function __construct(TokenClient $tokenClient, DenormalizerInterface $normalizer)
+    public function __construct(TokenClient $tokenClient, DenormalizerInterface $serializer)
     {
         $this->tokenClient = $tokenClient;
-        $this->normalizer = $normalizer;
+        $this->serializer = $serializer;
     }
 
     public function get(string $username) : PromiseInterface
@@ -27,7 +27,7 @@ final class Token
                 $username
             )
             ->then(function (Result $result) {
-                return $this->normalizer->denormalize($result->toArray(), ModelToken::class);
+                return $this->serializer->denormalize($result->toArray(), ModelToken::class);
             });
     }
 }
