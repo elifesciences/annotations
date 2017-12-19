@@ -95,7 +95,25 @@ final class AnnotationsController
                 return [
                     'total' => $this->hypothesisSdk->search()->count(),
                     'items' => array_map(function (Annotation $annotation) {
-                        return ['id' => $annotation->getId()];
+                        $item = array_filter([
+                            'id' => $annotation->getId(),
+                            'access' => ($annotation->getPermissions()->getRead() === 'group:__world__') ? 'public' : 'restricted',
+                            'content' => $annotation->getText(),
+                            'parents' => $annotation->getReferences(),
+                            'created' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
+                            'updated' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
+                            'document' => [
+                                'title' => $annotation->getDocument()->getTitle(),
+                                'uri' => $annotation->getUri(),
+                            ],
+                        ]) + ['parents' => []];
+                        if ($item['created'] === $item['updated']) {
+                            unset($item['updated']);
+                        }
+                        if ($annotation->getTarget()->getSelector()) {
+                            $item['highlight'] = $annotation->getTarget()->getSelector()->getTextQuote()->getExact();
+                        }
+                        return $item;
                     }, $result),
                 ];
             })->wait();
