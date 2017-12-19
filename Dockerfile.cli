@@ -8,12 +8,18 @@ RUN /root/scripts/install-composer.sh
 
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
-# could probably use --no-dev and other optimizations
+# could probably use --no-dev and other optimizations,
 # if we specialize annotations_ci instead
 RUN composer install
 
 # TODO: remove phpunit.xml.dist from here?
-COPY bin config phpunit.xml.dist src tests web /srv/annotations/
+# yes this is how you copy directories
+COPY bin/ /srv/annotations/bin/
+COPY config/ /srv/annotations/config/
+COPY phpunit.xml.dist /srv/annotations/
+COPY src/ /srv/annotations/src/
+COPY tests/ /srv/annotations/tests/
+COPY web/ /srv/annotations/web/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p /var/www && chown www-data:www-data /var/www
