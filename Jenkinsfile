@@ -11,6 +11,7 @@ elifePipeline {
                 sh './build_images.sh'
                 sh 'chmod 777 build && docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci ./project_tests.sh'
                 step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci ./smoke_tests.sh web'
             }
         },
         'elife-libraries--ci'
