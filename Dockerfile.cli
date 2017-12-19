@@ -12,7 +12,9 @@ COPY composer.json composer.lock /srv/annotations/
 # if we specialize annotations_ci instead
 RUN composer install
 
-COPY . /srv/annotations
+# TODO: remove phpunit.xml.dist from here?
+COPY bin config phpunit.xml.dist src tests web /srv/annotations
+
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p /var/www && chown www-data:www-data /var/www
 USER www-data

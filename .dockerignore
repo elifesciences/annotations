@@ -1,6 +1,8 @@
 build/
-.git
+build_images.sh
 config.php
 docker-compose.yml
+.git
+Jenkinsfile
 var/
 vendor/
