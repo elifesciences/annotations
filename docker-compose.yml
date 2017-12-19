@@ -21,6 +21,8 @@ services:
             - logs:/srv/annotations/var/logs
         env_file:
             - dev.env
+        depends_on:
+            - goaws
     cli:
         build: 
             context: .

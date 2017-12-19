@@ -1,5 +1,5 @@
 FROM php:7.0-fpm-jessie
-
+RUN docker-php-ext-install pcntl
 RUN apt-get update && apt-get install -y git-core zip
 # try apt-get clean
 
