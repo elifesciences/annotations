@@ -10,6 +10,7 @@ elifePipeline {
             stage 'Container image', {
                 sh './build_images.sh'
                 sh 'chmod 777 build && docker run -v $(pwd)/build:/srv/annotations/build annotations_ci ./project_tests.sh'
+                step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
             }
         },
         'elife-libraries--ci'
