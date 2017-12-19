@@ -1,9 +1,19 @@
 elifePipeline {
     def commit
-    stage 'Checkout', {
-        checkout scm
-        commit = elifeGitRevision()
-    }
+    elifeOnNode(
+        {
+            stage 'Checkout', {
+                checkout scm
+                commit = elifeGitRevision()
+            }
+
+            stage 'Container image', {
+                sh './build_images.sh'
+                sh 'chmod 777 build && docker run -v $(pwd)/build:/srv/annotations/build annotations_ci ./project_tests.sh'
+            }
+        },
+        'elife-libraries--ci'
+    )
 
     stage 'Project tests', {
         lock('annotations--ci') {
