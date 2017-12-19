@@ -12,13 +12,13 @@ use function GuzzleHttp\Promise\rejection_for;
 
 final class Users
 {
-    private $normalizer;
+    private $serializer;
     private $usersClient;
 
-    public function __construct(UsersClient $usersClient, DenormalizerInterface $normalizer)
+    public function __construct(UsersClient $usersClient, DenormalizerInterface $serializer)
     {
         $this->usersClient = $usersClient;
-        $this->normalizer = $normalizer;
+        $this->serializer = $serializer;
     }
 
     public function get(string $id) : PromiseInterface
@@ -29,7 +29,7 @@ final class Users
                 $id
             )
             ->then(function (Result $result) {
-                return $this->normalizer->denormalize($result->toArray(), User::class);
+                return $this->serializer->denormalize($result->toArray(), User::class);
             });
     }
 
@@ -72,7 +72,7 @@ final class Users
                 $user->getDisplayName()
             )
             ->then(function (Result $result) {
-                return $this->normalizer->denormalize($result->toArray() + ['new' => true], User::class);
+                return $this->serializer->denormalize($result->toArray() + ['new' => true], User::class);
             });
     }
 
@@ -86,7 +86,7 @@ final class Users
                 $user->getDisplayName()
             )
             ->then(function (Result $result) {
-                return $this->normalizer->denormalize($result->toArray(), User::class);
+                return $this->serializer->denormalize($result->toArray(), User::class, 'json');
             });
     }
 }
