@@ -1,0 +1,4 @@
+FROM annotations_cli
+RUN composer global --no-interaction require elife/proofreader-php=dev-master
+ENV PATH="/var/www/.composer/vendor/bin:${PATH}"
+CMD ["/bin/bash", "project_tests.sh"]
