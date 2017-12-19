@@ -275,11 +275,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'console.project_directory' => __DIR__.'/../..',
         ]);
 
-//        $this->app->register(new QueueCommandsProvider(), [
-//            'sqs.queue_message_type' => $this->app['aws']['queue_message_default_type'],
-//            'sqs.queue_name' => $this->app['aws']['queue_name'],
-//            'sqs.region' => $this->app['aws']['region'],
-//        ]);
+        $this->app->register(new QueueCommandsProvider(), [
+            'sqs.queue_message_type' => $this->app['aws']['queue_message_default_type'],
+            'sqs.queue_name' => $this->app['aws']['queue_name'],
+            'sqs.region' => $this->app['aws']['region'],
+        ]);
 
         $this->app['controllers.annotations'] = function () {
             return new AnnotationsController($this->app['hypothesis.sdk'], $this->app['api.sdk']);
