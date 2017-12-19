@@ -34,6 +34,7 @@ final class TokenClient
         string $username
     ) : PromiseInterface {
         $jwt = $this->getCredentials()->getJWT($username);
+
         return $this->postRequest(
             Uri::fromParts([
                 'path' => 'token',

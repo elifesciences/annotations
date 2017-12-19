@@ -41,6 +41,7 @@ final class SearchClient
             'order' => $descendingOrder ? 'desc' : 'asc',
             'sort' => $updatedSortBy ? 'updated' : 'created',
         ];
+
         return $this->getRequest(
             Uri::fromParts([
                 'path' => 'search',

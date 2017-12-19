@@ -19,6 +19,7 @@ final class TargetNormalizer implements DenormalizerInterface, DenormalizerAware
         } else {
             $data['selector'] = null;
         }
+
         return new Target($data['source'], $data['selector']);
     }
 

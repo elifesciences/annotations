@@ -19,6 +19,7 @@ final class AnnotationNormalizer implements DenormalizerInterface, DenormalizerA
         $data['document'] = $this->denormalizer->denormalize($data['document'], Document::class);
         $data['target'] = $this->denormalizer->denormalize($data['target'][0], Target::class);
         $data['permissions'] = $this->denormalizer->denormalize($data['permissions'], Permissions::class);
+
         return new Annotation($data['id'], $data['text'] ?? null, $data['created'], $data['updated'], $data['document'], $data['target'], $data['uri'], $data['references'] ?? null, $data['permissions']);
     }
 

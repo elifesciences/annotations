@@ -90,7 +90,7 @@ final class AnnotationsController
         }
 
         // Perform query to Hypothesis API.
-        $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page-1)*$perPage, $perPage, ('desc' === $order), ('updated' === $useDate))
+        $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page - 1) * $perPage, $perPage, ('desc' === $order), ('updated' === $useDate))
             ->then(function (array $result) {
                 return [
                     'total' => $this->hypothesisSdk->search()->count(),
@@ -113,6 +113,7 @@ final class AnnotationsController
                         if ($annotation->getTarget()->getSelector()) {
                             $item['highlight'] = $annotation->getTarget()->getSelector()->getTextQuote()->getExact();
                         }
+
                         return $item;
                     }, $result),
                 ];

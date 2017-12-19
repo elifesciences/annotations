@@ -34,6 +34,7 @@ final class SelectorNormalizer implements DenormalizerInterface, DenormalizerAwa
                     break;
             }
         }
+
         return new Selector($selectors['range'], $selectors['textPosition'], $selectors['textQuote'], $selectors['fragment'] ?? null);
     }
 
