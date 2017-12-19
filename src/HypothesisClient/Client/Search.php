@@ -40,6 +40,7 @@ final class Search
             )
             ->then(function (Result $result) {
                 $this->count = $result['total'];
+
                 return $result;
             })
             ->then(function (Result $result) {

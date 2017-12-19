@@ -11,8 +11,8 @@ use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
-use eLife\HypothesisClient\Serializer\AnnotationNormalizer;
 use eLife\HypothesisClient\Serializer\Annotation;
+use eLife\HypothesisClient\Serializer\AnnotationNormalizer;
 use eLife\HypothesisClient\Serializer\TokenNormalizer;
 use eLife\HypothesisClient\Serializer\UserNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -59,7 +59,6 @@ final class ApiSdk
         $this->search = new Search(new SearchClient($this->httpClient, $this->group, []), $this->serializer);
         $this->token = new Token(new TokenClient($this->httpClient, $this->jwtSigning, []), $this->serializer);
         $this->users = new Users(new UsersClient($this->httpClient, $this->userManagement, []), $this->serializer);
-
     }
 
     public function users() : Users
