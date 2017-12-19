@@ -15,6 +15,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile.fpm
+        image: annotations_fpm
         volumes:
             - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php
@@ -27,6 +28,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile.cli
+        image: annotations_cli
         volumes:
             - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php

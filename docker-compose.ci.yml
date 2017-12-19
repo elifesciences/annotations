@@ -5,6 +5,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile.ci
+        image: annotations_ci
         volumes:
             - ./build:/srv/annotations/build
             - ./config/container.php:/srv/annotations/config.php

@@ -13,7 +13,7 @@ COPY composer.json composer.lock /srv/annotations/
 RUN composer install
 
 # TODO: remove phpunit.xml.dist from here?
-COPY bin config phpunit.xml.dist src tests web /srv/annotations
+COPY bin config phpunit.xml.dist src tests web /srv/annotations/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p /var/www && chown www-data:www-data /var/www
