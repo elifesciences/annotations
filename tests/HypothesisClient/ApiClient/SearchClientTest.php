@@ -56,7 +56,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_lists_annotations_public()
     {
-        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc',
+        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc&sort=updated',
             ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
         $this->httpClient
@@ -72,7 +72,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_lists_annotations_restricted()
     {
-        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc',
+        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc&sort=updated',
             ['X-Foo' => 'bar', 'Authorization' => 'Bearer token', 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
         $this->httpClient
