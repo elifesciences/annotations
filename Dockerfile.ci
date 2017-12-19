@@ -1,4 +1,7 @@
 FROM annotations_cli
+USER root
+RUN mkdir -p build && chown www-data:www-data build
+USER www-data
 RUN composer global --no-interaction require elife/proofreader-php=dev-master
 ENV PATH="/var/www/.composer/vendor/bin:${PATH}"
 CMD ["/bin/bash", "project_tests.sh"]
