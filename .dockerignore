@@ -1,5 +1,4 @@
 build/
-build_images.sh
 config.php
 docker-compose.yml
 .git
