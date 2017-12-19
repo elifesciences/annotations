@@ -3,21 +3,15 @@
 namespace tests\eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
-use eLife\HypothesisClient\ApiClient\UsersClient;
 use eLife\HypothesisClient\Client\Token;
-use eLife\HypothesisClient\Client\Users;
 use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
-use eLife\HypothesisClient\Credentials\UserManagementCredentials;
-use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\Token as ModelToken;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;

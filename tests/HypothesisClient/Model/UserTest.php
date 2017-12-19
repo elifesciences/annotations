@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Model;
 
-use eLife\HypothesisClient\Model\Model;
 use eLife\HypothesisClient\Model\User;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
