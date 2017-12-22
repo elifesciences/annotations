@@ -3,6 +3,8 @@
 namespace eLife\Annotations;
 
 use Aws\Sqs\SqsClient;
+use ComposerLocator;
+use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
@@ -10,6 +12,8 @@ use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
+use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
 use eLife\Bus\Limit\LoggingLimit;
 use eLife\Bus\Limit\MemoryLimit;
@@ -18,7 +22,7 @@ use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
-use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
+use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
@@ -31,6 +35,7 @@ use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
@@ -44,6 +49,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
 use function GuzzleHttp\Psr7\str;
+use tests\eLife\Annotations\InMemoryStorageAdapter;
+use tests\eLife\Annotations\ValidatingStorageAdapter;
 
 final class AppKernel implements ContainerInterface, HttpKernelInterface, TerminableInterface
 {
@@ -86,6 +93,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'authority' => '',
                 'group' => '',
             ],
+            'mock' => $config['mock'] ?? false,
         ]);
 
         $this->app->register(new ApiProblemProvider());
@@ -138,28 +146,72 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             );
         };
 
-        $this->app['hypothesis.guzzle'] = function (Application $app) {
-            // Create default HandlerStack
-            $stack = HandlerStack::create();
-            $logger = $app['logger'];
-            $stack->push(
-                Middleware::mapRequest(function ($request) use ($logger) {
-                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+        $this->app['hypothesis.guzzle.handler'] = function () {
+            return HandlerStack::create();
+        };
 
-                    return $request;
-                })
-            );
-            $stack->push(
-                Middleware::mapResponse(function ($response) use ($logger) {
-                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+        $this->app['guzzle.handler'] = function () {
+            return HandlerStack::create();
+        };
 
-                    return $response;
-                })
-            );
+        if ($this->app['mock']) {
+            $this->app['elife.json_message_validator'] = function () {
+                return new JsonMessageValidator(
+                    new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
+                    new Validator()
+                );
+            };
+
+            $this->app['guzzle.mock.in_memory_storage'] = function () {
+                return new InMemoryStorageAdapter();
+            };
+
+            $this->app['guzzle.mock.validating_storage'] = function () {
+                return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
+            };
+
+            $this->app['hypothesis.guzzle.mock'] = function () {
+                return new MockMiddleware($this->app['guzzle.mock.in_memory_storage'], 'replay');
+            };
+
+            $this->app['guzzle.mock'] = function () {
+                return new MockMiddleware($this->app['guzzle.mock.validating_storage'], 'replay');
+            };
+
+            $this->app->extend('guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['guzzle.mock']);
+                return $stack;
+            });
+
+            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['hypothesis.guzzle.mock']);
+                return $stack;
+            });
+        }
+
+        $this->app['hypothesis.guzzle'] = function () {
+            $logger = $this->app['logger'];
+            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) use ($logger) {
+                $stack->push(
+                    Middleware::mapRequest(function ($request) use ($logger) {
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+
+                        return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+
+                        return $response;
+                    })
+                );
+                return $stack;
+            });
 
             return new Client([
-                'base_uri' => $app['hypothesis']['api_url'],
-                'handler' => $stack,
+                'base_uri' => $this->app['hypothesis']['api_url'],
+                'handler' => $this->app['hypothesis.guzzle.handler'],
             ]);
         };
 
@@ -192,31 +244,32 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 new Clock()
             );
 
-            return new HypothesisApiSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
+            return new HypothesisSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
         };
 
-        $this->app['guzzle'] = function (Application $app) {
-            // Create default HandlerStack
-            $stack = HandlerStack::create();
-            $logger = $app['logger'];
-            $stack->push(
-                Middleware::mapRequest(function ($request) use ($logger) {
-                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+        $this->app['guzzle'] = function () {
+            $logger = $this->app['logger'];
+            $this->app->extend('guzzle.handler', function (HandlerStack $stack) use ($logger) {
+                $stack->push(
+                    Middleware::mapRequest(function ($request) use ($logger) {
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
-                    return $request;
-                })
-            );
-            $stack->push(
-                Middleware::mapResponse(function ($response) use ($logger) {
-                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+                        return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
 
-                    return $response;
-                })
-            );
+                        return $response;
+                    })
+                );
+                return $stack;
+            });
 
             return new Client([
-                'base_uri' => $app['api.url'],
-                'handler' => $stack,
+                'base_uri' => $this->app['api.url'],
+                'handler' => $this->app['guzzle.handler'],
             ]);
         };
 

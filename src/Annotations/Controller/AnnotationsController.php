@@ -5,6 +5,8 @@ namespace eLife\Annotations\Controller;
 use eLife\Annotations\ApiResponse;
 use eLife\ApiClient\Exception\ApiProblemResponse;
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Collection\ArraySequence;
+use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Model\Annotation;
 use eLife\HypothesisClient\Model\Token;
@@ -98,7 +100,8 @@ final class AnnotationsController
                         $item = array_filter([
                             'id' => $annotation->getId(),
                             'access' => ($annotation->getPermissions()->getRead() === 'group:__world__') ? 'public' : 'restricted',
-                            'content' => $annotation->getText(),
+                            // @todo - split content into appropriate blocks.
+                            'content' => $annotation->getText() ? $this->contentSerializer->normalize(new ArraySequence([new Paragraph($annotation->getText())])) : null,
                             'parents' => $annotation->getReferences(),
                             'created' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
                             'updated' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
