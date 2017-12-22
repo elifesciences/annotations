@@ -17,7 +17,7 @@ final class QueueCommandsProviderTest extends WebTestCase
      */
     public function commands_are_registered()
     {
-        $console = $this->kernel->get('console');
+        $console = $this->getApp()->get('console');
         $this->assertTrue($console->has('queue:count'));
         $this->assertTrue($console->has('queue:clean'));
         $this->assertTrue($console->has('queue:create'));
