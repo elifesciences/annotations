@@ -5,7 +5,6 @@ namespace eLife\Annotations\Controller;
 use eLife\Annotations\ApiResponse;
 use eLife\ApiClient\Exception\ApiProblemResponse;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Model\Annotation;
@@ -92,7 +91,7 @@ final class AnnotationsController
         }
 
         // Perform query to Hypothesis API.
-        $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page - 1) * $perPage, $perPage, ('desc' === $order), ('updated' === $useDate))
+        $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page - 1) * $perPage, $perPage, ('desc' === $order), $useDate)
             ->then(function (array $result) {
                 return [
                     'total' => $this->hypothesisSdk->search()->count(),
@@ -101,7 +100,7 @@ final class AnnotationsController
                             'id' => $annotation->getId(),
                             'access' => ($annotation->getPermissions()->getRead() === 'group:__world__') ? 'public' : 'restricted',
                             // @todo - split content into appropriate blocks.
-                            'content' => $annotation->getText() ? $this->contentSerializer->normalize(new ArraySequence([new Paragraph($annotation->getText())])) : null,
+                            'content' => $annotation->getText() ? [['type' => 'paragraph', 'text' => $annotation->getText()]] : null,
                             'parents' => $annotation->getReferences(),
                             'created' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
                             'updated' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),

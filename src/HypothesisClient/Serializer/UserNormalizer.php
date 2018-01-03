@@ -13,7 +13,7 @@ final class UserNormalizer implements DenormalizerInterface, DenormalizerAwareIn
 
     public function denormalize($data, $class, $format = null, array $context = []) : User
     {
-        return new User($data['username'], $data['email'], $data['display_name'], $data['new'] ?? false);
+        return new User($data['username'], $data['email'] ?? null, $data['display_name'] ?? null, $data['new'] ?? false);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool

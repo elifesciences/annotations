@@ -26,7 +26,7 @@ final class Search
         int $offset = 5,
         int $limit = 20,
         bool $descendingOrder = true,
-        bool $updatedSortBy = true
+        string $sort = 'updated'
     ) : PromiseInterface {
         return $this->searchClient
             ->query(
@@ -36,7 +36,7 @@ final class Search
                 $offset,
                 $limit,
                 $descendingOrder,
-                $updatedSortBy
+                $sort
             )
             ->then(function (Result $result) {
                 $this->count = $result['total'];

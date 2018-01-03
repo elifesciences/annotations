@@ -2,6 +2,7 @@
 
 namespace eLife\HypothesisClient\Serializer;
 
+use DateTimeImmutable;
 use eLife\HypothesisClient\Model\Annotation;
 use eLife\HypothesisClient\Model\Annotation\Document;
 use eLife\HypothesisClient\Model\Annotation\Permissions;
@@ -20,7 +21,16 @@ final class AnnotationNormalizer implements DenormalizerInterface, DenormalizerA
         $data['target'] = $this->denormalizer->denormalize($data['target'][0], Target::class);
         $data['permissions'] = $this->denormalizer->denormalize($data['permissions'], Permissions::class);
 
-        return new Annotation($data['id'], $data['text'] ?? null, $data['created'], $data['updated'], $data['document'], $data['target'], $data['uri'], $data['references'] ?? null, $data['permissions']);
+        return new Annotation(
+            $data['id'],
+            $data['text'] ?? null,
+            new DateTimeImmutable($data['created']),
+            new DateTimeImmutable($data['updated']),
+            $data['document'], $data['target'],
+            $data['uri'],
+            $data['references'] ?? null,
+            $data['permissions']
+        );
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool

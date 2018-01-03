@@ -19,11 +19,16 @@ final class User
 
     /**
      * @internal
+     *
+     * @param string      $username
+     * @param string|null $email
+     * @param string|null $displayName
+     * @param bool        $new
      */
     public function __construct(
         string $username,
-        string $email,
-        string $displayName,
+        $email,
+        $displayName,
         bool $new = false
     ) {
         $this->username = $username;
@@ -39,17 +44,17 @@ final class User
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail() : string
+    public function getEmail()
     {
         return $this->email;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDisplayName() : string
+    public function getDisplayName()
     {
         return $this->displayName;
     }
