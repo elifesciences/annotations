@@ -28,7 +28,7 @@ final class SearchClient
         int $offset = 0,
         int $limit = 20,
         bool $descendingOrder = true,
-        bool $updatedSortBy = true
+        string $sort = 'updated'
     ) : PromiseInterface {
         $query = [];
         if ($username) {
@@ -39,7 +39,7 @@ final class SearchClient
             'offset' => $offset,
             'limit' => $limit,
             'order' => $descendingOrder ? 'desc' : 'asc',
-            'sort' => $updatedSortBy ? 'updated' : 'created',
+            'sort' => $sort,
         ];
 
         return $this->getRequest(

@@ -48,9 +48,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
-use function GuzzleHttp\Psr7\str;
 use tests\eLife\Annotations\InMemoryStorageAdapter;
 use tests\eLife\Annotations\ValidatingStorageAdapter;
+use function GuzzleHttp\Psr7\str;
 
 final class AppKernel implements ContainerInterface, HttpKernelInterface, TerminableInterface
 {
@@ -180,11 +180,13 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             $this->app->extend('guzzle.handler', function (HandlerStack $stack) {
                 $stack->push($this->app['guzzle.mock']);
+
                 return $stack;
             });
 
             $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
                 $stack->push($this->app['hypothesis.guzzle.mock']);
+
                 return $stack;
             });
         }
@@ -206,6 +208,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                         return $response;
                     })
                 );
+
                 return $stack;
             });
 
@@ -264,6 +267,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                         return $response;
                     })
                 );
+
                 return $stack;
             });
 

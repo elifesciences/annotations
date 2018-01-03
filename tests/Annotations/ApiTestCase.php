@@ -124,13 +124,13 @@ abstract class ApiTestCase extends TestCase
 
     final protected function createProfile(string $id, string $name = null, $orcid = null) : Profile
     {
-
         $names = array_map('trim', explode(' ', $name ?? 'Jim Bytheway'));
         $preferred = implode(' ', $names);
         $index = array_pop($names);
         if (!empty($names)) {
             $index .= ', '.implode(' ', $names);
         }
+
         return $this->denormalize(
             [
                 'id' => $id,

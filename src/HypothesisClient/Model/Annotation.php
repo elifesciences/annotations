@@ -2,6 +2,7 @@
 
 namespace eLife\HypothesisClient\Model;
 
+use Assert\Assert;
 use DateTimeImmutable;
 use eLife\HypothesisClient\Model\Annotation\Document;
 use eLife\HypothesisClient\Model\Annotation\Permissions;
@@ -20,27 +21,38 @@ final class Annotation
 
     /**
      * @internal
+     *
+     * @param string            $id
+     * @param string|null       $text
+     * @param DateTimeImmutable $created
+     * @param DateTimeImmutable $updated
+     * @param Document          $document
+     * @param Target            $target
+     * @param string            $uri
+     * @param array|null        $references
+     * @param $permissions
      */
     public function __construct(
         string $id,
-        string $text = null,
-        string $created,
-        string $updated,
+        $text,
+        DateTimeImmutable $created,
+        DateTimeImmutable $updated,
         Document $document,
         Target $target,
         string $uri,
-        array $references = null,
+        $references,
         Permissions $permissions
     ) {
         $this->id = $id;
         $this->text = $text;
-        $this->created = new DateTimeImmutable($created);
-        $this->updated = new DateTimeImmutable($updated);
+        $this->created = $created;
+        $this->updated = $updated;
         $this->document = $document;
         $this->target = $target;
         $this->uri = $uri;
         $this->references = $references;
         $this->permissions = $permissions;
+        $this->validate();
     }
 
     public function getId() : string
@@ -92,5 +104,13 @@ final class Annotation
     public function getPermissions() : Permissions
     {
         return $this->permissions;
+    }
+
+    private function validate() : bool
+    {
+        return Assert::lazy()
+            ->that(array_filter([$this->getText(), $this->getTarget()->getSelector() && $this->getTarget()->getSelector()->getTextQuote()]), 'Text or target text quote selector')
+            ->notEmpty('at least one value must be present.')
+            ->verifyNow();
     }
 }

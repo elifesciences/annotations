@@ -3,9 +3,9 @@
 namespace tests\eLife\Annotations;
 
 use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
+use eLife\Annotations\AppKernel;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator;
-use eLife\Annotations\AppKernel;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use function GuzzleHttp\json_encode;
 
