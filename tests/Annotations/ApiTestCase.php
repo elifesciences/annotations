@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use function GuzzleHttp\json_encode;
+use Traversable;
 
 abstract class ApiTestCase extends TestCase
 {
@@ -46,11 +47,11 @@ abstract class ApiTestCase extends TestCase
 
     final protected function mockHypothesisSearchCall(
         string $by,
-        array $rows,
+        Traversable $rows,
         int $total,
-        int $offset = 1,
-        int $limit = 100,
-        string $group = '__world__',
+        int $offset = 0,
+        int $limit = 20,
+        string $group = '',
         string $order = 'desc',
         string $sort = 'updated'
     ) {
@@ -73,18 +74,15 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function createAnnotations($total = 10) : array
+    final protected function createAnnotations($total = 10) : Traversable
     {
-        $annotations = [];
         for ($i = 1; $i <= $total; ++$i) {
             $updated = (rand(0, 1) === 0);
             $text = (rand(0, 3) > 0);
             $highlight = !$text ? true : (rand(0, 3) > 0);
             $parents = rand(0, 3) === 0 ? rand(1, 3) : 0;
-            $annotations[] = $this->createAnnotation($i, $updated, $text, $highlight, $parents);
+            yield $this->createAnnotation($i, $updated, $text, $highlight, $parents);
         }
-
-        return $annotations;
     }
 
     final protected function createAnnotation($id, $updated = true, $text = true, $highlight = true, int $parents = 0) : array
@@ -101,7 +99,7 @@ abstract class ApiTestCase extends TestCase
                     'Document title',
                 ],
             ],
-            'target' => array_filter([
+            'target' => [array_filter([
                 'source' => 'https://elifesciences.org/articles/11860',
                 'selector' => $highlight ? [
                     [
@@ -123,7 +121,7 @@ abstract class ApiTestCase extends TestCase
                         'suffix' => '',
                     ],
                 ] : null,
-            ]),
+            ])],
             'uri' => 'https://elifesciences.org/articles/11860',
             'references' => array_map(function ($v) {
                 static $co = 0;

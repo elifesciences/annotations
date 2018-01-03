@@ -39,7 +39,8 @@
         "mtdowling/jmespath.php": "^2.4",
         "phpunit/phpunit": "^5.7",
         "symfony/browser-kit": "^3.3",
-        "symfony/psr-http-message-bridge": "^1.0"
+        "symfony/psr-http-message-bridge": "^1.0",
+        "zendframework/zend-diactoros": "^1.6"
     },
     "suggest": {
         "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"

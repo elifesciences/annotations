@@ -60,7 +60,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
     {
         $configFile = __DIR__.'/../../config.php';
         $config = array_merge(
-            file_exists($configFile) ? require $configFile : [],
+            $environment !== 'test' && file_exists($configFile) ? require $configFile : [],
             require __DIR__."/../../config/{$environment}.php"
         );
 
@@ -344,7 +344,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app->get('/annotations', 'controllers.annotations:annotationsAction')
             ->before($this->app['negotiate.accept'](
-                'application/vnd.elife.annotations+json; version=1'
+                'application/vnd.elife.annotation-list+json; version=1'
             ));
 
         $this->app->after(function (Request $request, Response $response, Application $app) {
