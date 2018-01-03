@@ -26,7 +26,8 @@ final class AnnotationNormalizer implements DenormalizerInterface, DenormalizerA
             $data['text'] ?? null,
             new DateTimeImmutable($data['created']),
             new DateTimeImmutable($data['updated']),
-            $data['document'], $data['target'],
+            $data['document'],
+            $data['target'],
             $data['uri'],
             $data['references'] ?? null,
             $data['permissions']
