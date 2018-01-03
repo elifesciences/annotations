@@ -44,66 +44,99 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
-    final protected function mockAnnotationsCall(
+    final protected function mockHypothesisSearchCall(
         string $by,
-
-        int $page = 1,
-        int $perPage = 100,
+        array $rows,
+        int $total,
+        int $offset = 1,
+        int $limit = 100,
+        string $group = '__world__',
         string $order = 'desc',
-        string $sort = 'updated',
-        string $access = 'public'
+        string $sort = 'updated'
     ) {
-        $typesQuery = implode('', array_map(function (string $type) {
-            return "&type[]=$type";
-        }, $types));
-
-        $subjectsQuery = implode('', array_map(function (string $subject) {
-            return "&subject[]=$subject";
-        }, $subjects));
-
         $json = [
             'total' => $total,
-            'items' => array_map([$this, 'normalize'], $items),
-            'subjects' => [],
-            'types' => array_reduce([
-                'correction',
-                'editorial',
-                'feature',
-                'insight',
-                'research-advance',
-                'research-article',
-                'retraction',
-                'registered-report',
-                'replication-study',
-                'scientific-correspondence',
-                'short-report',
-                'tools-resources',
-                'blog-article',
-                'collection',
-                'interview',
-                'labs-post',
-                'podcast-episode',
-            ], function (array $carry, string $type) use ($items) {
-                $carry[$type] = count(array_filter($items, function (HasIdentifier $model) use ($type) {
-                    return $type === $model->getIdentifier();
-                }));
-
-                return $carry;
-            }, []),
+            'rows' => $rows,
         ];
 
         $this->getMockStorage()->save(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=&page=$page&per-page=$perPage&sort=date&order=desc$subjectsQuery$typesQuery&use-date=default",
-                ['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)]
+                "https://hypothes.is/api/search?user=$by&group=$group&offset=$offset&limit=$limit&order=$order&sort=$sort",
+                []
             ),
             new Response(
                 200,
-                ['Content-Type' => new MediaType(SearchClient::TYPE_SEARCH, 1)],
+                [],
                 json_encode($json)
             )
         );
+    }
+
+    final protected function createAnnotations($total = 10) : array
+    {
+        $annotations = [];
+        for ($i = 1; $i <= $total; ++$i) {
+            $updated = (rand(0, 1) === 0);
+            $text = (rand(0, 3) > 0);
+            $highlight = !$text ? true : (rand(0, 3) > 0);
+            $parents = rand(0, 3) === 0 ? rand(1, 3) : 0;
+            $annotations[] = $this->createAnnotation($i, $updated, $text, $highlight, $parents);
+        }
+
+        return $annotations;
+    }
+
+    final protected function createAnnotation($id, $updated = true, $text = true, $highlight = true, int $parents = 0) : array
+    {
+        $created = '2017-12-18T15:11:30.887421+00:00';
+
+        return array_filter([
+            'id' => 'identifier'.$id,
+            'text' => $text ? 'Annotation text '.$id : null,
+            'created' => $created,
+            'updated' => $updated ? '2017-12-19T11:13:30.796543+00:00' : $created,
+            'document' => [
+                'title' => [
+                    'Document title',
+                ],
+            ],
+            'target' => array_filter([
+                'source' => 'https://elifesciences.org/articles/11860',
+                'selector' => $highlight ? [
+                    [
+                        'type' => 'RangeSelector',
+                        'startContainer' => 'div[1]',
+                        'endContainer' => 'div[3]',
+                        'startOffset' => 5,
+                        'endOffset' => 25,
+                    ],
+                    [
+                        'type' => 'TextPositionSelector',
+                        'start' => 23609,
+                        'end' => 23678,
+                    ],
+                    [
+                        'type' => 'TextQuoteSelector',
+                        'exact' => 'Highlighted text '.$id,
+                        'prefix' => '',
+                        'suffix' => '',
+                    ],
+                ] : null,
+            ]),
+            'uri' => 'https://elifesciences.org/articles/11860',
+            'references' => array_map(function ($v) {
+                static $co = 0;
+                ++$co;
+
+                return $v.$co;
+            }, array_fill(0, $parents, 'parent')),
+            'permissions' => [
+                'read' => [
+                    'group:__world__',
+                ],
+            ],
+        ]);
     }
 
     final protected function mockProfileCall(Profile $profile)
@@ -111,7 +144,7 @@ abstract class ApiTestCase extends TestCase
         $this->getMockStorage()->save(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/podcast-episodes/{$profile->getId()}",
+                "http://api.elifesciences.org/profiles/{$profile->getId()}",
                 ['Accept' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)]
             ),
             new Response(
