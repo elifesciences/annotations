@@ -32,14 +32,9 @@ abstract class ApplicationTestCase extends ApiTestCase
         return $this->app->get('elife.api_sdk');
     }
 
-    final protected function getHypothesisSdk() : HypothesisSdk
-    {
-        return $this->app->get('elife.hypothesis_sdk');
-    }
-
     final protected function getMockStorage() : StorageAdapterInterface
     {
-        return $this->app->get('elife.guzzle_client.mock.storage');
+        return $this->app->get('guzzle.mock.in_memory_storage');
     }
 
     final protected function getValidator() : MessageValidator
