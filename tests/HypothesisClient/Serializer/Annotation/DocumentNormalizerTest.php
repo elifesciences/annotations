@@ -68,6 +68,10 @@ final class DocumentNormalizerTest extends PHPUnit_Framework_TestCase
                 ],
                 new Document('title'),
             ],
+            'minimum' => [
+                [],
+                new Document('Unknown'),
+            ],
         ];
     }
 }

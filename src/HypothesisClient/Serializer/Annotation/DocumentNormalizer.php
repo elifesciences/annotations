@@ -13,7 +13,8 @@ final class DocumentNormalizer implements DenormalizerInterface, DenormalizerAwa
 
     public function denormalize($data, $class, $format = null, array $context = []) : Document
     {
-        return new Document($data['title'][0]);
+        // @todo - should this be optional?
+        return new Document($data['title'][0] ?? 'Unknown');
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
