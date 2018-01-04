@@ -15,16 +15,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Psr7\normalize_header;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class AnnotationsController
 {
     private $apiSdk;
     private $hypothesisSdk;
+    private $serializer;
 
-    public function __construct(HypothesisSdk $hypothesisSdk, ApiSdk $apiSdk)
+    public function __construct(HypothesisSdk $hypothesisSdk, ApiSdk $apiSdk, NormalizerInterface $serializer)
     {
         $this->apiSdk = $apiSdk;
         $this->hypothesisSdk = $hypothesisSdk;
+        $this->serializer = $serializer;
     }
 
     public function annotationsAction(Request $request, Accept $type) : Response
@@ -96,27 +99,7 @@ final class AnnotationsController
                 return [
                     'total' => $this->hypothesisSdk->search()->count(),
                     'items' => array_map(function (Annotation $annotation) {
-                        $item = array_filter([
-                            'id' => $annotation->getId(),
-                            'access' => ($annotation->getPermissions()->getRead() === 'group:__world__') ? 'public' : 'restricted',
-                            // @todo - split content into appropriate blocks.
-                            'content' => $annotation->getText() ? [['type' => 'paragraph', 'text' => $annotation->getText()]] : null,
-                            'parents' => $annotation->getReferences(),
-                            'created' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
-                            'updated' => $annotation->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
-                            'document' => [
-                                'title' => $annotation->getDocument()->getTitle(),
-                                'uri' => $annotation->getUri(),
-                            ],
-                        ]) + ['parents' => []];
-                        if ($item['created'] === $item['updated']) {
-                            unset($item['updated']);
-                        }
-                        if ($annotation->getTarget()->getSelector()) {
-                            $item['highlight'] = $annotation->getTarget()->getSelector()->getTextQuote()->getExact();
-                        }
-
-                        return $item;
+                        return $this->serializer->normalize($annotation, Annotation::class);
                     }, $result),
                 ];
             })->wait();

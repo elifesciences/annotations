@@ -10,6 +10,8 @@ use eLife\HypothesisClient\Model\Annotation\Target;
 
 final class Annotation
 {
+    const PUBLIC_GROUP = 'group:__world__';
+
     private $id;
     private $text;
     private $created;
