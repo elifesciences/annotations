@@ -65,6 +65,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
         $renderBlock = function (Element\AbstractBlock $block) {
             return trim(preg_replace('~^.*<p>(.*)</p>.*$~s', '$1', $this->htmlRenderer->renderBlock($block)));
         };
+
         foreach ($blocks as $block) {
             if ($block instanceof Element\ListBlock) {
                 $data[] = new Block\Listing(
@@ -73,6 +74,8 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
                         return $renderBlock($item);
                     }, $block->children()))
                 );
+            } elseif ($block instanceof Element\BlockQuote) {
+                $data[] = new Block\Quote([new Block\Paragraph($renderBlock($block))]);
             } elseif ($block instanceof Element\Paragraph) {
                 $data[] = new Block\Paragraph($renderBlock($block));
             }
