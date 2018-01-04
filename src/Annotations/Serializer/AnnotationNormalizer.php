@@ -5,7 +5,6 @@ namespace eLife\Annotations\Serializer;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\HypothesisClient\Model\Annotation;
 use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
@@ -62,9 +61,20 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
     {
         $blocks = $this->docParser->parse($text)->children();
         $data = [];
+
+        $renderBlock = function (Element\AbstractBlock $block) {
+            return trim(preg_replace('~^.*<p>(.*)</p>.*$~s', '$1', $this->htmlRenderer->renderBlock($block)));
+        };
         foreach ($blocks as $block) {
-            if ($block instanceof Element\Paragraph) {
-                $data[] = new Paragraph(preg_replace('~^<p>(.*)</p>$~', '$1', $this->htmlRenderer->renderBlock($block)));
+            if ($block instanceof Element\ListBlock) {
+                $data[] = new Block\Listing(
+                    (Element\ListBlock::TYPE_ORDERED === $block->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
+                    new ArraySequence(array_map(function (Element\ListItem $item) use ($renderBlock) {
+                        return $renderBlock($item);
+                    }, $block->children()))
+                );
+            } elseif ($block instanceof Element\Paragraph) {
+                $data[] = new Block\Paragraph($renderBlock($block));
             }
         }
         return array_map(function (Block $block) {

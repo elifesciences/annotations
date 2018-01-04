@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\ApiSdk\Serializer\Block;
+use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -24,10 +25,8 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new AnnotationNormalizer();
-
-        new Serializer([
-            $this->normalizer,
+        $this->normalizer = new NormalizerAwareSerializer([
+            new AnnotationNormalizer(),
             new Block\ListingNormalizer(),
             new Block\MathMLNormalizer(),
             new Block\ParagraphNormalizer(),
@@ -95,7 +94,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'text',
-                        ]
+                        ],
                     ],
                     'highlight' => 'highlight',
                     'created' => $createdDate,
@@ -140,7 +139,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'text',
-                        ]
+                        ],
                     ],
                     'created' => $createdDate,
                     'document' => [
@@ -152,6 +151,89 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                 new Annotation(
                     'id',
                     'text',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-multiple-paragraphs' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'paragraph 1, <strong>with bold text</strong>',
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'paragraph 2',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "   paragraph 1, **with bold text**\n\nparagraph 2",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-lists' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'List:',
+                        ],
+                        [
+                            'type' => 'list',
+                            'prefix' => 'bullet',
+                            'items' => [
+                                'Item 1',
+                                'Item 2',
+                            ],
+                        ],
+                        [
+                            'type' => 'list',
+                            'prefix' => 'number',
+                            'items' => [
+                                'Item 1',
+                                'Item 2',
+                                'Item 3',
+                            ],
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Final paragraph.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "List:\n\n- Item 1\n- Item 2  \n\n1. Item 1\n1. Item 2\n1. Item 3\n\nFinal paragraph.",
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
