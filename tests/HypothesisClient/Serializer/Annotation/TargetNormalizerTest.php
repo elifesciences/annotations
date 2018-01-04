@@ -107,9 +107,9 @@ final class TargetNormalizerTest extends PHPUnit_Framework_TestCase
                 new Target(
                     'source',
                     new Target\Selector(
-                        new Target\Selector\Range('start_container', 'end_container', 0, 10),
                         new Target\Selector\TextPosition(0, 10),
                         new Target\Selector\TextQuote('exact', 'prefix', 'suffix'),
+                        new Target\Selector\Range('start_container', 'end_container', 0, 10),
                         new Target\Selector\Fragment('conforms_to', 'value')
                     )
                 ),

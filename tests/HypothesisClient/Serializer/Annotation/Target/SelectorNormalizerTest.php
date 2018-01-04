@@ -100,21 +100,14 @@ final class SelectorNormalizerTest extends PHPUnit_Framework_TestCase
                     ],
                 ],
                 new Selector(
-                    new Selector\Range('start_container', 'end_container', 0, 10),
                     new Selector\TextPosition(0, 10),
                     new Selector\TextQuote('exact', 'prefix', 'suffix'),
+                    new Selector\Range('start_container', 'end_container', 0, 10),
                     new Selector\Fragment('conforms_to', 'value')
                 ),
             ],
             'minimum' => [
                 [
-                    [
-                        'type' => 'RangeSelector',
-                        'startContainer' => 'start_container',
-                        'endContainer' => 'end_container',
-                        'startOffset' => 0,
-                        'endOffset' => 10,
-                    ],
                     [
                         'type' => 'TextPositionSelector',
                         'start' => 0,
@@ -128,7 +121,6 @@ final class SelectorNormalizerTest extends PHPUnit_Framework_TestCase
                     ],
                 ],
                 new Selector(
-                    new Selector\Range('start_container', 'end_container', 0, 10),
                     new Selector\TextPosition(0, 10),
                     new Selector\TextQuote('exact', 'prefix', 'suffix')
                 ),

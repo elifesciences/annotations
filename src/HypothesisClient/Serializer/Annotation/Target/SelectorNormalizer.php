@@ -35,7 +35,7 @@ final class SelectorNormalizer implements DenormalizerInterface, DenormalizerAwa
             }
         }
 
-        return new Selector($selectors['range'], $selectors['textPosition'], $selectors['textQuote'], $selectors['fragment'] ?? null);
+        return new Selector($selectors['textPosition'], $selectors['textQuote'], $selectors['range'] ?? null, $selectors['fragment'] ?? null);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
