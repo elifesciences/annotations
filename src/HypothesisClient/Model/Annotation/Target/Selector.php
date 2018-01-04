@@ -9,29 +9,24 @@ use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextQuote;
 
 final class Selector
 {
+    private $fragment;
     private $range;
     private $textPosition;
     private $textQuote;
-    private $fragment;
 
     /**
      * @internal
      */
     public function __construct(
-        Range $range,
         TextPosition $textPosition,
         TextQuote $textQuote,
+        Range $range = null,
         Fragment $fragment = null
     ) {
-        $this->range = $range;
         $this->textPosition = $textPosition;
         $this->textQuote = $textQuote;
+        $this->range = $range;
         $this->fragment = $fragment;
-    }
-
-    public function getRange() : Range
-    {
-        return $this->range;
     }
 
     public function getTextPosition() : TextPosition
@@ -42,6 +37,14 @@ final class Selector
     public function getTextQuote() : TextQuote
     {
         return $this->textQuote;
+    }
+
+    /**
+     * @return Range|null
+     */
+    public function getRange()
+    {
+        return $this->range;
     }
 
     /**
