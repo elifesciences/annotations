@@ -5,7 +5,7 @@ namespace tests\eLife\Annotations\Serializer;
 use DateTimeImmutable;
 use DateTimeZone;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
-use eLife\ApiSdk\Serializer\Block\ParagraphNormalizer;
+use eLife\ApiSdk\Serializer\Block;
 use eLife\HypothesisClient\Model\Annotation;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -28,7 +28,11 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
 
         new Serializer([
             $this->normalizer,
-            new ParagraphNormalizer(),
+            new Block\ListingNormalizer(),
+            new Block\MathMLNormalizer(),
+            new Block\ParagraphNormalizer(),
+            new Block\QuoteNormalizer(),
+            new Block\YouTubeNormalizer(),
         ]);
     }
 
