@@ -42,7 +42,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             'content' => $content,
             'parents' => $object->getReferences(),
             'created' => $object->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
-            'updated' => $object->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
+            'updated' => $object->getUpdatedDate()->format(ApiSdk::DATE_FORMAT),
             'document' => [
                 'title' => $object->getDocument()->getTitle(),
                 'uri' => $object->getUri(),
