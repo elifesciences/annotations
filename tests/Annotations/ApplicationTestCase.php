@@ -6,7 +6,6 @@ use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
 use eLife\Annotations\AppKernel;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiValidator\MessageValidator;
-use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use function GuzzleHttp\json_encode;
 
 abstract class ApplicationTestCase extends ApiTestCase
@@ -29,7 +28,7 @@ abstract class ApplicationTestCase extends ApiTestCase
 
     final protected function getApiSdk() : ApiSdk
     {
-        return $this->app->get('elife.api_sdk');
+        return $this->app->get('api.sdk');
     }
 
     final protected function getMockStorage() : StorageAdapterInterface
