@@ -38,10 +38,8 @@ final class TargetTest extends PHPUnit_Framework_TestCase
         $targetWithSelector = new Target(
             'source',
             $selector = new Target\Selector(
-                new Target\Selector\Range('start_container', 'end_container', 0, 100),
                 new Target\Selector\TextPosition(1000, 2001),
-                new Target\Selector\TextQuote('exact', 'prefix', 'suffix'),
-                new Target\Selector\Fragment('conforms_to', 'value')
+                new Target\Selector\TextQuote('exact', 'prefix', 'suffix')
             )
         );
         $this->assertNull($targetWithoutSelector->getSelector());
