@@ -44,8 +44,6 @@ final class AnnotationsTest extends WebTestCase
      */
     public function it_returns_404_if_user_unknown()
     {
-        $annotations = iterator_to_array($this->createAnnotations(50));
-
         $client = static::createClient();
         $this->mockNotFound('profiles/1234', ['Accept' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)]);
         $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0);
