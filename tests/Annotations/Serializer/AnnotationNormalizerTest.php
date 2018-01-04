@@ -79,7 +79,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     public function it_will_normalize_annotations(array $expected, Annotation $annotation)
     {
-        $this->assertSame($expected, $this->normalizer->normalize($annotation));
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
     public function normalizeProvider() : array
@@ -87,6 +87,51 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
         $createdDate = '2017-11-29T17:41:28Z';
         $updatedDate = '2018-01-04T11:23:47Z';
         return [
+            'complete' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'text',
+                        ]
+                    ],
+                    'highlight' => 'highlight',
+                    'created' => $createdDate,
+                    'updated' => $updatedDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [
+                        'parent1',
+                        'parent2',
+                    ],
+                ],
+                new Annotation(
+                    'id',
+                    'text',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($updatedDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target(
+                        'source',
+                        new Annotation\Target\Selector(
+                            new Annotation\Target\Selector\TextPosition(0, 10),
+                            new Annotation\Target\Selector\TextQuote('highlight', 'prefix', 'suffix'),
+                            new Annotation\Target\Selector\Range('div[1]', 'div[2]', 10, 300),
+                            new Annotation\Target\Selector\Fragment('conforms_to', 'value')
+                        )
+                    ),
+                    'uri',
+                    [
+                        'parent1',
+                        'parent2',
+                    ],
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
             'minimum' => [
                 [
                     'id' => 'id',
