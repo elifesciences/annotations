@@ -243,6 +243,57 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
+            'markdown-quotes' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Opening paragraph',
+                        ],
+                        [
+                            'type' => 'quote',
+                            'text' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Quote',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'quote',
+                            'text' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Another quote',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Closing paragraph',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "Opening paragraph\n\n> Quote\n\n> Another quote\n\nClosing paragraph",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
         ];
     }
 }
