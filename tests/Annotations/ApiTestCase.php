@@ -14,8 +14,8 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
-use function GuzzleHttp\json_encode;
 use Traversable;
+use function GuzzleHttp\json_encode;
 
 abstract class ApiTestCase extends TestCase
 {
@@ -32,7 +32,7 @@ abstract class ApiTestCase extends TestCase
         $this->getMockStorage()->save(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/$uri",
+                "https://api.elifesciences.org/$uri",
                 $headers
             ),
             new Response(
@@ -57,7 +57,7 @@ abstract class ApiTestCase extends TestCase
     ) {
         $json = [
             'total' => $total,
-            'rows' => $rows,
+            'rows' => iterator_to_array($rows),
         ];
 
         $this->getMockStorage()->save(
