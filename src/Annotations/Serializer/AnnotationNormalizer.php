@@ -63,7 +63,8 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
         $data = [];
 
         $renderBlock = function (Element\AbstractBlock $block) {
-            return trim(preg_replace('~^.*<p>(.*)</p>.*$~s', '$1', $this->htmlRenderer->renderBlock($block)));
+            // Strip img elements and outer p and li tags.
+            return trim(preg_replace(['~<img .*src=\"([^\"]+)\"[^>]*>~', '~^.*<p>(.*)</p>.*$~s'], ['$1', '$1'], $this->htmlRenderer->renderBlock($block)));
         };
 
         foreach ($blocks as $block) {
