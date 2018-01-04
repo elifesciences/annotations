@@ -44,12 +44,18 @@ final class AnnotationsTest extends WebTestCase
      */
     public function it_returns_404_if_user_unknown()
     {
+        $annotations = iterator_to_array($this->createAnnotations(50));
+
         $client = static::createClient();
         $this->mockNotFound('profiles/1234', ['Accept' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)]);
         $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0);
         $client->request('GET', '/annotations?by=1234');
         $response = $client->getResponse();
         $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertResponseIsValid($response);
+        $this->assertJsonStringEqualsJson(['title' => 'Unknown profile: 1234', 'type' => 'about:blank'], $response->getContent());
+        $this->assertFalse($response->isCacheable());
 
         $this->mockProfileCall($this->createProfile('4321'));
         $this->mockHypothesisSearchCall('4321', new EmptyIterator(), 0);
@@ -67,7 +73,7 @@ final class AnnotationsTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockProfileCall($this->createProfile('1234'));
-        $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0, ($page-1)*20, 20);
+        $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0, (int) $page);
 
         $client->request('GET', "/annotations?by=1234&page=$page");
         $response = $client->getResponse();
