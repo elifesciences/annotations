@@ -49,8 +49,8 @@ abstract class ApiTestCase extends TestCase
         string $by,
         Traversable $rows,
         int $total,
-        int $offset = 0,
-        int $limit = 20,
+        int $page = 1,
+        int $perPage = 20,
         string $group = '',
         string $order = 'desc',
         string $sort = 'updated'
@@ -60,10 +60,12 @@ abstract class ApiTestCase extends TestCase
             'rows' => iterator_to_array($rows),
         ];
 
+        $offset = ($page-1)*$perPage;
+
         $this->getMockStorage()->save(
             new Request(
                 'GET',
-                "https://hypothes.is/api/search?user=$by&group=$group&offset=$offset&limit=$limit&order=$order&sort=$sort",
+                "https://hypothes.is/api/search?user=$by&group=$group&offset=$offset&limit=$perPage&order=$order&sort=$sort",
                 []
             ),
             new Response(
@@ -77,10 +79,11 @@ abstract class ApiTestCase extends TestCase
     final protected function createAnnotations($total = 10) : Traversable
     {
         for ($i = 1; $i <= $total; ++$i) {
-            $updated = (rand(0, 1) === 0);
-            $text = (rand(0, 3) > 0);
-            $highlight = !$text ? true : (rand(0, 3) > 0);
-            $parents = rand(0, 3) === 0 ? rand(1, 3) : 0;
+            // Allow a variety of annotation structures to be present, without being random.
+            $updated = ($i % 2 === 0);
+            $text = ($i % 4 > 0);
+            $highlight = !$text ? true : (($i + 1) % 4 > 0);
+            $parents = ($i % 3 === 0) ? ($i % 7) + 1 : 0;
             yield $this->createAnnotation($i, $updated, $text, $highlight, $parents);
         }
     }
