@@ -7,6 +7,7 @@ use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
+use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
@@ -339,8 +340,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'sqs.region' => $this->app['aws']['region'],
         ]);
 
+        $this->app['annotation.serializer'] = function (Application $app) {
+            return new AnnotationNormalizer();
+        };
+
         $this->app['controllers.annotations'] = function () {
-            return new AnnotationsController($this->app['hypothesis.sdk'], $this->app['api.sdk']);
+            return new AnnotationsController($this->app['hypothesis.sdk'], $this->app['api.sdk'], $this->app['annotation.serializer']);
         };
 
         $this->app->get('/annotations', 'controllers.annotations:annotationsAction')
