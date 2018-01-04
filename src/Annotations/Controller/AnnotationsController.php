@@ -62,7 +62,7 @@ final class AnnotationsController
 
         // Verify that page parameter is valid.
         if ($page != (int) $page || $page < 1) {
-            throw new NotFoundHttpException('Invalid page value');
+            throw new NotFoundHttpException('No page '.$page);
         }
 
         // Verify that per-page parameter is valid.
@@ -70,7 +70,7 @@ final class AnnotationsController
             throw new NotFoundHttpException('Invalid per-page value: 1...100 expected');
         }
 
-        // Varify that use-date parameter is valid.
+        // Verify that use-date parameter is valid.
         if (!in_array($useDate, ['updated', 'created'])) {
             throw new BadRequestHttpException('Invalid use-date value: updated or created expected');
         }
