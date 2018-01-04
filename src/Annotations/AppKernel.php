@@ -44,6 +44,7 @@ use Silex\Application;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -351,6 +352,13 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             if ($response->isCacheable()) {
                 $response->headers->set('ETag', md5($response->getContent()));
                 $response->isNotModified($request);
+            }
+
+            if (!$this->app['mock'] && $this->app['debug']) {
+                (new JsonMessageValidator(
+                    new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
+                    new Validator()
+                ))->validate((new DiactorosFactory())->createResponse($response));
             }
         });
     }
