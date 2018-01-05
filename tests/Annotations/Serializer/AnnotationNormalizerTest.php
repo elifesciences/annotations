@@ -24,6 +24,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
+        // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
         $this->normalizer = new NormalizerAwareSerializer([
             new AnnotationNormalizer(),
             new Block\ListingNormalizer(),
