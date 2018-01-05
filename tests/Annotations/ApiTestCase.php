@@ -60,7 +60,7 @@ abstract class ApiTestCase extends TestCase
             'rows' => iterator_to_array($rows),
         ];
 
-        $offset = ($page-1)*$perPage;
+        $offset = ($page - 1) * $perPage;
 
         $this->getMockStorage()->save(
             new Request(

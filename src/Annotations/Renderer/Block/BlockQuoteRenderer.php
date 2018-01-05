@@ -10,12 +10,12 @@ use League\CommonMark\ElementRendererInterface;
 class BlockQuoteRenderer extends CommonMarkBlockQuoteRenderer
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof BlockQuote)) {
-            throw new \InvalidArgumentException('Incompatible block type: ' . get_class($block));
+            throw new \InvalidArgumentException('Incompatible block type: '.get_class($block));
         }
 
         return $htmlRenderer->renderBlocks($block->children());

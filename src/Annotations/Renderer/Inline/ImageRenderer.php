@@ -24,12 +24,12 @@ use League\CommonMark\Util\Xml;
 class ImageRenderer extends CommonMarkImageRenderer
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
     {
         if (!($inline instanceof Image)) {
-            throw new \InvalidArgumentException('Incompatible inline type: ' . get_class($inline));
+            throw new \InvalidArgumentException('Incompatible inline type: '.get_class($inline));
         }
 
         $forbidUnsafeLinks = $this->config->getConfig('safe') || !$this->config->getConfig('allow_unsafe_links');

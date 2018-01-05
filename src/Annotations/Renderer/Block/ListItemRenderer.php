@@ -15,7 +15,7 @@ class ListItemRenderer extends CommonMarkListItemRenderer
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof ListItem)) {
-            throw new \InvalidArgumentException('Incompatible block type: ' . get_class($block));
+            throw new \InvalidArgumentException('Incompatible block type: '.get_class($block));
         }
 
         return $htmlRenderer->renderBlocks($block->children(), $inTightList);
