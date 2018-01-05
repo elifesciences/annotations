@@ -11,6 +11,7 @@ use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
+use League\CommonMark\Inline\Renderer\HtmlInlineRenderer;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -25,10 +26,17 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
     public function __construct()
     {
         $environment = Environment::createCommonMarkEnvironment();
+
         $environment->addBlockRenderer('League\CommonMark\Block\Element\BlockQuote', new Renderer\Block\BlockQuoteRenderer());
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\FencedCode', new Renderer\Block\CodeRenderer());
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\HtmlBlock', new Renderer\Block\HtmlBlockRenderer());
+        $environment->addBlockRenderer('League\CommonMark\Block\Element\IndentedCode', new Renderer\Block\CodeRenderer());
         $environment->addBlockRenderer('League\CommonMark\Block\Element\ListItem', new Renderer\Block\ListItemRenderer());
         $environment->addBlockRenderer('League\CommonMark\Block\Element\Paragraph', new Renderer\Block\ParagraphRenderer());
+
+        $environment->addInlineRenderer('League\CommonMark\Inline\Element\HtmlInline', new HtmlInlineRenderer());
         $environment->addInlineRenderer('League\CommonMark\Inline\Element\Image', new Renderer\Inline\ImageRenderer());
+
         $this->docParser = new DocParser($environment);
         $this->htmlRenderer = new HtmlRenderer($environment);
     }
@@ -58,6 +66,9 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
         if ($object->getTarget()->getSelector()) {
             $data['highlight'] = $object->getTarget()->getSelector()->getTextQuote()->getExact();
         }
+        if (empty($data['highlight']) && empty($data['content'])) {
+            $data['content'] = [$this->normalizer->normalize(new Block\Paragraph('**empty**'))];
+        }
 
         return $data;
     }
@@ -68,17 +79,33 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
         $data = [];
 
         foreach ($blocks as $block) {
-            if ($block instanceof Element\ListBlock) {
-                $data[] = new Block\Listing(
-                    (Element\ListBlock::TYPE_ORDERED === $block->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
-                    new ArraySequence(array_map(function (Element\ListItem $item) {
-                        return $this->htmlRenderer->renderBlock($item);
-                    }, $block->children()))
-                );
-            } elseif ($block instanceof Element\BlockQuote) {
-                $data[] = new Block\Quote([new Block\Paragraph($this->htmlRenderer->renderBlock($block))]);
-            } elseif ($block instanceof Element\Paragraph) {
-                $data[] = new Block\Paragraph($this->htmlRenderer->renderBlock($block));
+            $rendered = $this->htmlRenderer->renderBlock($block);
+            if (empty($rendered)) {
+                continue;
+            }
+
+            switch (true) {
+                case $block instanceof Element\ThematicBreak:
+                    break;
+                case $block instanceof Element\ListBlock:
+                    $data[] = new Block\Listing(
+                        (Element\ListBlock::TYPE_ORDERED === $block->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
+                        new ArraySequence(array_map(function (Element\ListItem $item) {
+                            return $this->htmlRenderer->renderBlock($item);
+                        }, $block->children()))
+                    );
+                    break;
+                case $block instanceof Element\BlockQuote:
+                    $data[] = new Block\Quote([new Block\Paragraph($rendered)]);
+                    break;
+                case $block instanceof Element\HtmlBlock:
+                case $block instanceof Element\Paragraph:
+                    $data[] = new Block\Paragraph($rendered);
+                    break;
+                case $block instanceof Element\FencedCode:
+                case $block instanceof Element\IndentedCode:
+                    $data[] = new Block\Code($rendered);
+                    break;
             }
         }
 
