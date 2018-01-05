@@ -2,22 +2,22 @@
 
 namespace eLife\HypothesisClient\Serializer\Annotation\Target\Selector;
 
-use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextPosition;
+use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextQuote;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class TextPositionNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+final class TextQuoteDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
 
-    public function denormalize($data, $class, $format = null, array $context = []) : TextPosition
+    public function denormalize($data, $class, $format = null, array $context = []) : TextQuote
     {
-        return new TextPosition($data['start'], $data['end']);
+        return new TextQuote($data['exact'], $data['prefix'], $data['suffix']);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
     {
-        return TextPosition::class === $type;
+        return TextQuote::class === $type;
     }
 }

@@ -2,22 +2,22 @@
 
 namespace eLife\HypothesisClient\Serializer\Annotation\Target\Selector;
 
-use eLife\HypothesisClient\Model\Annotation\Target\Selector\Range;
+use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextPosition;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class RangeNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+final class TextPositionDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
 
-    public function denormalize($data, $class, $format = null, array $context = []) : Range
+    public function denormalize($data, $class, $format = null, array $context = []) : TextPosition
     {
-        return new Range($data['startContainer'], $data['endContainer'], $data['startOffset'], $data['endOffset']);
+        return new TextPosition($data['start'], $data['end']);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
     {
-        return Range::class === $type;
+        return TextPosition::class === $type;
     }
 }

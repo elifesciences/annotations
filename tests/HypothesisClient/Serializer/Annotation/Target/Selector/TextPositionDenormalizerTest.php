@@ -3,16 +3,16 @@
 namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target\Selector;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextPosition;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionNormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer
  */
-final class TextPositionNormalizerTest extends PHPUnit_Framework_TestCase
+final class TextPositionDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var TextPositionNormalizer */
+    /** @var TextPositionDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class TextPositionNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new TextPositionNormalizer();
+        $this->normalizer = new TextPositionDenormalizer();
     }
 
     /**

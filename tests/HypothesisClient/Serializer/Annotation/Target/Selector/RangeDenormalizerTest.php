@@ -3,16 +3,16 @@
 namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target\Selector;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector\Range;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeNormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer
  */
-final class RangeNormalizerTest extends PHPUnit_Framework_TestCase
+final class RangeDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var RangeNormalizer */
+    /** @var RangeDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class RangeNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new RangeNormalizer();
+        $this->normalizer = new RangeDenormalizer();
     }
 
     /**

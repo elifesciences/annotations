@@ -3,21 +3,21 @@
 namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorNormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\SelectorNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer
  */
-final class SelectorNormalizerTest extends PHPUnit_Framework_TestCase
+final class SelectorDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var SelectorNormalizer */
+    /** @var SelectorDenormalizer */
     private $normalizer;
 
     /**
@@ -25,14 +25,14 @@ final class SelectorNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new SelectorNormalizer();
+        $this->normalizer = new SelectorDenormalizer();
 
         new Serializer([
             $this->normalizer,
-            new FragmentNormalizer(),
-            new RangeNormalizer(),
-            new TextPositionNormalizer(),
-            new TextQuoteNormalizer(),
+            new FragmentDenormalizer(),
+            new RangeDenormalizer(),
+            new TextPositionDenormalizer(),
+            new TextQuoteDenormalizer(),
         ]);
     }
 

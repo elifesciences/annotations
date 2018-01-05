@@ -2,17 +2,17 @@
 
 namespace tests\eLife\HypothesisClient\Serializer\Annotation;
 
-use eLife\HypothesisClient\Model\Annotation\Permissions;
-use eLife\HypothesisClient\Serializer\Annotation\PermissionsNormalizer;
+use eLife\HypothesisClient\Model\Annotation\Document;
+use eLife\HypothesisClient\Serializer\Annotation\DocumentDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\Annotation\PermissionsNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\Annotation\DocumentDenormalizer
  */
-final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
+final class DocumentDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var PermissionsNormalizer */
+    /** @var DocumentDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new PermissionsNormalizer();
+        $this->normalizer = new DocumentDenormalizer();
     }
 
     /**
@@ -35,7 +35,7 @@ final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider canDenormalizeProvider
      */
-    public function it_can_denormalize_permissions($data, $format, array $context, bool $expected)
+    public function it_can_denormalize_documents($data, $format, array $context, bool $expected)
     {
         $this->assertSame($expected, $this->normalizer->supportsDenormalization($data, $format, $context));
     }
@@ -43,8 +43,8 @@ final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
     public function canDenormalizeProvider() : array
     {
         return [
-            'permissions' => [[], Permissions::class, [], true],
-            'non-permissions' => [[], get_class($this), [], false],
+            'document' => [[], Document::class, [], true],
+            'non-document' => [[], get_class($this), [], false],
         ];
     }
 
@@ -52,9 +52,9 @@ final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider denormalizeProvider
      */
-    public function it_will_denormalize_permissions(array $json, Permissions $expected)
+    public function it_will_denormalize_documents(array $json, Document $expected)
     {
-        $this->assertEquals($expected, $this->normalizer->denormalize($json, Permissions::class));
+        $this->assertEquals($expected, $this->normalizer->denormalize($json, Document::class));
     }
 
     public function denormalizeProvider() : array
@@ -62,11 +62,15 @@ final class PermissionsNormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'read' => [
-                        'read',
+                    'title' => [
+                        'title',
                     ],
                 ],
-                new Permissions('read'),
+                new Document('title'),
+            ],
+            'minimum' => [
+                [],
+                new Document('Unknown'),
             ],
         ];
     }

@@ -2,17 +2,17 @@
 
 namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target\Selector;
 
-use eLife\HypothesisClient\Model\Annotation\Target\Selector\Fragment;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentNormalizer;
+use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextQuote;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer
  */
-final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
+final class TextQuoteDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var FragmentNormalizer */
+    /** @var TextQuoteDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new FragmentNormalizer();
+        $this->normalizer = new TextQuoteDenormalizer();
     }
 
     /**
@@ -35,7 +35,7 @@ final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider canDenormalizeProvider
      */
-    public function it_can_denormalize_fragments($data, $format, array $context, bool $expected)
+    public function it_can_denormalize_text_quotes($data, $format, array $context, bool $expected)
     {
         $this->assertSame($expected, $this->normalizer->supportsDenormalization($data, $format, $context));
     }
@@ -43,8 +43,8 @@ final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
     public function canDenormalizeProvider() : array
     {
         return [
-            'fragment' => [[], Fragment::class, [], true],
-            'non-fragment' => [[], get_class($this), [], false],
+            'text-quote' => [[], TextQuote::class, [], true],
+            'non-text-quote' => [[], get_class($this), [], false],
         ];
     }
 
@@ -52,9 +52,9 @@ final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider denormalizeProvider
      */
-    public function it_will_denormalize_fragments(array $json, Fragment $expected)
+    public function it_will_denormalize_text_quotes(array $json, TextQuote $expected)
     {
-        $this->assertEquals($expected, $this->normalizer->denormalize($json, Fragment::class));
+        $this->assertEquals($expected, $this->normalizer->denormalize($json, TextQuote::class));
     }
 
     public function denormalizeProvider() : array
@@ -62,10 +62,11 @@ final class FragmentNormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'conformsTo' => 'conforms_to',
-                    'value' => 'value',
+                    'exact' => 'exact',
+                    'prefix' => 'prefix',
+                    'suffix' => 'suffix',
                 ],
-                new Fragment('conforms_to', 'value'),
+                new TextQuote('exact', 'prefix', 'suffix'),
             ],
         ];
     }

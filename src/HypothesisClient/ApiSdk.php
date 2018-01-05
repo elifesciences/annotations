@@ -12,9 +12,9 @@ use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Serializer\Annotation;
-use eLife\HypothesisClient\Serializer\AnnotationNormalizer;
-use eLife\HypothesisClient\Serializer\TokenNormalizer;
-use eLife\HypothesisClient\Serializer\UserNormalizer;
+use eLife\HypothesisClient\Serializer\AnnotationDenormalizer;
+use eLife\HypothesisClient\Serializer\TokenDenormalizer;
+use eLife\HypothesisClient\Serializer\UserDenormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
@@ -44,17 +44,17 @@ final class ApiSdk
         $this->jwtSigning = $jwtSigning;
         $this->group = $group;
         $this->serializer = new Serializer([
-            new Annotation\DocumentNormalizer(),
-            new Annotation\TargetNormalizer(),
-            new Annotation\Target\SelectorNormalizer(),
-            new Annotation\Target\Selector\FragmentNormalizer(),
-            new Annotation\Target\Selector\RangeNormalizer(),
-            new Annotation\Target\Selector\TextPositionNormalizer(),
-            new Annotation\Target\Selector\TextQuoteNormalizer(),
-            new Annotation\PermissionsNormalizer(),
-            new AnnotationNormalizer(),
-            new TokenNormalizer(),
-            new UserNormalizer(),
+            new Annotation\DocumentDenormalizer(),
+            new Annotation\TargetDenormalizer(),
+            new Annotation\Target\SelectorDenormalizer(),
+            new Annotation\Target\Selector\FragmentDenormalizer(),
+            new Annotation\Target\Selector\RangeDenormalizer(),
+            new Annotation\Target\Selector\TextPositionDenormalizer(),
+            new Annotation\Target\Selector\TextQuoteDenormalizer(),
+            new Annotation\PermissionsDenormalizer(),
+            new AnnotationDenormalizer(),
+            new TokenDenormalizer(),
+            new UserDenormalizer(),
         ], [new JsonEncoder()]);
         $this->search = new Search(new SearchClient($this->httpClient, $this->group, []), $this->serializer);
         $this->token = new Token(new TokenClient($this->httpClient, $this->jwtSigning, []), $this->serializer);
