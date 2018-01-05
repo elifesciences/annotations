@@ -66,7 +66,6 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
             $this->target = new Annotation\Target(
                 'source',
                 new Annotation\Target\Selector(
-                    new Annotation\Target\Selector\TextPosition(0, 100),
                     new Annotation\Target\Selector\TextQuote('exact', 'prefix', 'suffix')
                 )
             ),

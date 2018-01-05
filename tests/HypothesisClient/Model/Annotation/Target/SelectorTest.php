@@ -12,8 +12,6 @@ final class SelectorTest extends PHPUnit_Framework_TestCase
 {
     /** @var Selector */
     private $selector;
-    /** @var Selector\TextPosition */
-    private $textPosition;
     /** @var Selector\TextQuote */
     private $textQuote;
 
@@ -23,17 +21,8 @@ final class SelectorTest extends PHPUnit_Framework_TestCase
     public function prepare_selector()
     {
         $this->selector = new Selector(
-            $this->textPosition = new Selector\TextPosition(1000, 2001),
             $this->textQuote = new Selector\TextQuote('exact', 'prefix', 'suffix')
         );
-    }
-
-    /**
-     * @test
-     */
-    public function it_has_a_text_position()
-    {
-        $this->assertEquals($this->textPosition, $this->selector->getTextPosition());
     }
 
     /**
@@ -47,12 +36,26 @@ final class SelectorTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_may_have_a_text_position()
+    {
+        $without = $this->selector;
+        $with = new Selector(
+            $this->textQuote,
+            $textPosition = new Selector\TextPosition(1000, 2001)
+        );
+        $this->assertNull($without->getTextPosition());
+        $this->assertEquals($textPosition, $with->getTextPosition());
+    }
+
+    /**
+     * @test
+     */
     public function it_may_have_a_range()
     {
         $without = $this->selector;
         $with = new Selector(
-            $this->textPosition,
             $this->textQuote,
+            null,
             $range = new Selector\Range('start_container', 'end_container', 0, 100)
         );
         $this->assertNull($without->getRange());
@@ -66,8 +69,8 @@ final class SelectorTest extends PHPUnit_Framework_TestCase
     {
         $without = $this->selector;
         $with = new Selector(
-            $this->textPosition,
             $this->textQuote,
+            null,
             null,
             $fragment = new Selector\Fragment('conforms_to', 'value')
         );

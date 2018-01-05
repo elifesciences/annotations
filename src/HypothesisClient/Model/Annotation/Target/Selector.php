@@ -18,8 +18,8 @@ final class Selector
      * @internal
      */
     public function __construct(
-        TextPosition $textPosition,
         TextQuote $textQuote,
+        TextPosition $textPosition = null,
         Range $range = null,
         Fragment $fragment = null
     ) {
@@ -29,14 +29,17 @@ final class Selector
         $this->fragment = $fragment;
     }
 
-    public function getTextPosition() : TextPosition
-    {
-        return $this->textPosition;
-    }
-
     public function getTextQuote() : TextQuote
     {
         return $this->textQuote;
+    }
+
+    /**
+     * @return TextPosition|null
+     */
+    public function getTextPosition()
+    {
+        return $this->textPosition;
     }
 
     /**

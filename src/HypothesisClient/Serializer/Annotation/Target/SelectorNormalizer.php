@@ -21,7 +21,9 @@ final class SelectorNormalizer implements DenormalizerInterface, DenormalizerAwa
         foreach ($data as $selector) {
             switch ($selector['type']) {
                 case 'FragmentSelector':
-                    $selectors['fragment'] = $this->denormalizer->denormalize($selector, Fragment::class);
+                    if (!empty($selector['conformsTo']) && !empty($selector['value'])) {
+                        $selectors['fragment'] = $this->denormalizer->denormalize($selector, Fragment::class);
+                    }
                     break;
                 case 'RangeSelector':
                     $selectors['range'] = $this->denormalizer->denormalize($selector, Range::class);
@@ -35,7 +37,7 @@ final class SelectorNormalizer implements DenormalizerInterface, DenormalizerAwa
             }
         }
 
-        return new Selector($selectors['textPosition'], $selectors['textQuote'], $selectors['range'] ?? null, $selectors['fragment'] ?? null);
+        return new Selector($selectors['textQuote'], $selectors['textPosition'] ?? null, $selectors['range'] ?? null, $selectors['fragment'] ?? null);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
