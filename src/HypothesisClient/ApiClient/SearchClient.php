@@ -31,7 +31,7 @@ final class SearchClient
         string $sort = 'updated'
     ) : PromiseInterface {
         $query = [];
-        if ($username && false) {
+        if ($username) {
             $query['user'] = $username;
         }
         $query += [
