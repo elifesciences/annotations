@@ -85,6 +85,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
     {
         $createdDate = '2017-11-29T17:41:28Z';
         $updatedDate = '2018-01-04T11:23:47Z';
+
         return [
             'complete' => [
                 [
@@ -301,31 +302,31 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => "[Originally posted 10 July 2015]",
+                            'text' => '[Originally posted 10 July 2015]',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "<strong>Comment: The viruses of Tulloch et al. do not maintain constant codon pair frequencies, and do not distinguish dinucleotide bias from codon pair bias</strong>",
+                            'text' => '<strong>Comment: The viruses of Tulloch et al. do not maintain constant codon pair frequencies, and do not distinguish dinucleotide bias from codon pair bias</strong>',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "Bruce Futcher (1#), Oleksandr Gorbatsevych (1), Sam H Shen (3), Charles B Stauft (1,2), Yutong Song (1), Bingyin Wang (1), Janet Leatherwood (1), Justin Gardin (1), Alisa Yurovsky (1), Steffen Mueller (2), Eckard Wimmer (1,2#)",
+                            'text' => 'Bruce Futcher (1#), Oleksandr Gorbatsevych (1), Sam H Shen (3), Charles B Stauft (1,2), Yutong Song (1), Bingyin Wang (1), Janet Leatherwood (1), Justin Gardin (1), Alisa Yurovsky (1), Steffen Mueller (2), Eckard Wimmer (1,2#)',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "(1) Dept of Microbiology and Molecular Genetics, Stony Brook University, NY 11790",
+                            'text' => '(1) Dept of Microbiology and Molecular Genetics, Stony Brook University, NY 11790',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "(2) Codagenix, 25-108 Health Sciences Dr, Stony Brook, NY 11790",
+                            'text' => '(2) Codagenix, 25-108 Health Sciences Dr, Stony Brook, NY 11790',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "(3) Present address: Integrated DNA Technologies, Coralville, Iowa 52241",
+                            'text' => '(3) Present address: Integrated DNA Technologies, Coralville, Iowa 52241',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "# Corresponding authors: <a href=\"mailto:bfutcher@gmail.com\">bfutcher@gmail.com</a> / <a href=\"mailto:eckard.wimmer@stonybrook.edu\">eckard.wimmer@stonybrook.edu</a>",
+                            'text' => '# Corresponding authors: <a href="mailto:bfutcher@gmail.com">bfutcher@gmail.com</a> / <a href="mailto:eckard.wimmer@stonybrook.edu">eckard.wimmer@stonybrook.edu</a>',
                         ],
                         [
                             'type' => 'paragraph',
@@ -353,47 +354,47 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "In their closing remarks Tulloch et al entertain a potential danger should codon pair deoptimized RNA viruses that relative to wild type viruses contain hundreds of silent nucleotide changes be used as vaccines. They ignore that such vaccine candidates, originally investigated only in tissue culture cells (Coleman et al., 2008; Tulloch et al., 2014) will undergo multiple years-long testing in animals and humans for safety, efficacy and genetic stability. Significantly, studies with codon pair deoptimized RNA viruses in tissue culture cells may not yield matching results in experimental animals (Shen et al., 2015).",
+                            'text' => 'In their closing remarks Tulloch et al entertain a potential danger should codon pair deoptimized RNA viruses that relative to wild type viruses contain hundreds of silent nucleotide changes be used as vaccines. They ignore that such vaccine candidates, originally investigated only in tissue culture cells (Coleman et al., 2008; Tulloch et al., 2014) will undergo multiple years-long testing in animals and humans for safety, efficacy and genetic stability. Significantly, studies with codon pair deoptimized RNA viruses in tissue culture cells may not yield matching results in experimental animals (Shen et al., 2015).',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "<strong>References</strong>",
+                            'text' => '<strong>References</strong>',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "BEUTLER, E, GELBART, T, HAN, JH, KOZIOL, JA &amp; BEUTLER, B. 1989. Evolution of the genome and the genetic code: selection at the dinucleotide level by methylation and polyribonucleotide cleavage. Proc Natl Acad Sci U S A, 86, 192-6.",
+                            'text' => 'BEUTLER, E, GELBART, T, HAN, JH, KOZIOL, JA &amp; BEUTLER, B. 1989. Evolution of the genome and the genetic code: selection at the dinucleotide level by methylation and polyribonucleotide cleavage. Proc Natl Acad Sci U S A, 86, 192-6.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "COLEMAN, JR, PAPAMICHAIL, D, SKIENA, S, FUTCHER, B, WIMMER, E &amp; MUELLER, S. 2008. Virus attenuation by genome-scale changes in codon pair bias. Science, 320, 1784-7.",
+                            'text' => 'COLEMAN, JR, PAPAMICHAIL, D, SKIENA, S, FUTCHER, B, WIMMER, E &amp; MUELLER, S. 2008. Virus attenuation by genome-scale changes in codon pair bias. Science, 320, 1784-7.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "FUTCHER, B, GORBATSEVYCH, O, SHEN, SH, STAUFT, CB, SONG, Y, WANG, B, LEATHERWOOD, J, GARDIN, J, YUROVSKY, A, MUELLER, S &amp; WIMMER, E. 2015. Reply to Simmonds et al.: Codon pair and dinucleotide bias have not been functionally distinguished. Proc Natl Acad Sci U S A.",
+                            'text' => 'FUTCHER, B, GORBATSEVYCH, O, SHEN, SH, STAUFT, CB, SONG, Y, WANG, B, LEATHERWOOD, J, GARDIN, J, YUROVSKY, A, MUELLER, S &amp; WIMMER, E. 2015. Reply to Simmonds et al.: Codon pair and dinucleotide bias have not been functionally distinguished. Proc Natl Acad Sci U S A.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "GUTMAN, GA &amp; HATFIELD, GW. 1989. Nonrandom utilization of codon pairs in Escherichia coli. Proc Natl Acad Sci U S A, 86, 3699-703.",
+                            'text' => 'GUTMAN, GA &amp; HATFIELD, GW. 1989. Nonrandom utilization of codon pairs in Escherichia coli. Proc Natl Acad Sci U S A, 86, 3699-703.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "ROTHBERG, PG &amp; WIMMER, E. 1981. Mononucleotide and dinucleotide frequencies, and codon usage in poliovirion RNA. Nucleic Acids Res, 9, 6221-9.",
+                            'text' => 'ROTHBERG, PG &amp; WIMMER, E. 1981. Mononucleotide and dinucleotide frequencies, and codon usage in poliovirion RNA. Nucleic Acids Res, 9, 6221-9.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "SHEN, SH, STAUFT, CB, GORBATSEVYCH, O, SONG, Y, WARD, CB, YUROVSKY, A, MUELLER, S, FUTCHER, B &amp; WIMMER, E. 2015. Large-scale recoding of an arbovirus genome to rebalance its insect versus mammalian preference. Proc Natl Acad Sci U S A, 112, 4749-54.",
+                            'text' => 'SHEN, SH, STAUFT, CB, GORBATSEVYCH, O, SONG, Y, WARD, CB, YUROVSKY, A, MUELLER, S, FUTCHER, B &amp; WIMMER, E. 2015. Large-scale recoding of an arbovirus genome to rebalance its insect versus mammalian preference. Proc Natl Acad Sci U S A, 112, 4749-54.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "TULLOCH, F, ATKINSON, NJ, EVANS, DJ, RYAN, MD &amp; SIMMONDS, P. 2014. RNA virus attenuation by codon pair deoptimisation is an artefact of increases in CpG/UpA dinucleotide frequencies. eLife, 3, e04531.",
+                            'text' => 'TULLOCH, F, ATKINSON, NJ, EVANS, DJ, RYAN, MD &amp; SIMMONDS, P. 2014. RNA virus attenuation by codon pair deoptimisation is an artefact of increases in CpG/UpA dinucleotide frequencies. eLife, 3, e04531.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "Figure 1. Rare codon pairs and CpG/UpA dinucleotides are increased co-ordinately in the viruses of Tulloch et al.",
+                            'text' => 'Figure 1. Rare codon pairs and CpG/UpA dinucleotides are increased co-ordinately in the viruses of Tulloch et al.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "<a href=\"https://cdn.elifesciences.org/annotations-media/2981226593-001-c4da4874752e6ee62725d97cab61f6f58d3e8b2975902d859336f730d1760b61.jpg\">https://cdn.elifesciences.org/annotations-media/2981226593-001-c4da4874752e6ee62725d97cab61f6f58d3e8b2975902d859336f730d1760b61.jpg</a>",
+                            'text' => '<a href="https://cdn.elifesciences.org/annotations-media/2981226593-001-c4da4874752e6ee62725d97cab61f6f58d3e8b2975902d859336f730d1760b61.jpg">https://cdn.elifesciences.org/annotations-media/2981226593-001-c4da4874752e6ee62725d97cab61f6f58d3e8b2975902d859336f730d1760b61.jpg</a>',
                         ],
                     ],
                     'created' => $createdDate,
@@ -413,7 +414,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     'uri',
                     null,
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
-                )
+                ),
             ],
         ];
     }

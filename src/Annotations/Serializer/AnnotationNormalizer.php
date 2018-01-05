@@ -81,6 +81,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
                 $data[] = new Block\Paragraph($this->htmlRenderer->renderBlock($block));
             }
         }
+
         return array_map(function (Block $block) {
             return $this->normalizer->normalize($block);
         }, $data);
