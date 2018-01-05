@@ -38,7 +38,6 @@ final class TargetTest extends PHPUnit_Framework_TestCase
         $targetWithSelector = new Target(
             'source',
             $selector = new Target\Selector(
-                new Target\Selector\TextPosition(1000, 2001),
                 new Target\Selector\TextQuote('exact', 'prefix', 'suffix')
             )
         );

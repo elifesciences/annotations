@@ -10,7 +10,6 @@ use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * @covers \eLife\Annotations\Serializer\AnnotationNormalizer
@@ -117,8 +116,8 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     new Annotation\Target(
                         'source',
                         new Annotation\Target\Selector(
-                            new Annotation\Target\Selector\TextPosition(0, 10),
                             new Annotation\Target\Selector\TextQuote('highlight', 'prefix', 'suffix'),
+                            new Annotation\Target\Selector\TextPosition(0, 10),
                             new Annotation\Target\Selector\Range('div[1]', 'div[2]', 10, 300),
                             new Annotation\Target\Selector\Fragment('conforms_to', 'value')
                         )
