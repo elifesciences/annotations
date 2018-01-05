@@ -14,7 +14,6 @@ use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Serializer\Block;
-use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
@@ -52,6 +51,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
+use Symfony\Component\Serializer\Serializer;
 use tests\eLife\Annotations\InMemoryStorageAdapter;
 use tests\eLife\Annotations\ValidatingStorageAdapter;
 use function GuzzleHttp\Psr7\str;
@@ -343,7 +343,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         ]);
 
         $this->app['annotation.serializer'] = function (Application $app) {
-            return new NormalizerAwareSerializer([
+            return new Serializer([
                 new AnnotationNormalizer(),
                 new Block\ListingNormalizer(),
                 new Block\MathMLNormalizer(),
