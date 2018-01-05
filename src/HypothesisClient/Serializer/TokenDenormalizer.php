@@ -2,22 +2,22 @@
 
 namespace eLife\HypothesisClient\Serializer;
 
-use eLife\HypothesisClient\Model\User;
+use eLife\HypothesisClient\Model\Token;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class UserNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+final class TokenDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
 
-    public function denormalize($data, $class, $format = null, array $context = []) : User
+    public function denormalize($data, $class, $format = null, array $context = []) : Token
     {
-        return new User($data['username'], $data['email'] ?? null, $data['display_name'] ?? null, $data['new'] ?? false);
+        return new Token($data['access_token'], $data['token_type'], $data['expires_in'], $data['refresh_token']);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
     {
-        return User::class === $type;
+        return Token::class === $type;
     }
 }

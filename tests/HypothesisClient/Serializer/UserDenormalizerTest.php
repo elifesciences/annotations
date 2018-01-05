@@ -3,16 +3,16 @@
 namespace tests\eLife\HypothesisClient\Serializer;
 
 use eLife\HypothesisClient\Model\User;
-use eLife\HypothesisClient\Serializer\UserNormalizer;
+use eLife\HypothesisClient\Serializer\UserDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\UserNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\UserDenormalizer
  */
-final class UserNormalizerTest extends PHPUnit_Framework_TestCase
+final class UserDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var UserNormalizer */
+    /** @var UserDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class UserNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new UserNormalizer();
+        $this->normalizer = new UserDenormalizer();
     }
 
     /**

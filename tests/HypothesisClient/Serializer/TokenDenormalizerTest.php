@@ -3,16 +3,16 @@
 namespace tests\eLife\HypothesisClient\Serializer;
 
 use eLife\HypothesisClient\Model\Token;
-use eLife\HypothesisClient\Serializer\TokenNormalizer;
+use eLife\HypothesisClient\Serializer\TokenDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\TokenNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\TokenDenormalizer
  */
-final class TokenNormalizerTest extends PHPUnit_Framework_TestCase
+final class TokenDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var TokenNormalizer */
+    /** @var TokenDenormalizer */
     private $normalizer;
 
     /**
@@ -20,7 +20,7 @@ final class TokenNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new TokenNormalizer();
+        $this->normalizer = new TokenDenormalizer();
     }
 
     /**

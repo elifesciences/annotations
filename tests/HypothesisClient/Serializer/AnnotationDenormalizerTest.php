@@ -4,25 +4,25 @@ namespace tests\eLife\HypothesisClient\Serializer;
 
 use DateTimeImmutable;
 use eLife\HypothesisClient\Model\Annotation;
-use eLife\HypothesisClient\Serializer\Annotation\DocumentNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\PermissionsNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorNormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\TargetNormalizer;
-use eLife\HypothesisClient\Serializer\AnnotationNormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\DocumentDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\PermissionsDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
+use eLife\HypothesisClient\Serializer\Annotation\TargetDenormalizer;
+use eLife\HypothesisClient\Serializer\AnnotationDenormalizer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * @covers \eLife\HypothesisClient\Serializer\AnnotationNormalizer
+ * @covers \eLife\HypothesisClient\Serializer\AnnotationDenormalizer
  */
-final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
+final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
 {
-    /** @var AnnotationNormalizer */
+    /** @var AnnotationDenormalizer */
     private $normalizer;
 
     /**
@@ -30,18 +30,18 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
-        $this->normalizer = new AnnotationNormalizer();
+        $this->normalizer = new AnnotationDenormalizer();
 
         new Serializer([
             $this->normalizer,
-            new DocumentNormalizer(),
-            new FragmentNormalizer(),
-            new PermissionsNormalizer(),
-            new RangeNormalizer(),
-            new SelectorNormalizer(),
-            new TargetNormalizer(),
-            new TextPositionNormalizer(),
-            new TextQuoteNormalizer(),
+            new DocumentDenormalizer(),
+            new FragmentDenormalizer(),
+            new PermissionsDenormalizer(),
+            new RangeDenormalizer(),
+            new SelectorDenormalizer(),
+            new TargetDenormalizer(),
+            new TextPositionDenormalizer(),
+            new TextQuoteDenormalizer(),
         ]);
     }
 
