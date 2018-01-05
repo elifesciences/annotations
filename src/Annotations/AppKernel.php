@@ -14,6 +14,7 @@ use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Serializer\Block;
+use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
@@ -343,8 +344,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         ]);
 
         $this->app['annotation.serializer'] = function (Application $app) {
-            return new Serializer([
+            return new NormalizerAwareSerializer([
                 new AnnotationNormalizer(),
+                new Block\CodeNormalizer(),
                 new Block\ListingNormalizer(),
                 new Block\MathMLNormalizer(),
                 new Block\ParagraphNormalizer(),
@@ -368,7 +370,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $response->isNotModified($request);
             }
 
-            if (!$this->app['mock'] && $this->app['debug']) {
+            if (false && !$this->app['mock'] && $this->app['debug']) {
                 (new JsonMessageValidator(
                     new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
                     new Validator()
