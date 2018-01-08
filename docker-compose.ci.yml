@@ -47,7 +47,7 @@ services:
         image: busybox:1.27.2
         volumes:
             - logs:/logs
-        # be careful, this will only tail alredy existing files
+        # be careful, this will only tail already existing files
         command: tail -f /logs/all.json
         depends_on:
             - cli
