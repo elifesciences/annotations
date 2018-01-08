@@ -9,6 +9,6 @@ RUN mkdir -p build && chown www-data:www-data build
 USER www-data
 RUN composer global --no-interaction require elife/proofreader-php=dev-master
 ENV PATH="/var/www/.composer/vendor/bin:${PATH}"
-COPY project_tests.sh smoke_tests.sh /srv/annotations/
+COPY .php_cs project_tests.sh smoke_tests.sh /srv/annotations/
 
 CMD ["/bin/bash", "project_tests.sh"]
