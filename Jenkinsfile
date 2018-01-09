@@ -1,13 +1,14 @@
 elifePipeline {
     def commit
+    stage 'Checkout', {
+        checkout scm
+        commit = elifeGitRevision()
+    }
+
     elifeOnNode(
         {
-            stage 'Checkout', {
-                checkout scm
-                commit = elifeGitRevision()
-            }
-
             stage 'Container image', {
+                checkout scm
                 sh 'docker-compose -f docker-compose.ci.yml build'
             }
 
