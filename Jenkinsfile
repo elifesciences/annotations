@@ -1,9 +1,21 @@
 elifePipeline {
     def commit
-    stage 'Checkout', {
-        checkout scm
-        commit = elifeGitRevision()
-    }
+    elifeOnNode(
+        {
+            stage 'Checkout', {
+                checkout scm
+                commit = elifeGitRevision()
+            }
+
+            stage 'Container image', {
+                sh 'docker-compose -f docker-compose.ci.yml build'
+                sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run ci ./project_tests.sh'
+                step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                sh 'docker-compose -f docker-compose.ci.yml run ci ./smoke_tests.sh web'
+            }
+        },
+        'elife-libraries--ci'
+    )
 
     stage 'Project tests', {
         lock('annotations--ci') {

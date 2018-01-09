@@ -1,13 +1,15 @@
 version: '3'
 
+
 services:
     web:
         image: nginx:1.13.7
         ports:
+            # TODO: must be configurable/random
             - "8080:80"
         volumes:
             - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
-            # can we avoid this by removing try_files?
+            # TODO: can we avoid this by removing try_files?
             - ./web:/srv/annotations/web
         depends_on:
             - fpm
@@ -17,7 +19,6 @@ services:
             dockerfile: Dockerfile.fpm
         image: annotations_fpm
         volumes:
-            - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
         env_file:
@@ -30,7 +31,6 @@ services:
             dockerfile: Dockerfile.cli
         image: annotations_cli
         volumes:
-            - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
         env_file:
@@ -53,6 +53,19 @@ services:
             - cli
     # TODO: api-dummy
     # TODO: hypothesis-dummy
+    ci:
+        build: 
+            context: .
+            dockerfile: Dockerfile.ci
+        image: annotations_ci
+        volumes:
+            - ./build:/srv/annotations/build
+            - ./config/container.php:/srv/annotations/config.php
+        env_file:
+            - dev.env
+        depends_on:
+            - web
+            - cli
 
 volumes:
     logs:

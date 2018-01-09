@@ -1,0 +1,14 @@
+FROM annotations_cli
+USER root
+
+# extract into another image
+RUN git clone https://github.com/asm89/smoke.sh /opt/smoke.sh
+
+RUN mkdir -p build && chown www-data:www-data build
+
+USER www-data
+RUN composer global --no-interaction require elife/proofreader-php=dev-master
+ENV PATH="/var/www/.composer/vendor/bin:${PATH}"
+COPY .php_cs project_tests.sh smoke_tests.sh /srv/annotations/
+
+CMD ["/bin/bash", "project_tests.sh"]
