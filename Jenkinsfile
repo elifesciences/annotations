@@ -12,9 +12,13 @@ elifePipeline {
             }
 
             stage 'Project tests', {
-                sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh'
-                step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
+                try {
+                    sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh'
+                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                    sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
+                } finally {
+                    sh 'docker-compose -f docker-compose.ci.yml stop'
+                }
             }
         },
         'elife-libraries--ci'
