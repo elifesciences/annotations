@@ -7,7 +7,7 @@ elifePipeline {
 
     elifeOnNode(
         {
-            stage 'Container image', {
+            stage 'Build images', {
                 checkout scm
                 sh 'docker-compose -f docker-compose.ci.yml build'
             }
@@ -19,6 +19,15 @@ elifePipeline {
                     sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
                 } finally {
                     sh 'docker-compose -f docker-compose.ci.yml stop'
+                }
+            }
+
+            elifeMainlineOnly {
+                stage 'Push images', {
+                    sh "docker tag annotations_cli elifesciences/annotations_cli:latest && docker push elifesciences/annotations_cli:latest"
+                    sh "docker tag annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
+                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:latest && docker push elifesciences/annotations_fpm:latest"
+                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
                 }
             }
         },
