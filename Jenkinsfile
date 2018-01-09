@@ -9,6 +9,9 @@ elifePipeline {
 
             stage 'Container image', {
                 sh 'docker-compose -f docker-compose.ci.yml build'
+            }
+
+            stage 'Project tests', {
                 sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run ci ./project_tests.sh'
                 step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
                 sh 'docker-compose -f docker-compose.ci.yml run ci ./smoke_tests.sh web'
@@ -16,13 +19,6 @@ elifePipeline {
         },
         'elife-libraries--ci'
     )
-
-    stage 'Project tests', {
-        lock('annotations--ci') {
-            builderDeployRevision 'annotations--ci', commit
-            builderProjectTests 'annotations--ci', '/srv/annotations', ['/srv/annotations/build/phpunit.xml']
-        }
-    }
 
     elifeMainlineOnly {
         stage 'End2end tests', {
