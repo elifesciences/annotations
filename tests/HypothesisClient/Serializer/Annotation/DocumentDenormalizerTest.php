@@ -70,7 +70,7 @@ final class DocumentDenormalizerTest extends PHPUnit_Framework_TestCase
             ],
             'minimum' => [
                 [],
-                new Document('Unknown'),
+                new Document('No title available'),
             ],
         ];
     }

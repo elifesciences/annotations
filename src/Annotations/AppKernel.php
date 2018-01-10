@@ -175,22 +175,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
             };
 
-            $this->app['hypothesis.guzzle.mock'] = function () {
-                return new MockMiddleware($this->app['guzzle.mock.in_memory_storage'], 'replay');
-            };
-
             $this->app['guzzle.mock'] = function () {
                 return new MockMiddleware($this->app['guzzle.mock.validating_storage'], 'replay');
             };
 
             $this->app->extend('guzzle.handler', function (HandlerStack $stack) {
                 $stack->push($this->app['guzzle.mock']);
-
-                return $stack;
-            });
-
-            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
-                $stack->push($this->app['hypothesis.guzzle.mock']);
 
                 return $stack;
             });
@@ -345,7 +335,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app['annotation.serializer'] = function (Application $app) {
             return new NormalizerAwareSerializer([
-                new AnnotationNormalizer(),
+                new AnnotationNormalizer($this->app['logger']),
                 new Block\CodeNormalizer(),
                 new Block\ListingNormalizer(),
                 new Block\MathMLNormalizer(),

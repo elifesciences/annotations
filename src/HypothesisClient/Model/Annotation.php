@@ -110,8 +110,6 @@ final class Annotation
 
     private function validate() : bool
     {
-        return true;
-
         return Assert::lazy()
             ->that(array_filter([$this->getText(), $this->getTarget()->getSelector() && $this->getTarget()->getSelector()->getTextQuote()]), 'Text or target text quote selector')
             ->notEmpty('at least one value must be present.')

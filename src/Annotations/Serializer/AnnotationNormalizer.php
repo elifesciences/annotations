@@ -11,6 +11,7 @@ use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline\Element\HtmlInline;
 use League\CommonMark\Inline\Element\Image;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -23,8 +24,9 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
 
     private $docParser;
     private $htmlRenderer;
+    private $logger;
 
-    public function __construct()
+    public function __construct(LoggerInterface $logger)
     {
         $environment = Environment::createCommonMarkEnvironment();
 
@@ -45,6 +47,8 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
 
         $this->docParser = new CommonMark\DocParser($environment);
         $this->htmlRenderer = new HtmlRenderer($environment);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -73,6 +77,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             $data['highlight'] = $object->getTarget()->getSelector()->getTextQuote()->getExact();
         }
         if (empty($data['highlight']) && empty($data['content'])) {
+            $this->logger->warning(sprintf('Annotation detected without highligt or content (ID: %s)', $data['id']), ['annotation' => $data]);
             $data['content'] = self::CANNOT_RENDER_CONTENT_COPY;
         }
 
