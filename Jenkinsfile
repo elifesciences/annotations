@@ -1,28 +1,38 @@
 elifePipeline {
     def commit
+    stage 'Checkout', {
+        checkout scm
+        commit = elifeGitRevision()
+    }
+
     elifeOnNode(
         {
-            stage 'Checkout', {
+            stage 'Build images', {
                 checkout scm
-                commit = elifeGitRevision()
+                sh 'docker-compose -f docker-compose.ci.yml build'
             }
 
-            stage 'Container image', {
-                sh 'docker-compose -f docker-compose.ci.yml build'
-                sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run ci ./project_tests.sh'
-                step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                sh 'docker-compose -f docker-compose.ci.yml run ci ./smoke_tests.sh web'
+            stage 'Project tests', {
+                try {
+                    sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh'
+                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                    sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
+                } finally {
+                    sh 'docker-compose -f docker-compose.ci.yml stop'
+                }
+            }
+
+            elifeMainlineOnly {
+                stage 'Push images', {
+                    sh "docker tag annotations_cli elifesciences/annotations_cli:latest && docker push elifesciences/annotations_cli:latest"
+                    sh "docker tag annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
+                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:latest && docker push elifesciences/annotations_fpm:latest"
+                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
+                }
             }
         },
         'elife-libraries--ci'
     )
-
-    stage 'Project tests', {
-        lock('annotations--ci') {
-            builderDeployRevision 'annotations--ci', commit
-            builderProjectTests 'annotations--ci', '/srv/annotations', ['/srv/annotations/build/phpunit.xml']
-        }
-    }
 
     elifeMainlineOnly {
         stage 'End2end tests', {
