@@ -9,6 +9,7 @@ use eLife\ApiSdk\Serializer\Block;
 use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
@@ -16,6 +17,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
 {
+    /** @var BufferingLogger */
+    private $logger;
     /** @var AnnotationNormalizer */
     private $normalizer;
 
@@ -24,9 +27,10 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
+        $this->logger = new BufferingLogger();
         // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
         $this->normalizer = new NormalizerAwareSerializer([
-            new AnnotationNormalizer(),
+            new AnnotationNormalizer($this->logger),
             new Block\CodeNormalizer(),
             new Block\ListingNormalizer(),
             new Block\MathMLNormalizer(),
