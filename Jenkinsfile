@@ -19,6 +19,7 @@ elifePipeline {
                     sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
                 } finally {
                     sh 'docker-compose -f docker-compose.ci.yml stop'
+                    sh 'docker-compose -f docker-compose.ci.yml rm -v -f'
                 }
             }
 
