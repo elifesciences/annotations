@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Annotations\Renderer\Inline;
+namespace eLife\Annotations\Serializer\CommonMark\Inline\Renderer;
 
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Inline\Element\AbstractInline;

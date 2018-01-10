@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Annotations\Renderer\Block;
+namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\FencedCode;
@@ -17,7 +17,7 @@ class CodeRenderer extends CommonMarkCodeRenderer
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof FencedCode) && !($block instanceof IndentedCode)) {
-            throw new \InvalidArgumentException('Incompatible block type: ' . get_class($block));
+            throw new \InvalidArgumentException('Incompatible block type: '.get_class($block));
         }
 
         return Xml::escape($block->getStringContent());

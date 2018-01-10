@@ -370,7 +370,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $response->isNotModified($request);
             }
 
-            if (false && !$this->app['mock'] && $this->app['debug']) {
+            if (!$this->app['mock'] && $this->app['debug']) {
                 (new JsonMessageValidator(
                     new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
                     new Validator()

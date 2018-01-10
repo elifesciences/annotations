@@ -1,19 +1,21 @@
 <?php
 
-namespace eLife\Annotations\Renderer\Inline;
+namespace eLife\Annotations\Serializer\CommonMark\Inline\Renderer;
 
-use eLife\Annotations\Renderer\Block\HtmlBlockRenderer;
+use eLife\Annotations\Serializer\CommonMark\FilterTags;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Inline\Element\AbstractInline;
 use League\CommonMark\Inline\Renderer\HtmlInlineRenderer as CommonMarkHtmlInlineRenderer;
 
-class ImageRenderer extends CommonMarkHtmlInlineRenderer
+class HtmlInlineRenderer extends CommonMarkHtmlInlineRenderer
 {
+    use FilterTags;
+
     /**
      * {@inheritdoc}
      */
     public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
     {
-        return strip_tags(parent::render($inline, $htmlRenderer), HtmlBlockRenderer::ALLOWED_TAGS);
+        return $this->filter_tags(parent::render($inline, $htmlRenderer));
     }
 }

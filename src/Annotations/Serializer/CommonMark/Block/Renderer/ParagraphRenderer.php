@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Annotations\Renderer\Block;
+namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\Paragraph;
