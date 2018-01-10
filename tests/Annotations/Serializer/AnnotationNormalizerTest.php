@@ -79,7 +79,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     public function it_will_normalize_annotations(array $expected, Annotation $annotation)
     {
-         $this->assertEquals($expected, $this->normalizer->normalize($annotation));
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
     public function normalizeProvider() : array
@@ -236,6 +236,61 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                 new Annotation(
                     'id',
                     "List:\n\n- Item 1\n- Item 2  \n\n1. Item 1\n1. Item 2\n1. Item 3\n\nFinal paragraph.",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-nested-lists' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Nested list:',
+                        ],
+                        [
+                            'type' => 'list',
+                            'prefix' => 'bullet',
+                            'items' => [
+                                'Item 1',
+                                'Item 2',
+                                [
+                                    [
+                                        'type' => 'list',
+                                        'prefix' => 'bullet',
+                                        'items' => [
+                                            'Item 2.1',
+                                            [
+                                                [
+                                                    'type' => 'list',
+                                                    'prefix' => 'number',
+                                                    'items' => [
+                                                        'Item 2.1.1',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "Nested list:\n\n- Item 1\n- Item 2\n  - Item 2.1\n    1. Item 2.1.1",
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -424,19 +479,19 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => "To check I understand the requirements here, you want to be able to index a conversation thread (annotation + all replies) as one ES document, and then in response to a query, return a data structure which contains the IDs of matching conversations plus the IDs of matching items (annotation or original reply) within those conversations?",
+                            'text' => 'To check I understand the requirements here, you want to be able to index a conversation thread (annotation + all replies) as one ES document, and then in response to a query, return a data structure which contains the IDs of matching conversations plus the IDs of matching items (annotation or original reply) within those conversations?',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "So this is essentially the same problem as say, finding out which page matched if you were indexing multi-page documents?",
+                            'text' => 'So this is essentially the same problem as say, finding out which page matched if you were indexing multi-page documents?',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "Presumably ES can store position information with indexed terms. In that case here is one possible approach: Take all of the original items in the thread and serialize them into a single string - which is indexed with positional information, and separately the offsets of each item within that string are stored as a non-indexed field.",
+                            'text' => 'Presumably ES can store position information with indexed terms. In that case here is one possible approach: Take all of the original items in the thread and serialize them into a single string - which is indexed with positional information, and separately the offsets of each item within that string are stored as a non-indexed field.',
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "eg:",
+                            'text' => 'eg:',
                         ],
                         [
                             'type' => 'code',
@@ -444,7 +499,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the &quot;content&quot; field. These offsets are then looked up in the &quot;offsets&quot; field to get the thread IDs.",
+                            'text' => 'When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the &quot;content&quot; field. These offsets are then looked up in the &quot;offsets&quot; field to get the thread IDs.',
                         ],
                     ],
                     'created' => $createdDate,
@@ -457,6 +512,138 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                 new Annotation(
                     'id',
                     "To check I understand the requirements here, you want to be able to index a conversation thread (annotation + all replies) as one ES document, and then in response to a query, return a data structure which contains the IDs of matching conversations plus the IDs of matching items (annotation or original reply) within those conversations?\n\nSo this is essentially the same problem as say, finding out which page matched if you were indexing multi-page documents?\n\nPresumably ES can store position information with indexed terms. In that case here is one possible approach: Take all of the original items in the thread and serialize them into a single string - which is indexed with positional information, and separately the offsets of each item within that string are stored as a non-indexed field.\n\neg:\n\n```\n\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: <first reply ID>:<offset of first reply>,<second reply ID>:<offset of second reply>\n```\n\nWhen a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the \"content\" field. These offsets are then looked up in the \"offsets\" field to get the thread IDs.",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-mathml' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => '&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle mathcolor=&quot;blue&quot; fontfamily=&quot;serif&quot; displaystyle=&quot;true&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mstyle&gt;&lt;/math&gt;',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    '<math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle mathcolor="blue" fontfamily="serif" displaystyle="true"><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mstyle></math>',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-latex' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Math inline (k_{n+1} = n^2 + k_n^2 - k_{n-1})',
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'And a block of math for larger equations:',
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => "$$\n\\forall x \\in X,\n\\quad \\exists y\n\\leq \\epsilon\n$$",
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "Math inline \\(k_{n+1} = n^2 + k_n^2 - k_{n-1}\\)\n\nAnd a block of math for larger equations:\n\n$$\n\\forall x \\in X,\n\\quad \\exists y\n\\leq \\epsilon\n$$",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-strip-tags' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Leading paragraph.',
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'iframe: ',
+                        ],
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Trailing paragraph.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    "Leading paragraph.\n\niframe: <iframe src=\"https://elifesciences.org\"></iframe>\n\nTrailing paragraph.",
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'markdown-strip-all-tags' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'NOTE: It is not possible to display this content.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    '<iframe src="https://elifesciences.org"></iframe>',
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),

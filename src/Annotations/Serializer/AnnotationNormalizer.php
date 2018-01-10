@@ -2,22 +2,23 @@
 
 namespace eLife\Annotations\Serializer;
 
-use eLife\Annotations\Renderer;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\Block;
 use eLife\HypothesisClient\Model\Annotation;
 use League\CommonMark\Block\Element;
-use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
-use League\CommonMark\Inline\Renderer\HtmlInlineRenderer;
+use League\CommonMark\Inline\Element\HtmlInline;
+use League\CommonMark\Inline\Element\Image;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class AnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
+    const CANNOT_RENDER_CONTENT_COPY = 'NOTE: It is not possible to display this content.';
+
     use NormalizerAwareTrait;
 
     private $docParser;
@@ -27,17 +28,22 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
     {
         $environment = Environment::createCommonMarkEnvironment();
 
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\BlockQuote', new Renderer\Block\BlockQuoteRenderer());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\FencedCode', new Renderer\Block\CodeRenderer());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\HtmlBlock', new Renderer\Block\HtmlBlockRenderer());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\IndentedCode', new Renderer\Block\CodeRenderer());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\ListItem', new Renderer\Block\ListItemRenderer());
-        $environment->addBlockRenderer('League\CommonMark\Block\Element\Paragraph', new Renderer\Block\ParagraphRenderer());
+        $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
+        $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
 
-        $environment->addInlineRenderer('League\CommonMark\Inline\Element\HtmlInline', new HtmlInlineRenderer());
-        $environment->addInlineRenderer('League\CommonMark\Inline\Element\Image', new Renderer\Inline\ImageRenderer());
+        $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
+        $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
+        $environment->addBlockRenderer(Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
+        $environment->addBlockRenderer(Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+        $environment->addBlockRenderer(Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
+        $environment->addBlockRenderer(Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+        $environment->addBlockRenderer(Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
+        $environment->addBlockRenderer(Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
 
-        $this->docParser = new DocParser($environment);
+        $environment->addInlineRenderer(HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
+        $environment->addInlineRenderer(Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
+
+        $this->docParser = new CommonMark\DocParser($environment);
         $this->htmlRenderer = new HtmlRenderer($environment);
     }
 
@@ -67,7 +73,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             $data['highlight'] = $object->getTarget()->getSelector()->getTextQuote()->getExact();
         }
         if (empty($data['highlight']) && empty($data['content'])) {
-            $data['content'] = [$this->normalizer->normalize(new Block\Paragraph('**empty**'))];
+            $data['content'] = self::CANNOT_RENDER_CONTENT_COPY;
         }
 
         return $data;
@@ -88,17 +94,14 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
                 case $block instanceof Element\ThematicBreak:
                     break;
                 case $block instanceof Element\ListBlock:
-                    $data[] = new Block\Listing(
-                        (Element\ListBlock::TYPE_ORDERED === $block->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
-                        new ArraySequence(array_map(function (Element\ListItem $item) {
-                            return $this->htmlRenderer->renderBlock($item);
-                        }, $block->children()))
-                    );
+                    $data[] = $this->processListBlock($block);
                     break;
                 case $block instanceof Element\BlockQuote:
                     $data[] = new Block\Quote([new Block\Paragraph($rendered)]);
                     break;
                 case $block instanceof Element\HtmlBlock:
+                case $block instanceof CommonMark\Block\Element\Latex:
+                case $block instanceof CommonMark\Block\Element\MathML:
                 case $block instanceof Element\Paragraph:
                     $data[] = new Block\Paragraph($rendered);
                     break;
@@ -109,9 +112,40 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             }
         }
 
+        if (empty($data)) {
+            $data = [new Block\Paragraph(self::CANNOT_RENDER_CONTENT_COPY)];
+        }
+
         return array_map(function (Block $block) {
             return $this->normalizer->normalize($block);
         }, $data);
+    }
+
+    private function processListBlock(Element\ListBlock $block)
+    {
+        $gather = function (Element\ListBlock $list) use (&$gather, &$render) {
+            $items = [];
+            foreach ($list->children() as $item) {
+                foreach ($item->children() as $child) {
+                    if ($child instanceof Element\ListBlock) {
+                        $items[] = new ArraySequence([$render($child)]);
+                    } else {
+                        $items[] = $this->htmlRenderer->renderBlock($child);
+                    }
+                }
+            }
+
+            return $items;
+        };
+
+        $render = function (Element\ListBlock $list) use ($gather) {
+            return new Block\Listing(
+                (Element\ListBlock::TYPE_ORDERED === $list->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
+                new ArraySequence($gather($list))
+            );
+        };
+
+        return $render($block);
     }
 
     public function supportsNormalization($data, $format = null) : bool

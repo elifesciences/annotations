@@ -11,10 +11,11 @@ final class DocumentDenormalizer implements DenormalizerInterface, DenormalizerA
 {
     use DenormalizerAwareTrait;
 
+    const NO_TITLE_AVAILABLE_COPY = 'No title available';
+
     public function denormalize($data, $class, $format = null, array $context = []) : Document
     {
-        // @todo - should this be optional?
-        return new Document($data['title'][0] ?? 'Unknown');
+        return new Document($data['title'][0] ?? self::NO_TITLE_AVAILABLE_COPY);
     }
 
     public function supportsDenormalization($data, $type, $format = null) : bool
