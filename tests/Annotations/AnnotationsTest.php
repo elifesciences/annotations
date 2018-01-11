@@ -89,4 +89,47 @@ final class AnnotationsTest extends WebTestCase
             yield 'page '.$page => [$page];
         }
     }
+
+    /**
+     * @test
+     */
+    public function it_will_return_restricted_annotations()
+    {
+        $client = static::createClient();
+
+        $this->mockHypothesisTokenCall('1234', '1234access');
+        $this->mockHypothesisSearchCall('1234', $this->createAnnotations(), 20, 1, 20, '', 'desc', 'updated', ['Authorization' => 'Bearer 1234access']);
+        $client->request('GET', '/annotations?by=1234&access=restricted', [], [], ['HTTP_X_CONSUMER_GROUPS' => 'user,view-restricted-annotations']);
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_return_public_only_annotations()
+    {
+        $client = static::createClient();
+
+        $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
+        $client->request('GET', '/annotations?by=4321&access=public', [], [], ['HTTP_X_CONSUMER_GROUPS' => 'user,view-restricted-annotations']);
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_restrict_access_to_private_annotations()
+    {
+        $client = static::createClient();
+
+        $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
+        $client->request('GET', '/annotations?by=4321&access=restricted');
+        $response = $client->getResponse();
+
+        $this->assertSame(400, $response->getStatusCode());
+    }
 }

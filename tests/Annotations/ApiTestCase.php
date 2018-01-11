@@ -3,6 +3,7 @@
 namespace tests\eLife\Annotations;
 
 use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
+use eLife\Annotations\Credentials\MockJWTSigningCredentials;
 use eLife\ApiClient\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\ApiSdk;
@@ -45,6 +46,36 @@ abstract class ApiTestCase extends TestCase
         );
     }
 
+    final protected function mockHypothesisTokenCall(
+        string $by,
+        string $accessToken
+    ) {
+        $jwt = (new MockJWTSigningCredentials())->getJWT($by);
+        $json = [
+            'access_token' => $accessToken,
+            'token_type' => 'token_type',
+            'expires_in' => 600,
+            'refresh_token' => 'refresh_token',
+        ];
+
+        $this->getMockStorage()->save(
+            new Request(
+                'POST',
+                "https://hypothes.is/api/token",
+                [],
+                http_build_query([
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                    'assertion' => $jwt,
+                ])
+            ),
+            new Response(
+                200,
+                [],
+                json_encode($json)
+            )
+        );
+    }
+
     final protected function mockHypothesisSearchCall(
         string $by,
         Traversable $rows,
@@ -53,7 +84,8 @@ abstract class ApiTestCase extends TestCase
         int $perPage = 20,
         string $group = '',
         string $order = 'desc',
-        string $sort = 'updated'
+        string $sort = 'updated',
+        array $headers = []
     ) {
         $json = [
             'total' => $total,
@@ -66,7 +98,7 @@ abstract class ApiTestCase extends TestCase
             new Request(
                 'GET',
                 "https://hypothes.is/api/search?user=$by&group=$group&offset=$offset&limit=$perPage&order=$order&sort=$sort",
-                []
+                $headers
             ),
             new Response(
                 200,

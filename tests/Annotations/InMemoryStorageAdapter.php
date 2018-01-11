@@ -13,6 +13,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
         'User-Agent',
         'Host',
         'X-Guzzle-Cache',
+        'Content-Length',
     ];
     private $responseHeadersBlacklist = [
         'X-Guzzle-Cache',
@@ -60,6 +61,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
             'port' => $request->getUri()->getPort(),
             'scheme' => $request->getUri()->getScheme(),
             'headers' => array_diff_key($request->getHeaders(), array_flip($this->requestHeadersBlacklist)),
+            'body' => (string) $request->getBody(),
         ]));
     }
 }

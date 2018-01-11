@@ -6,6 +6,7 @@ use Aws\Sqs\SqsClient;
 use ComposerLocator;
 use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
+use eLife\Annotations\Credentials\MockJWTSigningCredentials;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
@@ -245,12 +246,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $app['hypothesis']['authority']
             );
 
-            $jwtSigning = new JWTSigningCredentials(
+            $jwtSigning = (!$this->app['mock']) ? new JWTSigningCredentials(
                 $app['hypothesis']['jwt_signing']['client_id'],
                 $app['hypothesis']['jwt_signing']['client_secret'],
                 $app['hypothesis']['authority'],
                 new Clock()
-            );
+            ) : new MockJWTSigningCredentials();
 
             return new HypothesisSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
         };
