@@ -21,7 +21,7 @@ final class AnnotationsTest extends WebTestCase
 
         $client->request('GET', '/annotations?by=1234', [], [], ['HTTP_ACCEPT' => $type]);
         $response = $client->getResponse();
-        $this->assertSame($statusCode, $response->getStatusCode());
+        $this->assertSame($statusCode, $response->getStatusCode(), $response->getContent());
     }
 
     public function typeProvider() : Traversable
