@@ -155,7 +155,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return HandlerStack::create();
         };
 
-        $this->app['guzzle.handler'] = function () {
+        $this->app['api.guzzle.handler'] = function () {
             return HandlerStack::create();
         };
 
@@ -171,22 +171,26 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 return new InMemoryStorageAdapter();
             };
 
-            //$this->app['guzzle.mock.validating_storage'] = function () {
-            //    return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
-            //};
+            $this->app['api.guzzle.mock.validating_storage'] = function () {
+                return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
+            };
 
-            $this->app['guzzle.mock'] = function () {
+            $this->app['api.guzzle.mock'] = function () {
+                return new MockMiddleware($this->app['api.guzzle.mock.validating_storage'], 'replay');
+            };
+
+            $this->app['hypothesis.guzzle.mock'] = function () {
                 return new MockMiddleware($this->app['guzzle.mock.in_memory_storage'], 'replay');
             };
 
-            $this->app->extend('guzzle.handler', function (HandlerStack $stack) {
-                $stack->push($this->app['guzzle.mock']);
+            $this->app->extend('api.guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['api.guzzle.mock']);
 
                 return $stack;
             });
 
             $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
-                $stack->push($this->app['guzzle.mock']);
+                $stack->push($this->app['hypothesis.guzzle.mock']);
 
                 return $stack;
             });
@@ -251,9 +255,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new HypothesisSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
         };
 
-        $this->app['guzzle'] = function () {
+        $this->app['api.guzzle'] = function () {
             $logger = $this->app['logger'];
-            $this->app->extend('guzzle.handler', function (HandlerStack $stack) use ($logger) {
+            $this->app->extend('api.guzzle.handler', function (HandlerStack $stack) use ($logger) {
                 $stack->push(
                     Middleware::mapRequest(function ($request) use ($logger) {
                         $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
@@ -274,7 +278,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             return new Client([
                 'base_uri' => $this->app['api.url'],
-                'handler' => $this->app['guzzle.handler'],
+                'handler' => $this->app['api.guzzle.handler'],
             ]);
         };
 
@@ -282,7 +286,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             $notifyingHttpClient = new NotifyingHttpClient(
                 new BatchingHttpClient(
                     new Guzzle6HttpClient(
-                        $app['guzzle']
+                        $app['api.guzzle']
                     ),
                     $app['api.requests_batch']
                 )
