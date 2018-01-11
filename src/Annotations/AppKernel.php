@@ -171,15 +171,21 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 return new InMemoryStorageAdapter();
             };
 
-            $this->app['guzzle.mock.validating_storage'] = function () {
-                return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
-            };
+            //$this->app['guzzle.mock.validating_storage'] = function () {
+            //    return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
+            //};
 
             $this->app['guzzle.mock'] = function () {
-                return new MockMiddleware($this->app['guzzle.mock.validating_storage'], 'replay');
+                return new MockMiddleware($this->app['guzzle.mock.in_memory_storage'], 'replay');
             };
 
             $this->app->extend('guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['guzzle.mock']);
+
+                return $stack;
+            });
+
+            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
                 $stack->push($this->app['guzzle.mock']);
 
                 return $stack;
