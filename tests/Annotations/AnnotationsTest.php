@@ -21,6 +21,7 @@ final class AnnotationsTest extends WebTestCase
 
         $client->request('GET', '/annotations?by=1234', [], [], ['HTTP_ACCEPT' => $type]);
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
         $this->assertSame($statusCode, $response->getStatusCode(), $response->getContent());
     }
 
@@ -49,6 +50,7 @@ final class AnnotationsTest extends WebTestCase
         $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0);
         $client->request('GET', '/annotations?by=1234');
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
         $this->assertResponseIsValid($response);
@@ -59,6 +61,7 @@ final class AnnotationsTest extends WebTestCase
         $this->mockHypothesisSearchCall('4321', new EmptyIterator(), 0);
         $client->request('GET', '/annotations?by=4321');
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
         $this->assertSame(200, $response->getStatusCode());
     }
 
@@ -75,6 +78,7 @@ final class AnnotationsTest extends WebTestCase
 
         $client->request('GET', "/annotations?by=1234&page=$page");
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertSame('application/problem+json', $response->headers->get('Content-Type'));
@@ -101,6 +105,7 @@ final class AnnotationsTest extends WebTestCase
         $this->mockHypothesisSearchCall('1234', $this->createAnnotations(), 20, 1, 20, '', 'desc', 'updated', ['Authorization' => 'Bearer 1234access']);
         $client->request('GET', '/annotations?by=1234&access=restricted', [], [], ['HTTP_X_CONSUMER_GROUPS' => 'user,view-restricted-annotations']);
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
 
         $this->assertSame(200, $response->getStatusCode());
     }
@@ -115,6 +120,7 @@ final class AnnotationsTest extends WebTestCase
         $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
         $client->request('GET', '/annotations?by=4321&access=public', [], [], ['HTTP_X_CONSUMER_GROUPS' => 'user,view-restricted-annotations']);
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
 
         $this->assertSame(200, $response->getStatusCode());
     }
@@ -129,6 +135,7 @@ final class AnnotationsTest extends WebTestCase
         $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
         $client->request('GET', '/annotations?by=4321&access=restricted');
         $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
 
         $this->assertSame(400, $response->getStatusCode());
     }
