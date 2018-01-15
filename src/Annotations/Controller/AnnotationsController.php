@@ -94,9 +94,9 @@ final class AnnotationsController
 
         // Perform query to Hypothesis API.
         $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page - 1) * $perPage, $perPage, ('desc' === $order), $useDate)
-            ->then(function (array $result) {
+            ->then(function (array $result) use ($by, $accessToken) {
                 return [
-                    'total' => $this->hypothesisSdk->search()->count(),
+                    'total' => $this->hypothesisSdk->search()->count($by, $accessToken),
                     'items' => array_map(function (Annotation $annotation) {
                         return $this->serializer->normalize($annotation, Annotation::class);
                     }, $result),

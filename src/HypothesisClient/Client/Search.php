@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class Search
 {
-    private $count;
+    private $total = [];
     private $serializer;
     private $searchClient;
 
@@ -23,7 +23,7 @@ final class Search
     public function query(
         string $username = null,
         string $accessToken = null,
-        int $offset = 5,
+        int $offset = 0,
         int $limit = 20,
         bool $descendingOrder = true,
         string $sort = 'updated'
@@ -38,9 +38,8 @@ final class Search
                 $descendingOrder,
                 $sort
             )
-            ->then(function (Result $result) {
-                $this->count = $result['total'];
-
+            ->then(function (Result $result) use ($username, $accessToken) {
+                $this->total[$this->getTotalKey($username, $accessToken)] = $result['total'];
                 return $result;
             })
             ->then(function (Result $result) {
@@ -50,8 +49,30 @@ final class Search
             });
     }
 
-    public function count() : int
+    public function count(
+        string $username = null,
+        string $accessToken = null
+    ) : int
     {
-        return $this->count ?? 0;
+        if (!$this->hasTotalKey($username, $accessToken)) {
+            $this->query($username, $accessToken)->wait();
+        }
+
+        return $this->total[$this->getTotalKey($username, $accessToken)];
+    }
+
+    private function hasTotalKey(
+        string $username = null,
+        string $accessToken = null
+    ) : bool {
+        return isset($this->total[$this->getTotalKey($username, $accessToken)]);
+    }
+
+    private function getTotalKey(
+        string $username = null,
+        string $accessToken = null
+    ) : string {
+        $key = (string) $username . (string) $accessToken;
+        return md5($key ?? Annotation::PUBLIC_GROUP);
     }
 }

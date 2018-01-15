@@ -2,17 +2,15 @@
 
 namespace eLife\Annotations\Serializer\CommonMark\Inline\Renderer;
 
-use eLife\Annotations\Serializer\CommonMark\FilterTags;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Inline\Element\AbstractInline;
-use League\CommonMark\Inline\Renderer\HtmlInlineRenderer as CommonMarkHtmlInlineRenderer;
+use League\CommonMark\Inline\Renderer\InlineRendererInterface;
+use function eLife\Annotations\Serializer\CommonMark\clean_paragraph;
 
-class HtmlInlineRenderer extends CommonMarkHtmlInlineRenderer
+class HtmlInlineRenderer implements InlineRendererInterface
 {
-    use FilterTags;
-
     public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
     {
-        return $this->filter_tags(parent::render($inline, $htmlRenderer));
+        return clean_paragraph($inline->getContent());
     }
 }

@@ -2,17 +2,15 @@
 
 namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
-use eLife\Annotations\Serializer\CommonMark\FilterTags;
 use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Renderer\HtmlBlockRenderer as CommonMarkHtmlBlockRenderer;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
+use function eLife\Annotations\Serializer\CommonMark\clean_paragraph;
 
-class HtmlBlockRenderer extends CommonMarkHtmlBlockRenderer
+class HtmlBlockRenderer implements BlockRendererInterface
 {
-    use FilterTags;
-
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
-        return $this->filter_tags(parent::render($block, $htmlRenderer, $inTightList));
+        return clean_paragraph($block->getStringContent());
     }
 }
