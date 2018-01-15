@@ -3,8 +3,6 @@
 namespace eLife\Annotations\Serializer;
 
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Collection\ArraySequence;
-use eLife\ApiSdk\Model\Block;
 use eLife\HypothesisClient\Model\Annotation;
 use League\CommonMark\Block\Element;
 use League\CommonMark\Environment;
@@ -102,28 +100,45 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
                     $data[] = $this->processListBlock($block);
                     break;
                 case $block instanceof Element\BlockQuote:
-                    $data[] = new Block\Quote([new Block\Paragraph($rendered)]);
+                    $data[] = [
+                        'type' => 'quote',
+                        'text' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => $rendered,
+                            ],
+                        ],
+                    ];
                     break;
                 case $block instanceof Element\HtmlBlock:
                 case $block instanceof CommonMark\Block\Element\Latex:
                 case $block instanceof CommonMark\Block\Element\MathML:
                 case $block instanceof Element\Paragraph:
-                    $data[] = new Block\Paragraph($rendered);
+                    $data[] = [
+                        'type' => 'paragraph',
+                        'text' => $rendered,
+                    ];
                     break;
                 case $block instanceof Element\FencedCode:
                 case $block instanceof Element\IndentedCode:
-                    $data[] = new Block\Code($rendered);
+                    $data[] = [
+                        'type' => 'code',
+                        'code' => $rendered,
+                    ];
                     break;
             }
         }
 
         if (empty($data)) {
-            $data = [new Block\Paragraph(self::CANNOT_RENDER_CONTENT_COPY)];
+            $data = [
+                [
+                    'type' => 'paragraph',
+                    'text' => self::CANNOT_RENDER_CONTENT_COPY,
+                ],
+            ];
         }
 
-        return array_map(function (Block $block) {
-            return $this->normalizer->normalize($block);
-        }, $data);
+        return $data;
     }
 
     private function processListBlock(Element\ListBlock $block)
@@ -133,7 +148,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             foreach ($list->children() as $item) {
                 foreach ($item->children() as $child) {
                     if ($child instanceof Element\ListBlock) {
-                        $items[] = new ArraySequence([$render($child)]);
+                        $items[] = [$render($child)];
                     } else {
                         $items[] = $this->htmlRenderer->renderBlock($child);
                     }
@@ -144,10 +159,11 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
         };
 
         $render = function (Element\ListBlock $list) use ($gather) {
-            return new Block\Listing(
-                (Element\ListBlock::TYPE_ORDERED === $list->getListData()->type) ? Block\Listing::PREFIX_NUMBER : Block\Listing::PREFIX_BULLET,
-                new ArraySequence($gather($list))
-            );
+            return [
+                'type' => 'list',
+                'prefix' => (Element\ListBlock::TYPE_ORDERED === $list->getListData()->type) ? 'number' : 'bullet',
+                'items' => $gather($list),
+            ];
         };
 
         return $render($block);
