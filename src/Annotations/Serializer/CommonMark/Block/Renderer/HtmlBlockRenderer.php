@@ -11,9 +11,6 @@ class HtmlBlockRenderer extends CommonMarkHtmlBlockRenderer
 {
     use FilterTags;
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         return $this->filter_tags(parent::render($block, $htmlRenderer, $inTightList));

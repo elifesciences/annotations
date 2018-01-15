@@ -10,9 +10,6 @@ use League\CommonMark\Util\Xml;
 
 class LatexRenderer implements BlockRendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof Latex)) {

@@ -29,9 +29,6 @@ final class SelectorDenormalizerTest extends PHPUnit_Framework_TestCase
 
         new Serializer([
             $this->normalizer,
-            new FragmentDenormalizer(),
-            new RangeDenormalizer(),
-            new TextPositionDenormalizer(),
             new TextQuoteDenormalizer(),
         ]);
     }
@@ -100,10 +97,7 @@ final class SelectorDenormalizerTest extends PHPUnit_Framework_TestCase
                     ],
                 ],
                 new Selector(
-                    new Selector\TextQuote('exact', 'prefix', 'suffix'),
-                    new Selector\TextPosition(0, 10),
-                    new Selector\Range('start_container', 'end_container', 0, 10),
-                    new Selector\Fragment('conforms_to', 'value')
+                    new Selector\TextQuote('exact', 'prefix', 'suffix')
                 ),
             ],
             'minimum' => [

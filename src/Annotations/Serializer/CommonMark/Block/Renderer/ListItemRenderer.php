@@ -4,14 +4,11 @@ namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\ListItem;
-use League\CommonMark\Block\Renderer\ListItemRenderer as CommonMarkListItemRenderer;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class ListItemRenderer extends CommonMarkListItemRenderer
+class ListItemRenderer implements BlockRendererInterface
 {
-    /**
-     * @inherit
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof ListItem)) {

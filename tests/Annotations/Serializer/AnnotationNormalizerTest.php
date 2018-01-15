@@ -123,10 +123,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
                     new Annotation\Target(
                         'source',
                         new Annotation\Target\Selector(
-                            new Annotation\Target\Selector\TextQuote('highlight', 'prefix', 'suffix'),
-                            new Annotation\Target\Selector\TextPosition(0, 10),
-                            new Annotation\Target\Selector\Range('div[1]', 'div[2]', 10, 300),
-                            new Annotation\Target\Selector\Fragment('conforms_to', 'value')
+                            new Annotation\Target\Selector\TextQuote('highlight', 'prefix', 'suffix')
                         )
                     ),
                     'uri',

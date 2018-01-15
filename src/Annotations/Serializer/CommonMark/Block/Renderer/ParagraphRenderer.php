@@ -4,14 +4,11 @@ namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\Paragraph;
-use League\CommonMark\Block\Renderer\ParagraphRenderer as CommonMarkParagraphRenderer;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class ParagraphRenderer extends CommonMarkParagraphRenderer
+class ParagraphRenderer implements BlockRendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof Paragraph)) {

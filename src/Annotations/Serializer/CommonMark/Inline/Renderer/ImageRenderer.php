@@ -11,9 +11,6 @@ use League\CommonMark\Util\Xml;
 
 class ImageRenderer extends CommonMarkImageRenderer
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
     {
         if (!($inline instanceof Image)) {

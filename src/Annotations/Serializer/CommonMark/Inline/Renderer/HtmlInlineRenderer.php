@@ -11,9 +11,6 @@ class HtmlInlineRenderer extends CommonMarkHtmlInlineRenderer
 {
     use FilterTags;
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
     {
         return $this->filter_tags(parent::render($inline, $htmlRenderer));

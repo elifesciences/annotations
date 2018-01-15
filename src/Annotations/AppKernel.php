@@ -4,9 +4,8 @@ namespace eLife\Annotations;
 
 use Aws\Sqs\SqsClient;
 use ComposerLocator;
-use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
+use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
-use eLife\Annotations\Credentials\MockJWTSigningCredentials;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
@@ -28,6 +27,8 @@ use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Clock\Clock;
+use eLife\HypothesisClient\Clock\FixedClock;
+use eLife\HypothesisClient\Clock\SystemClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
@@ -224,6 +225,15 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             ]);
         };
 
+        $this->app['hypothesis.sdk.jwt_signing'] = function (Application $app) {
+            return new JWTSigningCredentials(
+                $app['hypothesis']['jwt_signing']['client_id'],
+                $app['hypothesis']['jwt_signing']['client_secret'],
+                $app['hypothesis']['authority'],
+                (!$this->app['mock']) ? new SystemClock() : new FixedClock()
+            );
+        };
+
         $this->app['hypothesis.sdk'] = function (Application $app) {
             $notifyingHttpClient = new HypothesisNotifyingHttpClient(
                 new HypothesisBatchingHttpClient(
@@ -246,14 +256,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $app['hypothesis']['authority']
             );
 
-            $jwtSigning = (!$this->app['mock']) ? new JWTSigningCredentials(
-                $app['hypothesis']['jwt_signing']['client_id'],
-                $app['hypothesis']['jwt_signing']['client_secret'],
-                $app['hypothesis']['authority'],
-                new Clock()
-            ) : new MockJWTSigningCredentials();
-
-            return new HypothesisSdk($notifyingHttpClient, $userManagement, $jwtSigning, $app['hypothesis']['group']);
+            return new HypothesisSdk($notifyingHttpClient, $userManagement, $app['hypothesis.sdk.jwt_signing'], $app['hypothesis']['group']);
         };
 
         $this->app['api.guzzle'] = function () {

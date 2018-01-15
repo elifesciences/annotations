@@ -54,7 +54,6 @@ final class Annotation
         $this->uri = $uri;
         $this->references = $references;
         $this->permissions = $permissions;
-        $this->validate();
     }
 
     public function getId() : string
@@ -106,13 +105,5 @@ final class Annotation
     public function getPermissions() : Permissions
     {
         return $this->permissions;
-    }
-
-    private function validate() : bool
-    {
-        return Assert::lazy()
-            ->that(array_filter([$this->getText(), $this->getTarget()->getSelector() && $this->getTarget()->getSelector()->getTextQuote()]), 'Text or target text quote selector')
-            ->notEmpty('at least one value must be present.')
-            ->verifyNow();
     }
 }

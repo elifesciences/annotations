@@ -5,15 +5,12 @@ namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\FencedCode;
 use League\CommonMark\Block\Element\IndentedCode;
-use League\CommonMark\Block\Renderer\FencedCodeRenderer as CommonMarkCodeRenderer;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Util\Xml;
 
-class CodeRenderer extends CommonMarkCodeRenderer
+class CodeRenderer implements BlockRendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof FencedCode) && !($block instanceof IndentedCode)) {

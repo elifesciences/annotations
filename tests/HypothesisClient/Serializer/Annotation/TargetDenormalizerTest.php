@@ -30,10 +30,7 @@ final class TargetDenormalizerTest extends PHPUnit_Framework_TestCase
 
         new Serializer([
             $this->normalizer,
-            new FragmentDenormalizer(),
-            new RangeDenormalizer(),
             new SelectorDenormalizer(),
-            new TextPositionDenormalizer(),
             new TextQuoteDenormalizer(),
         ]);
     }
@@ -107,10 +104,7 @@ final class TargetDenormalizerTest extends PHPUnit_Framework_TestCase
                 new Target(
                     'source',
                     new Target\Selector(
-                        new Target\Selector\TextQuote('exact', 'prefix', 'suffix'),
-                        new Target\Selector\TextPosition(0, 10),
-                        new Target\Selector\Range('start_container', 'end_container', 0, 10),
-                        new Target\Selector\Fragment('conforms_to', 'value')
+                        new Target\Selector\TextQuote('exact', 'prefix', 'suffix')
                     )
                 ),
             ],

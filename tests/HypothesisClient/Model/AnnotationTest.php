@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Model;
 
-use Assert\LazyAssertionException;
 use DateTimeImmutable;
 use DateTimeZone;
 use eLife\HypothesisClient\Model\Annotation;
@@ -76,26 +75,6 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
         $with = $this->annotation;
         $this->assertNull($without->getText());
         $this->assertEquals('text', $with->getText());
-    }
-
-    /**
-     * @test
-     */
-    public function it_must_have_text_or_target_text_quote_selector()
-    {
-        $this->expectException(LazyAssertionException::class);
-        $this->expectExceptionMessage('Text or target text quote selector: at least one value must be present.');
-        $annotation = new Annotation(
-            'id',
-            null,
-            $this->created = new DateTimeImmutable('now', new DateTimeZone('Z')),
-            $this->updated = new DateTimeImmutable('now', new DateTimeZone('Z')),
-            $this->document = new Annotation\Document('title'),
-            $this->target = new Annotation\Target('source'),
-            'uri',
-            null,
-            $this->permissions = new Annotation\Permissions('read')
-        );
     }
 
     /**

@@ -4,7 +4,7 @@ namespace tests\eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
 use eLife\HypothesisClient\Client\Token;
-use eLife\HypothesisClient\Clock\Clock;
+use eLife\HypothesisClient\Clock\SystemClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\Token as ModelToken;
@@ -43,7 +43,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
         $this->authority = 'authority';
         $this->group = 'group';
         $this->credentials = $this->getMockBuilder(JWTSigningCredentials::class)
-            ->setConstructorArgs([$this->clientId, $this->clientSecret, $this->authority, new Clock()])
+            ->setConstructorArgs([$this->clientId, $this->clientSecret, $this->authority, new SystemClock()])
             ->getMock();
         $this->denormalizer = $this->getMockBuilder(DenormalizerInterface::class)
             ->setMethods(['denormalize', 'supportsDenormalization'])

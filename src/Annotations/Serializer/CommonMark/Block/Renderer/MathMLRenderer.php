@@ -10,9 +10,6 @@ use League\CommonMark\Util\Xml;
 
 class MathMLRenderer implements BlockRendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof MathML)) {

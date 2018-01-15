@@ -6,9 +6,6 @@ use League\CommonMark\DocParser as CommonMarkDocParser;
 
 class DocParser extends CommonMarkDocParser
 {
-    /**
-     * {@inheritdoc}
-     */
     public function parse($input)
     {
         // Encode LaTeX.

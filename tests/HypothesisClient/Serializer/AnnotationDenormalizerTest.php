@@ -35,12 +35,9 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
         new Serializer([
             $this->normalizer,
             new DocumentDenormalizer(),
-            new FragmentDenormalizer(),
             new PermissionsDenormalizer(),
-            new RangeDenormalizer(),
             new SelectorDenormalizer(),
             new TargetDenormalizer(),
-            new TextPositionDenormalizer(),
             new TextQuoteDenormalizer(),
         ]);
     }
@@ -146,10 +143,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                     new Annotation\Target(
                         'source',
                         new Annotation\Target\Selector(
-                            new Annotation\Target\Selector\TextQuote('exact', 'prefix', 'suffix'),
-                            new Annotation\Target\Selector\TextPosition(0, 10),
-                            new Annotation\Target\Selector\Range('start_container', 'end_container', 0, 10),
-                            new Annotation\Target\Selector\Fragment('conforms_to', 'value')
+                            new Annotation\Target\Selector\TextQuote('exact', 'prefix', 'suffix')
                         )
                     ),
                     'uri',

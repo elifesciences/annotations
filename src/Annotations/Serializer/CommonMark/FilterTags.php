@@ -8,8 +8,6 @@ trait FilterTags
 
     private function filter_tags($html)
     {
-        $tmp = strip_tags($html, $this->allowed_tags);
-
-        return $tmp;
+        return strip_tags($html, $this->allowed_tags);
     }
 }

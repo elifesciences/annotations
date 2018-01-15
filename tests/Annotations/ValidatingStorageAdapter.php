@@ -2,7 +2,7 @@
 
 namespace tests\eLife\Annotations;
 
-use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
+use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
 use eLife\ApiValidator\Exception\InvalidMessage;
 use eLife\ApiValidator\MessageValidator;
 use Psr\Http\Message\MessageInterface;

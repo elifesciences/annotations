@@ -9,9 +9,6 @@ use League\CommonMark\Cursor;
 
 class MathMLParser extends AbstractBlockParser
 {
-    /**
-     * {@inheritdoc}
-     */
     public function parse(ContextInterface $context, Cursor $cursor)
     {
         $cursor->advanceToNextNonSpaceOrTab();

@@ -2,14 +2,15 @@
 
 namespace tests\eLife\Annotations;
 
-use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
-use eLife\Annotations\Credentials\MockJWTSigningCredentials;
+use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
+use eLife\Annotations\AppKernel;
 use eLife\ApiClient\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Profile;
 use eLife\ApiValidator\MessageValidator;
+use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,8 @@ use function GuzzleHttp\json_encode;
 abstract class ApiTestCase extends TestCase
 {
     use HasDiactorosFactory;
+
+    abstract protected function getApp() : AppKernel;
 
     abstract protected function getApiSdk() : ApiSdk;
 
@@ -50,7 +53,7 @@ abstract class ApiTestCase extends TestCase
         string $by,
         string $accessToken
     ) {
-        $jwt = (new MockJWTSigningCredentials())->getJWT($by);
+        $jwt = $this->getApp()->get('hypothesis.sdk.jwt_signing')->getJWT($by);
         $json = [
             'access_token' => $accessToken,
             'token_type' => 'token_type',

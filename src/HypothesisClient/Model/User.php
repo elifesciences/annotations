@@ -19,16 +19,11 @@ final class User
 
     /**
      * @internal
-     *
-     * @param string      $username
-     * @param string|null $email
-     * @param string|null $displayName
-     * @param bool        $new
      */
     public function __construct(
         string $username,
-        $email,
-        $displayName,
+        string $email = null,
+        string $displayName = null,
         bool $new = false
     ) {
         $this->username = $username;

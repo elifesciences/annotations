@@ -4,14 +4,11 @@ namespace eLife\Annotations\Serializer\CommonMark\Block\Renderer;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\BlockQuote;
-use League\CommonMark\Block\Renderer\BlockQuoteRenderer as CommonMarkBlockQuoteRenderer;
+use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class BlockQuoteRenderer extends CommonMarkBlockQuoteRenderer
+class BlockQuoteRenderer implements BlockRendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {
         if (!($block instanceof BlockQuote)) {
