@@ -165,7 +165,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
                     'parent2',
                 ],
                 new Annotation\Permissions('read')
-            )
+            ),
         ];
 
         $this->denormalizer
