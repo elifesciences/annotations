@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Credentials;
 
-use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use Firebase\JWT\JWT;

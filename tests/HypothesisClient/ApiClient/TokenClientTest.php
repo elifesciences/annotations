@@ -3,7 +3,6 @@
 namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
-use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Clock\SystemClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;

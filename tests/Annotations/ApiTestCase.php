@@ -10,7 +10,6 @@ use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Profile;
 use eLife\ApiValidator\MessageValidator;
-use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -64,7 +63,7 @@ abstract class ApiTestCase extends TestCase
         $this->getMockStorage()->save(
             new Request(
                 'POST',
-                "https://hypothes.is/api/token",
+                'https://hypothes.is/api/token',
                 [],
                 http_build_query([
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',

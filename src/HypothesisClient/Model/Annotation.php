@@ -2,7 +2,6 @@
 
 namespace eLife\HypothesisClient\Model;
 
-use Assert\Assert;
 use DateTimeImmutable;
 use eLife\HypothesisClient\Model\Annotation\Document;
 use eLife\HypothesisClient\Model\Annotation\Permissions;

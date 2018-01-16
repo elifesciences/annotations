@@ -3,9 +3,6 @@
 namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentDenormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
 use PHPUnit_Framework_TestCase;

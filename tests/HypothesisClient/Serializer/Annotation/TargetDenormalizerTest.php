@@ -3,9 +3,6 @@
 namespace tests\eLife\HypothesisClient\Serializer\Annotation;
 
 use eLife\HypothesisClient\Model\Annotation\Target;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\FragmentDenormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\RangeDenormalizer;
-use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextPositionDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\TargetDenormalizer;

@@ -40,6 +40,7 @@ final class Search
             )
             ->then(function (Result $result) use ($username, $accessToken) {
                 $this->total[$this->getTotalKey($username, $accessToken)] = $result['total'];
+
                 return $result;
             })
             ->then(function (Result $result) {
@@ -52,8 +53,7 @@ final class Search
     public function count(
         string $username = null,
         string $accessToken = null
-    ) : int
-    {
+    ) : int {
         if (!$this->hasTotalKey($username, $accessToken)) {
             $this->query($username, $accessToken)->wait();
         }
@@ -72,7 +72,8 @@ final class Search
         string $username = null,
         string $accessToken = null
     ) : string {
-        $key = (string) $username . (string) $accessToken;
+        $key = (string) $username.(string) $accessToken;
+
         return md5($key ?? Annotation::PUBLIC_GROUP);
     }
 }
