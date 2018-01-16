@@ -20,7 +20,5 @@ class SystemClockTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Clock::class, $clock);
         $time = $clock->time();
         $this->assertGreaterThan(0, $time);
-        sleep(1);
-        $this->assertNotEquals($time, $clock->time());
     }
 }

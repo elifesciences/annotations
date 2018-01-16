@@ -16,11 +16,8 @@ class FixedClockTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_return_a_fixed_time()
     {
-        $clock = new FixedClock();
+        $clock = new FixedClock(1000);
         $this->assertInstanceOf(Clock::class, $clock);
-        $time = $clock->time();
-        $this->assertGreaterThan(0, $time);
-        sleep(1);
-        $this->assertEquals($time, $clock->time());
+        $this->assertEquals(1000, $clock->time());
     }
 }
