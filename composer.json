@@ -11,7 +11,9 @@
         "psr-4": {
             "tests\\eLife\\": "./tests"
         },
-        "files": ["src/Annotations/Serializer/CommonMark/functions_include.php"]
+        "files": [
+            "src/Annotations/Serializer/CommonMark/functions_include.php"
+        ]
     },
     "require": {
         "beberlei/assert": "^2.7",
