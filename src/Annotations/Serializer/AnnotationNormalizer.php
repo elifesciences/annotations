@@ -56,7 +56,7 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
             $data['highlight'] = $object->getTarget()->getSelector()->getTextQuote()->getExact();
         }
         if (empty($data['highlight']) && empty($data['content'])) {
-            $this->logger->warning(sprintf('Annotation detected without highligt or content (ID: %s)', $data['id']), ['annotation' => $data]);
+            $this->logger->warning(sprintf('Annotation detected without highlight or content (ID: %s)', $data['id']), ['annotation' => $data]);
             $data['content'] = self::CANNOT_RENDER_CONTENT_COPY;
         }
 
