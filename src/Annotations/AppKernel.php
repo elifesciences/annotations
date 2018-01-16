@@ -8,6 +8,7 @@ use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
+use eLife\Annotations\Serializer\CommonMark;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
@@ -26,7 +27,6 @@ use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
 use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
-use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Clock\SystemClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
@@ -42,6 +42,11 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
+use League\CommonMark\Block as CommonMarkBlock;
+use League\CommonMark\DocParser;
+use League\CommonMark\Environment;
+use League\CommonMark\HtmlRenderer;
+use League\CommonMark\Inline as CommonMarkInline;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
@@ -54,7 +59,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
-use Symfony\Component\Serializer\Serializer;
 use tests\eLife\Annotations\InMemoryStorageAdapter;
 use tests\eLife\Annotations\ValidatingStorageAdapter;
 use function GuzzleHttp\Psr7\str;
@@ -347,9 +351,38 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'sqs.region' => $this->app['aws']['region'],
         ]);
 
-        $this->app['annotation.serializer'] = function (Application $app) {
+        $this->app['annotation.serializer.common_mark.environment'] = function () {
+            $environment = Environment::createCommonMarkEnvironment();
+
+            $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
+            $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
+
+            $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
+            $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
+
+            $environment->addInlineRenderer(CommonMarkInline\Element\HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
+            $environment->addInlineRenderer(CommonMarkInline\Element\Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
+
+            return $environment;
+        };
+
+        $this->app['annotation.serializer.common_mark.doc_parser'] = function () {
+            return new DocParser($this->app['annotation.serializer.common_mark.environment']);
+        };
+
+        $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
+            return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
+        };
+
+        $this->app['annotation.serializer'] = function () {
             return new NormalizerAwareSerializer([
-                new AnnotationNormalizer($this->app['logger']),
+                new AnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
                 new Block\CodeNormalizer(),
                 new Block\ListingNormalizer(),
                 new Block\MathMLNormalizer(),

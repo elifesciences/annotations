@@ -5,10 +5,8 @@ namespace eLife\Annotations\Serializer;
 use eLife\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\Model\Annotation;
 use League\CommonMark\Block\Element;
-use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
-use League\CommonMark\Inline\Element\HtmlInline;
-use League\CommonMark\Inline\Element\Image;
+use League\CommonMark\DocParser;
+use League\CommonMark\ElementRendererInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -24,27 +22,10 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
     private $htmlRenderer;
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, LoggerInterface $logger)
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
-        $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
-
-        $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
-        $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
-        $environment->addBlockRenderer(Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
-        $environment->addBlockRenderer(Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
-        $environment->addBlockRenderer(Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
-        $environment->addBlockRenderer(Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
-        $environment->addBlockRenderer(Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
-        $environment->addBlockRenderer(Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
-
-        $environment->addInlineRenderer(HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
-        $environment->addInlineRenderer(Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
-
-        $this->docParser = new CommonMark\DocParser($environment);
-        $this->htmlRenderer = new HtmlRenderer($environment);
+        $this->docParser = $docParser;
+        $this->htmlRenderer = $htmlRenderer;
 
         $this->logger = $logger;
     }

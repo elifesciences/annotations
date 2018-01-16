@@ -5,9 +5,15 @@ namespace tests\eLife\Annotations\Serializer;
 use DateTimeImmutable;
 use DateTimeZone;
 use eLife\Annotations\Serializer\AnnotationNormalizer;
+use eLife\Annotations\Serializer\CommonMark;
 use eLife\ApiSdk\Serializer\Block;
 use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
+use League\CommonMark\Block as CommonMarkBlock;
+use League\CommonMark\Inline as CommonMarkInline;
+use League\CommonMark\DocParser;
+use League\CommonMark\Environment;
+use League\CommonMark\HtmlRenderer;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -17,6 +23,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
 {
+    /** @var DocParser */
+    private $docParser;
+    /** @var HtmlRenderer */
+    private $htmlRenderer;
     /** @var BufferingLogger */
     private $logger;
     /** @var AnnotationNormalizer */
@@ -27,10 +37,30 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpNormalizer()
     {
+        $environment = Environment::createCommonMarkEnvironment();
+
+        $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
+        $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
+
+        $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
+        $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
+        $environment->addBlockRenderer(CommonMarkBlock\Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
+
+        $environment->addInlineRenderer(CommonMarkInline\Element\HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
+        $environment->addInlineRenderer(CommonMarkInline\Element\Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
+
+        $this->docParser = new CommonMark\DocParser($environment);
+        $this->htmlRenderer = new HtmlRenderer($environment);
+
         $this->logger = new BufferingLogger();
         // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
         $this->normalizer = new NormalizerAwareSerializer([
-            new AnnotationNormalizer($this->logger),
+            new AnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->logger),
             new Block\CodeNormalizer(),
             new Block\ListingNormalizer(),
             new Block\MathMLNormalizer(),
