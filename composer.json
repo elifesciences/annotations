@@ -12,7 +12,7 @@
             "tests\\eLife\\": "./tests"
         },
         "files": [
-            "src/Annotations/Serializer/CommonMark/functions_include.php"
+            "src/Annotations/Serializer/CommonMark/functions.php"
         ]
     },
     "require": {
