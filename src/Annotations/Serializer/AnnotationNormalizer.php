@@ -35,26 +35,32 @@ final class AnnotationNormalizer implements NormalizerInterface, NormalizerAware
      */
     public function normalize($object, $format = null, array $context = []) : array
     {
-        $content = $object->getText() ? $this->processText($object->getText()) : null;
+        $created = $object->getCreatedDate()->format(ApiSdk::DATE_FORMAT);
+        $updated = $object->getUpdatedDate()->format(ApiSdk::DATE_FORMAT);
 
-        $data = array_filter([
+        $data = [
             'id' => $object->getId(),
             'access' => ($object->getPermissions()->getRead() === Annotation::PUBLIC_GROUP) ? 'public' : 'restricted',
-            'content' => $content,
-            'parents' => $object->getReferences(),
-            'created' => $object->getCreatedDate()->format(ApiSdk::DATE_FORMAT),
-            'updated' => $object->getUpdatedDate()->format(ApiSdk::DATE_FORMAT),
+            'parents' => $object->getReferences() ?? [],
+            'created' => $created,
             'document' => [
                 'title' => $object->getDocument()->getTitle(),
                 'uri' => $object->getUri(),
             ],
-        ]) + ['parents' => []];
-        if ($data['created'] === $data['updated']) {
-            unset($data['updated']);
+        ];
+
+        if ($object->getText()) {
+            $data['content'] = $this->processText($object->getText());
         }
+
+        if ($created !== $updated) {
+            $data['updated'] = $updated;
+        }
+
         if ($object->getTarget()->getSelector()) {
             $data['highlight'] = $object->getTarget()->getSelector()->getTextQuote()->getExact();
         }
+
         if (empty($data['highlight']) && empty($data['content'])) {
             $this->logger->warning(sprintf('Annotation detected without highlight or content (ID: %s)', $data['id']), ['annotation' => $data]);
             $data['content'] = self::CANNOT_RENDER_CONTENT_COPY;
