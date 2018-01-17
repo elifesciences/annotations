@@ -193,6 +193,35 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
+            'no-content-or-higlight' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'NOTE: There is no content available to display.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    null,
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
             'markdown-multiple-paragraphs' => [
                 [
                     'id' => 'id',

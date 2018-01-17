@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 final class HypothesisClientAnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     const CANNOT_RENDER_CONTENT_COPY = 'NOTE: It is not possible to display this content.';
+    const UNAVAILABLE_CONTENT_COPY = 'NOTE: There is no content available to display.';
 
     use NormalizerAwareTrait;
 
@@ -63,7 +64,12 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
 
         if (empty($data['highlight']) && empty($data['content'])) {
             $this->logger->warning(sprintf('Annotation detected without highlight or content (ID: %s)', $data['id']), ['annotation' => $data]);
-            $data['content'] = self::CANNOT_RENDER_CONTENT_COPY;
+            $data['content'] = [
+                [
+                    'type' => 'paragraph',
+                    'text' => self::UNAVAILABLE_CONTENT_COPY,
+                ],
+            ];
         }
 
         return $data;
