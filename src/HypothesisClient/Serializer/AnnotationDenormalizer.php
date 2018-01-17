@@ -2,6 +2,7 @@
 
 namespace eLife\HypothesisClient\Serializer;
 
+use Assert\Assert;
 use DateTimeImmutable;
 use eLife\HypothesisClient\Model\Annotation;
 use eLife\HypothesisClient\Model\Annotation\Document;
@@ -18,6 +19,7 @@ final class AnnotationDenormalizer implements DenormalizerInterface, Denormalize
     public function denormalize($data, $class, $format = null, array $context = []) : Annotation
     {
         $data['document'] = $this->denormalizer->denormalize($data['document'], Document::class);
+        Assert::that($data['target'])->count(1);
         $data['target'] = $this->denormalizer->denormalize($data['target'][0], Target::class);
         $data['permissions'] = $this->denormalizer->denormalize($data['permissions'], Permissions::class);
 
