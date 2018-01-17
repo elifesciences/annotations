@@ -666,7 +666,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         '\\forall x \\in X,',
                         '\\quad \\exists y',
                         '\\leq \\epsilon',
-                        '$$'
+                        '$$',
                     ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
@@ -750,7 +750,8 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
         ];
     }
 
-    private function lines(array $lines) {
+    private function lines(array $lines)
+    {
         return implode(PHP_EOL, $lines);
     }
 }
