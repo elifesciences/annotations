@@ -108,6 +108,20 @@ abstract class ApiTestCase extends TestCase
                 json_encode($json)
             )
         );
+
+        // Additional call is need to get count.
+        $this->getMockStorage()->save(
+            new Request(
+                'GET',
+                "https://hypothes.is/api/search?user=$by&group=$group&offset=0&limit=1&order=desc&sort=updated",
+                $headers
+            ),
+            new Response(
+                200,
+                [],
+                json_encode($json)
+            )
+        );
     }
 
     final protected function createAnnotations($total = 10) : Traversable
