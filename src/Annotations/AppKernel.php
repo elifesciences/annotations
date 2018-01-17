@@ -7,8 +7,8 @@ use ComposerLocator;
 use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
-use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
@@ -381,7 +381,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app['annotation.serializer'] = function () {
             return new NormalizerAwareSerializer([
-                new AnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
+                new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
                 new Block\CodeNormalizer(),
                 new Block\ListingNormalizer(),
                 new Block\MathMLNormalizer(),

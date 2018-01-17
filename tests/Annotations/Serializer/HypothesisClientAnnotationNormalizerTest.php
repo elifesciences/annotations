@@ -4,8 +4,8 @@ namespace tests\eLife\Annotations\Serializer;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use eLife\Annotations\Serializer\AnnotationNormalizer;
 use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiSdk\Serializer\Block;
 use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
@@ -19,9 +19,9 @@ use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * @covers \eLife\Annotations\Serializer\AnnotationNormalizer
+ * @covers \eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer
  */
-final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
+final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_TestCase
 {
     /** @var DocParser */
     private $docParser;
@@ -29,7 +29,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
     private $htmlRenderer;
     /** @var BufferingLogger */
     private $logger;
-    /** @var AnnotationNormalizer */
+    /** @var HypothesisClientAnnotationNormalizer */
     private $normalizer;
 
     /**
@@ -60,7 +60,7 @@ final class AnnotationNormalizerTest extends PHPUnit_Framework_TestCase
         $this->logger = new BufferingLogger();
         // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
         $this->normalizer = new NormalizerAwareSerializer([
-            new AnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->logger),
+            new HypothesisClientAnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->logger),
             new Block\CodeNormalizer(),
             new Block\ListingNormalizer(),
             new Block\MathMLNormalizer(),

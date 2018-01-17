@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class AnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
+final class HypothesisClientAnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
     const CANNOT_RENDER_CONTENT_COPY = 'NOTE: It is not possible to display this content.';
 
