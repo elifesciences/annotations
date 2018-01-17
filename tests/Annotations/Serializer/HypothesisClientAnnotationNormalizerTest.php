@@ -216,7 +216,10 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "   paragraph 1, **with bold text**\n\nparagraph 2",
+                    $this->lines([
+                        '   paragraph 1, **with bold text**'.PHP_EOL,
+                        'paragraph 2',
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -266,7 +269,15 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "List:\n\n- Item 1\n- Item 2  \n\n1. Item 1\n1. Item 2\n1. Item 3\n\nFinal paragraph.",
+                    $this->lines([
+                        'List:'.PHP_EOL,
+                        '- Item 1',
+                        '- Item 2  '.PHP_EOL,
+                        '1. Item 1',
+                        '1. Item 2',
+                        '1. Item 3'.PHP_EOL,
+                        'Final paragraph.',
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -321,7 +332,13 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "Nested list:\n\n- Item 1\n- Item 2\n  - Item 2.1\n    1. Item 2.1.1",
+                    $this->lines([
+                        'Nested list:'.PHP_EOL,
+                        '- Item 1',
+                        '- Item 2',
+                        '  - Item 2.1',
+                        '    1. Item 2.1.1',
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -372,7 +389,12 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "Opening paragraph\n\n> Quote\n\n> Another quote\n\nClosing paragraph",
+                    $this->lines([
+                        'Opening paragraph'.PHP_EOL,
+                        '> Quote'.PHP_EOL,
+                        '> Another quote'.PHP_EOL,
+                        'Closing paragraph',
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -608,7 +630,15 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "Math inline \\(k_{n+1} = n^2 + k_n^2 - k_{n-1}\\)\n\nAnd a block of math for larger equations:\n\n$$\n\\forall x \\in X,\n\\quad \\exists y\n\\leq \\epsilon\n$$",
+                    $this->lines([
+                        'Math inline \\(k_{n+1} = n^2 + k_n^2 - k_{n-1}\\)'.PHP_EOL,
+                        'And a block of math for larger equations:'.PHP_EOL,
+                        '$$',
+                        '\\forall x \\in X,',
+                        '\\quad \\exists y',
+                        '\\leq \\epsilon',
+                        '$$'
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -645,7 +675,11 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ],
                 new Annotation(
                     'id',
-                    "Leading paragraph.\n\niframe: <iframe src=\"https://elifesciences.org\"></iframe>\n\nTrailing paragraph.",
+                    $this->lines([
+                        'Leading paragraph.'.PHP_EOL,
+                        'iframe: <iframe src="https://elifesciences.org"></iframe>'.PHP_EOL,
+                        'Trailing paragraph.',
+                    ]),
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
@@ -685,5 +719,9 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 ),
             ],
         ];
+    }
+
+    private function lines(array $lines) {
+        return implode(PHP_EOL, $lines);
     }
 }
