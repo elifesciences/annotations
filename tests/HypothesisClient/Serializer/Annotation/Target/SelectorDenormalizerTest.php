@@ -71,43 +71,43 @@ final class SelectorDenormalizerTest extends PHPUnit_Framework_TestCase
                 [
                     [
                         'type' => 'RangeSelector',
-                        'startContainer' => 'start_container',
-                        'endContainer' => 'end_container',
-                        'startOffset' => 0,
-                        'endOffset' => 10,
+                        'startContainer' => '/div[4]',
+                        'endContainer' => '/div[4]',
+                        'startOffset' => 100,
+                        'endOffset' => 200,
                     ],
                     [
                         'type' => 'TextPositionSelector',
-                        'start' => 0,
-                        'end' => 10,
+                        'start' => 10000,
+                        'end' => 10021,
                     ],
                     [
                         'type' => 'TextQuoteSelector',
-                        'exact' => 'exact',
-                        'prefix' => 'prefix',
-                        'suffix' => 'suffix',
+                        'exact' => 'a new human species',
+                        'prefix' => 'have been assigned to ',
+                        'suffix' => ', Homo naledi',
                     ],
                     [
                         'type' => 'FragmentSelector',
-                        'conformsTo' => 'conforms_to',
-                        'value' => 'value',
+                        'conformsTo' => 'https://tools.ietf.org/html/rfc3236',
+                        'value' => 'abstract',
                     ],
                 ],
                 new Selector(
-                    new Selector\TextQuote('exact', 'prefix', 'suffix')
+                    new Selector\TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
                 ),
             ],
             'minimum' => [
                 [
                     [
                         'type' => 'TextQuoteSelector',
-                        'exact' => 'exact',
-                        'prefix' => 'prefix',
-                        'suffix' => 'suffix',
+                        'exact' => 'a new human species',
+                        'prefix' => 'have been assigned to ',
+                        'suffix' => ', Homo naledi',
                     ],
                 ],
                 new Selector(
-                    new Selector\TextQuote('exact', 'prefix', 'suffix')
+                    new Selector\TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
                 ),
             ],
         ];

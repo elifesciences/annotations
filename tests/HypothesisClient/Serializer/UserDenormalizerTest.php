@@ -62,36 +62,36 @@ final class UserDenormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'username' => 'username',
+                    'username' => 'jcarberry',
                     'email' => 'email@email.com',
-                    'display_name' => 'display_name',
+                    'display_name' => 'J. Carberry',
                     'new' => true,
                 ],
-                new User('username', 'email@email.com', 'display_name', true),
+                new User('jcarberry', 'email@email.com', 'J. Carberry', true),
             ],
             'no-email' => [
                 [
-                    'username' => 'username',
-                    'display_name' => 'display_name',
+                    'username' => 'jcarberry',
+                    'display_name' => 'J. Carberry',
                     'new' => true,
                 ],
-                new User('username', null, 'display_name', true),
+                new User('jcarberry', null, 'J. Carberry', true),
             ],
             'no-display-name' => [
                 [
-                    'username' => 'username',
+                    'username' => 'jcarberry',
                     'email' => 'email@email.com',
                     'new' => true,
                 ],
-                new User('username', 'email@email.com', null, true),
+                new User('jcarberry', 'email@email.com', null, true),
             ],
             'minimum' => [
                 [
-                    'username' => 'username',
+                    'username' => 'jcarberry',
                     'email' => 'email@email.com',
-                    'display_name' => 'display_name',
+                    'display_name' => 'J. Carberry',
                 ],
-                new User('username', 'email@email.com', 'display_name'),
+                new User('jcarberry', 'email@email.com', 'J. Carberry'),
             ],
         ];
     }

@@ -63,10 +63,10 @@ final class DocumentDenormalizerTest extends PHPUnit_Framework_TestCase
             'complete' => [
                 [
                     'title' => [
-                        'title',
+                        'Human Evolution: The many mysteries of Homo naledi',
                     ],
                 ],
-                new Document('title'),
+                new Document('Human Evolution: The many mysteries of Homo naledi'),
             ],
             'minimum' => [
                 [],
