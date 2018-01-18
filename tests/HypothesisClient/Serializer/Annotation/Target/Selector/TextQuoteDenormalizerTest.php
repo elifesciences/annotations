@@ -62,11 +62,11 @@ final class TextQuoteDenormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'exact' => 'exact',
-                    'prefix' => 'prefix',
-                    'suffix' => 'suffix',
+                    'exact' => 'a new human species',
+                    'prefix' => 'have been assigned to ',
+                    'suffix' => ', Homo naledi',
                 ],
-                new TextQuote('exact', 'prefix', 'suffix'),
+                new TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
             ],
         ];
     }

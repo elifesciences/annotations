@@ -113,12 +113,27 @@ final class AnnotationsTest extends WebTestCase
     /**
      * @test
      */
-    public function it_will_return_public_only_annotations()
+    public function it_will_return_public_only_annotations_if_authorized_users_ask_for_them_exclusively()
     {
         $client = static::createClient();
 
         $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
         $client->request('GET', '/annotations?by=4321&access=public', [], [], ['HTTP_X_CONSUMER_GROUPS' => 'user,view-restricted-annotations']);
+        $response = $client->getResponse();
+        $this->assertResponseIsValid($response);
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_return_public_only_annotations_to_unauthorized_users()
+    {
+        $client = static::createClient();
+
+        $this->mockHypothesisSearchCall('4321', $this->createAnnotations(), 20);
+        $client->request('GET', '/annotations?by=4321');
         $response = $client->getResponse();
         $this->assertResponseIsValid($response);
 

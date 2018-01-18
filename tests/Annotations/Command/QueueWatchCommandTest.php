@@ -15,7 +15,7 @@ use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\QueueItem;
 use eLife\Bus\Queue\QueueItemTransformer;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
-use eLife\HypothesisClient\Clock\SystemClock;
+use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
@@ -71,7 +71,7 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->authority = 'authority';
         $this->authorization = sprintf('Basic %s', base64_encode($this->clientId.':'.$this->secretKey));
         $this->userManagement = new UserManagementCredentials('client_id', 'secret_key', 'authority');
-        $this->jwtSigning = new JWTSigningCredentials('client_id', 'secret_key', 'authority', new SystemClock());
+        $this->jwtSigning = new JWTSigningCredentials('client_id', 'secret_key', 'authority', new FixedClock(1000000000));
         $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['send'])
             ->getMock();

@@ -81,13 +81,13 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'id' => 'identifier',
-                    'text' => 'text',
+                    'id' => 'Ng1e2sTBEeegJt8a9q3zpQ',
+                    'text' => '<p>A new human species</p>',
                     'created' => $created,
                     'updated' => $updated,
                     'document' => [
                         'title' => [
-                            'title',
+                            'Human Evolution: The many mysteries of Homo naledi',
                         ],
                     ],
                     'target' => [
@@ -96,66 +96,66 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                             'selector' => [
                                 [
                                     'type' => 'RangeSelector',
-                                    'startContainer' => 'start_container',
-                                    'endContainer' => 'end_container',
-                                    'startOffset' => 0,
-                                    'endOffset' => 10,
+                                    'startContainer' => '/div[4]',
+                                    'endContainer' => '/div[4]',
+                                    'startOffset' => 100,
+                                    'endOffset' => 200,
                                 ],
                                 [
                                     'type' => 'TextPositionSelector',
-                                    'start' => 0,
-                                    'end' => 10,
+                                    'start' => 10000,
+                                    'end' => 10021,
                                 ],
                                 [
                                     'type' => 'TextQuoteSelector',
-                                    'exact' => 'exact',
-                                    'prefix' => 'prefix',
-                                    'suffix' => 'suffix',
+                                    'exact' => 'a new human species',
+                                    'prefix' => 'have been assigned to ',
+                                    'suffix' => ', Homo naledi',
                                 ],
                                 [
                                     'type' => 'FragmentSelector',
-                                    'conformsTo' => 'conforms_to',
-                                    'value' => 'value',
+                                    'conformsTo' => 'https://tools.ietf.org/html/rfc3236',
+                                    'value' => 'abstract',
                                 ],
                             ],
                         ],
                     ],
-                    'uri' => 'uri',
+                    'uri' => 'https://elifesciences.org/articles/10627',
                     'references' => [
                         'parent1',
                         'parent2',
                     ],
                     'permissions' => [
                         'read' => [
-                            'read',
+                            'group:__world__',
                         ],
                     ],
                 ],
                 new Annotation(
-                    'identifier',
-                    'text',
+                    'Ng1e2sTBEeegJt8a9q3zpQ',
+                    '<p>A new human species</p>',
                     new DateTimeImmutable($created),
                     new DateTimeImmutable($updated),
-                    new Annotation\Document('title'),
+                    new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
                     new Annotation\Target(
                         'source',
                         new Annotation\Target\Selector(
-                            new Annotation\Target\Selector\TextQuote('exact', 'prefix', 'suffix')
+                            new Annotation\Target\Selector\TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
                         )
                     ),
-                    'uri',
+                    'https://elifesciences.org/articles/10627',
                     ['parent1', 'parent2'],
-                    new Annotation\Permissions('read')
+                    new Annotation\Permissions('group:__world__')
                 ),
             ],
             'no-text' => [
                 [
-                    'id' => 'identifier',
+                    'id' => 'OFdkMTBEeeIFd8-JnIE1wN',
                     'created' => $created,
                     'updated' => $updated,
                     'document' => [
                         'title' => [
-                            'title',
+                            'Human Evolution: The many mysteries of Homo naledi',
                         ],
                     ],
                     'target' => [
@@ -164,76 +164,76 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                             'selector' => [
                                 [
                                     'type' => 'TextQuoteSelector',
-                                    'exact' => 'exact',
-                                    'prefix' => 'prefix',
-                                    'suffix' => 'suffix',
+                                    'exact' => 'a new human species',
+                                    'prefix' => 'have been assigned to ',
+                                    'suffix' => ', Homo naledi',
                                 ],
                             ],
                         ],
                     ],
-                    'uri' => 'uri',
+                    'uri' => 'https://elifesciences.org/articles/10627',
                     'references' => [
                         'parent1',
                         'parent2',
                     ],
                     'permissions' => [
                         'read' => [
-                            'read',
+                            'group:__world__',
                         ],
                     ],
                 ],
                 new Annotation(
-                    'identifier',
+                    'OFdkMTBEeeIFd8-JnIE1wN',
                     null,
                     new DateTimeImmutable($created),
                     new DateTimeImmutable($updated),
-                    new Annotation\Document('title'),
+                    new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
                     new Annotation\Target(
                         'source',
                         new Annotation\Target\Selector(
-                            new Annotation\Target\Selector\TextQuote('exact', 'prefix', 'suffix')
+                            new Annotation\Target\Selector\TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
                         )
                     ),
-                    'uri',
+                    'https://elifesciences.org/articles/10627',
                     ['parent1', 'parent2'],
-                    new Annotation\Permissions('read')
+                    new Annotation\Permissions('group:__world__')
                 ),
             ],
             'minimum' => [
                 [
-                    'id' => 'identifier',
+                    'id' => 'M_FoqMTBEeerwYvINYO67Q',
                     'text' => 'text',
                     'created' => $created,
                     'updated' => $updated,
                     'document' => [
                         'title' => [
-                            'title',
+                            'Human Evolution: The many mysteries of Homo naledi',
                         ],
                     ],
                     'target' => [
                         [
-                            'source' => 'source',
+                            'source' => 'https://elifesciences.org/articles/10627',
                         ],
                     ],
-                    'uri' => 'uri',
+                    'uri' => 'https://elifesciences.org/articles/10627',
                     'permissions' => [
                         'read' => [
-                            'read',
+                            'group:__world__',
                         ],
                     ],
                 ],
                 new Annotation(
-                    'identifier',
+                    'M_FoqMTBEeerwYvINYO67Q',
                     'text',
                     new DateTimeImmutable($created),
                     new DateTimeImmutable($updated),
-                    new Annotation\Document('title'),
+                    new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
                     new Annotation\Target(
-                        'source'
+                        'https://elifesciences.org/articles/10627'
                     ),
-                    'uri',
+                    'https://elifesciences.org/articles/10627',
                     null,
-                    new Annotation\Permissions('read')
+                    new Annotation\Permissions('group:__world__')
                 ),
             ],
         ];

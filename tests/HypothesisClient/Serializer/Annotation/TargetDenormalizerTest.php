@@ -71,45 +71,45 @@ final class TargetDenormalizerTest extends PHPUnit_Framework_TestCase
         return [
             'complete' => [
                 [
-                    'source' => 'source',
+                    'source' => 'https://elifesciences.org/articles/10627',
                     'selector' => [
                         [
                             'type' => 'RangeSelector',
-                            'startContainer' => 'start_container',
-                            'endContainer' => 'end_container',
-                            'startOffset' => 0,
-                            'endOffset' => 10,
+                            'startContainer' => '/div[4]',
+                            'endContainer' => '/div[4]',
+                            'startOffset' => 100,
+                            'endOffset' => 200,
                         ],
                         [
                             'type' => 'TextPositionSelector',
-                            'start' => 0,
-                            'end' => 10,
+                            'start' => 10000,
+                            'end' => 10021,
                         ],
                         [
                             'type' => 'TextQuoteSelector',
-                            'exact' => 'exact',
-                            'prefix' => 'prefix',
-                            'suffix' => 'suffix',
+                            'exact' => 'a new human species',
+                            'prefix' => 'have been assigned to ',
+                            'suffix' => ', Homo naledi',
                         ],
                         [
                             'type' => 'FragmentSelector',
-                            'conformsTo' => 'conforms_to',
-                            'value' => 'value',
+                            'conformsTo' => 'https://tools.ietf.org/html/rfc3236',
+                            'value' => 'abstract',
                         ],
                     ],
                 ],
                 new Target(
-                    'source',
+                    'https://elifesciences.org/articles/10627',
                     new Target\Selector(
-                        new Target\Selector\TextQuote('exact', 'prefix', 'suffix')
+                        new Target\Selector\TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
                     )
                 ),
             ],
             'minimum' => [
                 [
-                    'source' => 'source',
+                    'source' => 'https://elifesciences.org/articles/10627',
                 ],
-                new Target('source'),
+                new Target('https://elifesciences.org/articles/10627'),
             ],
         ];
     }
