@@ -20,7 +20,7 @@ class JWTSigningCredentials extends Credentials
     public function getJWT(string $username) : string
     {
         $now = $this->clock->time();
-        $sub = "acct:{$username}@".$this->getAuthority();
+        $sub = "acct:{$username}@{$this->getAuthority()}";
 
         $payload = [
             'aud' => 'hypothes.is',

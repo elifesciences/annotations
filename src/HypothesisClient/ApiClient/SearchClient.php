@@ -25,20 +25,27 @@ final class SearchClient
         array $headers,
         string $username = null,
         string $token = null,
-        int $page = 1,
-        int $perPage = 20,
-        bool $descendingOrder = true
+        int $offset = 0,
+        int $limit = 20,
+        bool $descendingOrder = true,
+        string $sort = 'updated'
     ) : PromiseInterface {
+        $query = [];
+        if ($username) {
+            $query['user'] = $username;
+        }
+        $query += [
+            'group' => $this->group,
+            'offset' => $offset,
+            'limit' => $limit,
+            'order' => $descendingOrder ? 'desc' : 'asc',
+            'sort' => $sort,
+        ];
+
         return $this->getRequest(
             Uri::fromParts([
                 'path' => 'search',
-                'query' => build_query([
-                    'user' => $username,
-                    'group' => $this->group,
-                    'offset' => ($page - 1) * $perPage,
-                    'limit' => $perPage,
-                    'order' => $descendingOrder ? 'desc' : 'asc',
-                ]),
+                'query' => build_query($query),
             ]),
             (($token) ? ['Authorization' => 'Bearer '.$token] : []) + $headers
         );

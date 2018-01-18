@@ -56,7 +56,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_lists_annotations_public()
     {
-        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc',
+        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc&sort=updated',
             ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
         $this->httpClient
@@ -64,7 +64,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->searchClient->query([], 'username', null, 1, 20, true));
+        $this->assertEquals($response, $this->searchClient->query([], 'username', null, 0, 20, true));
     }
 
     /**
@@ -72,7 +72,7 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_lists_annotations_restricted()
     {
-        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc',
+        $request = new Request('GET', 'search?user=username&group=group&offset=0&limit=20&order=desc&sort=updated',
             ['X-Foo' => 'bar', 'Authorization' => 'Bearer token', 'User-Agent' => 'HypothesisClient']);
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));
         $this->httpClient
@@ -80,6 +80,6 @@ final class SearchClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->searchClient->query([], 'username', 'token', 1, 20, true));
+        $this->assertEquals($response, $this->searchClient->query([], 'username', 'token', 0, 20, true));
     }
 }

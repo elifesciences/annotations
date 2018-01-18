@@ -25,11 +25,11 @@ class UsersTest extends PHPUnit_Framework_TestCase
     private $authority;
     private $authorization;
     private $clientId;
+    private $clientSecret;
     private $credentials;
     private $denormalizer;
     private $group;
     private $httpClient;
-    private $secretKey;
     /** @var Users */
     private $users;
     /** @var Users */
@@ -45,11 +45,11 @@ class UsersTest extends PHPUnit_Framework_TestCase
     public function prepareDependencies()
     {
         $this->clientId = 'client_id';
-        $this->secretKey = 'secret_key';
+        $this->clientSecret = 'client_secret';
         $this->authority = 'authority';
         $this->group = 'group';
-        $this->authorization = sprintf('Basic %s', base64_encode($this->clientId.':'.$this->secretKey));
-        $this->credentials = new UserManagementCredentials($this->clientId, $this->secretKey, $this->authority);
+        $this->authorization = sprintf('Basic %s', base64_encode($this->clientId.':'.$this->clientSecret));
+        $this->credentials = new UserManagementCredentials($this->clientId, $this->clientSecret, $this->authority);
         $this->denormalizer = $this->getMockBuilder(DenormalizerInterface::class)
             ->setMethods(['denormalize', 'supportsDenormalization'])
             ->getMock();

@@ -3,12 +3,21 @@
 namespace eLife\Annotations;
 
 use Aws\Sqs\SqsClient;
+use ComposerLocator;
+use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
+use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
+use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
+use eLife\ApiSdk\Serializer\Block;
+use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
+use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
+use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
 use eLife\Bus\Limit\LoggingLimit;
 use eLife\Bus\Limit\MemoryLimit;
@@ -16,8 +25,11 @@ use eLife\Bus\Limit\SignalsLimit;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\SqsMessageTransformer;
 use eLife\Bus\Queue\SqsWatchableQueue;
-use eLife\HypothesisClient\ApiSdk as HypothesisApiSdk;
-use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\ContentNegotiator\Silex\ContentNegotiationProvider;
+use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
+use eLife\HypothesisClient\Clock\FixedClock;
+use eLife\HypothesisClient\Clock\SystemClock;
+use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient as HypothesisGuzzle6HttpClient;
@@ -28,7 +40,13 @@ use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
+use League\CommonMark\Block as CommonMarkBlock;
+use League\CommonMark\DocParser;
+use League\CommonMark\Environment;
+use League\CommonMark\HtmlRenderer;
+use League\CommonMark\Inline as CommonMarkInline;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
@@ -40,6 +58,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
+use tests\eLife\Annotations\InMemoryStorageAdapter;
+use tests\eLife\Annotations\ValidatingStorageAdapter;
 use function GuzzleHttp\Psr7\str;
 
 final class AppKernel implements ContainerInterface, HttpKernelInterface, TerminableInterface
@@ -50,7 +70,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
     {
         $configFile = __DIR__.'/../../config.php';
         $config = array_merge(
-            file_exists($configFile) ? require $configFile : [],
+            $environment !== 'test' && file_exists($configFile) ? require $configFile : [],
             require __DIR__."/../../config/{$environment}.php"
         );
 
@@ -83,9 +103,11 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'authority' => '',
                 'group' => '',
             ],
+            'mock' => $config['mock'] ?? false,
         ]);
 
         $this->app->register(new ApiProblemProvider());
+        $this->app->register(new ContentNegotiationProvider());
         $this->app->register(new PingControllerProvider());
 
         if ($this->app['debug']) {
@@ -134,29 +156,85 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             );
         };
 
-        $this->app['hypothesis.guzzle'] = function (Application $app) {
-            // Create default HandlerStack
-            $stack = HandlerStack::create();
-            $logger = $app['logger'];
-            $stack->push(
-                Middleware::mapRequest(function ($request) use ($logger) {
-                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+        $this->app['hypothesis.guzzle.handler'] = function () {
+            return HandlerStack::create();
+        };
 
-                    return $request;
-                })
-            );
-            $stack->push(
-                Middleware::mapResponse(function ($response) use ($logger) {
-                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+        $this->app['api.guzzle.handler'] = function () {
+            return HandlerStack::create();
+        };
 
-                    return $response;
-                })
-            );
+        if ($this->app['mock']) {
+            $this->app['elife.json_message_validator'] = function () {
+                return new JsonMessageValidator(
+                    new PathBasedSchemaFinder(ComposerLocator::getPath('elife/api').'/dist/model'),
+                    new Validator()
+                );
+            };
+
+            $this->app['guzzle.mock.in_memory_storage'] = function () {
+                return new InMemoryStorageAdapter();
+            };
+
+            $this->app['api.guzzle.mock.validating_storage'] = function () {
+                return new ValidatingStorageAdapter($this->app['guzzle.mock.in_memory_storage'], $this->app['elife.json_message_validator']);
+            };
+
+            $this->app['api.guzzle.mock'] = function () {
+                return new MockMiddleware($this->app['api.guzzle.mock.validating_storage'], 'replay');
+            };
+
+            $this->app['hypothesis.guzzle.mock'] = function () {
+                return new MockMiddleware($this->app['guzzle.mock.in_memory_storage'], 'replay');
+            };
+
+            $this->app->extend('api.guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['api.guzzle.mock']);
+
+                return $stack;
+            });
+
+            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) {
+                $stack->push($this->app['hypothesis.guzzle.mock']);
+
+                return $stack;
+            });
+        }
+
+        $this->app['hypothesis.guzzle'] = function () {
+            $logger = $this->app['logger'];
+            $this->app->extend('hypothesis.guzzle.handler', function (HandlerStack $stack) use ($logger) {
+                $stack->push(
+                    Middleware::mapRequest(function ($request) use ($logger) {
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+
+                        return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+
+                        return $response;
+                    })
+                );
+
+                return $stack;
+            });
 
             return new Client([
-                'base_uri' => $app['hypothesis']['api_url'],
-                'handler' => $stack,
+                'base_uri' => $this->app['hypothesis']['api_url'],
+                'handler' => $this->app['hypothesis.guzzle.handler'],
             ]);
+        };
+
+        $this->app['hypothesis.sdk.jwt_signing'] = function (Application $app) {
+            return new JWTSigningCredentials(
+                $app['hypothesis']['jwt_signing']['client_id'],
+                $app['hypothesis']['jwt_signing']['client_secret'],
+                $app['hypothesis']['authority'],
+                (!$this->app['mock']) ? new SystemClock() : new FixedClock()
+            );
         };
 
         $this->app['hypothesis.sdk'] = function (Application $app) {
@@ -181,31 +259,33 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $app['hypothesis']['authority']
             );
 
-            return new HypothesisApiSdk($notifyingHttpClient, $userManagement);
+            return new HypothesisSdk($notifyingHttpClient, $userManagement, $app['hypothesis.sdk.jwt_signing'], $app['hypothesis']['group']);
         };
 
-        $this->app['guzzle'] = function (Application $app) {
-            // Create default HandlerStack
-            $stack = HandlerStack::create();
-            $logger = $app['logger'];
-            $stack->push(
-                Middleware::mapRequest(function ($request) use ($logger) {
-                    $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
+        $this->app['api.guzzle'] = function () {
+            $logger = $this->app['logger'];
+            $this->app->extend('api.guzzle.handler', function (HandlerStack $stack) use ($logger) {
+                $stack->push(
+                    Middleware::mapRequest(function ($request) use ($logger) {
+                        $logger->debug("Request performed in Guzzle Middleware: {$request->getUri()}.", ['request' => str($request)]);
 
-                    return $request;
-                })
-            );
-            $stack->push(
-                Middleware::mapResponse(function ($response) use ($logger) {
-                    $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
+                        return $request;
+                    })
+                );
+                $stack->push(
+                    Middleware::mapResponse(function ($response) use ($logger) {
+                        $logger->debug('Response received in Guzzle Middleware.', ['response' => str($response)]);
 
-                    return $response;
-                })
-            );
+                        return $response;
+                    })
+                );
+
+                return $stack;
+            });
 
             return new Client([
-                'base_uri' => $app['api.url'],
-                'handler' => $stack,
+                'base_uri' => $this->app['api.url'],
+                'handler' => $this->app['api.guzzle.handler'],
             ]);
         };
 
@@ -213,7 +293,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             $notifyingHttpClient = new NotifyingHttpClient(
                 new BatchingHttpClient(
                     new Guzzle6HttpClient(
-                        $app['guzzle']
+                        $app['api.guzzle']
                     ),
                     $app['api.requests_batch']
                 )
@@ -269,6 +349,63 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'sqs.queue_name' => $this->app['aws']['queue_name'],
             'sqs.region' => $this->app['aws']['region'],
         ]);
+
+        $this->app['annotation.serializer.common_mark.environment'] = function () {
+            $environment = Environment::createCommonMarkEnvironment();
+
+            $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
+            $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
+
+            $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
+            $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
+            $environment->addBlockRenderer(CommonMarkBlock\Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
+
+            $environment->addInlineRenderer(CommonMarkInline\Element\HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
+            $environment->addInlineRenderer(CommonMarkInline\Element\Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
+
+            return $environment;
+        };
+
+        $this->app['annotation.serializer.common_mark.doc_parser'] = function () {
+            return new DocParser($this->app['annotation.serializer.common_mark.environment']);
+        };
+
+        $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
+            return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
+        };
+
+        $this->app['annotation.serializer'] = function () {
+            return new NormalizerAwareSerializer([
+                new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
+                new Block\CodeNormalizer(),
+                new Block\ListingNormalizer(),
+                new Block\MathMLNormalizer(),
+                new Block\ParagraphNormalizer(),
+                new Block\QuoteNormalizer(),
+                new Block\YouTubeNormalizer(),
+            ]);
+        };
+
+        $this->app['controllers.annotations'] = function () {
+            return new AnnotationsController($this->app['hypothesis.sdk'], $this->app['api.sdk'], $this->app['annotation.serializer']);
+        };
+
+        $this->app->get('/annotations', 'controllers.annotations:annotationsAction')
+            ->before($this->app['negotiate.accept'](
+                'application/vnd.elife.annotation-list+json; version=1'
+            ));
+
+        $this->app->after(function (Request $request, Response $response, Application $app) {
+            if ($response->isCacheable()) {
+                $response->headers->set('ETag', md5($response->getContent()));
+                $response->isNotModified($request);
+            }
+        });
     }
 
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true) : Response

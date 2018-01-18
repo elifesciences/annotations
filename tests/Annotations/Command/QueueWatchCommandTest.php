@@ -15,7 +15,8 @@ use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Bus\Queue\QueueItem;
 use eLife\Bus\Queue\QueueItemTransformer;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
-use eLife\HypothesisClient\Credentials\Credentials;
+use eLife\HypothesisClient\Clock\FixedClock;
+use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
@@ -43,10 +44,10 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     private $command;
     /** @var CommandTester */
     private $commandTester;
-    /** @var Credentials */
-    private $credentials;
     /** @var HypothesisSdk */
     private $hypothesisSdk;
+    /** @var JWTSigningCredentials */
+    private $jwtSigning;
     private $limit;
     /** @var BufferingLogger */
     private $logger;
@@ -54,6 +55,8 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     private $monitoring;
     private $secretKey;
     private $transformer;
+    /** @var UserManagementCredentials */
+    private $userManagement;
     /** @var WatchableQueueMock */
     private $queue;
 
@@ -67,11 +70,12 @@ class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->secretKey = 'secret_key';
         $this->authority = 'authority';
         $this->authorization = sprintf('Basic %s', base64_encode($this->clientId.':'.$this->secretKey));
-        $this->credentials = new UserManagementCredentials('client_id', 'secret_key', 'authority');
+        $this->userManagement = new UserManagementCredentials('client_id', 'secret_key', 'authority');
+        $this->jwtSigning = new JWTSigningCredentials('client_id', 'secret_key', 'authority', new FixedClock(1000000000));
         $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['send'])
             ->getMock();
-        $this->hypothesisSdk = new HypothesisSdk($this->httpClient, $this->credentials);
+        $this->hypothesisSdk = new HypothesisSdk($this->httpClient, $this->userManagement, $this->jwtSigning);
         $this->limit = $this->limitIterations(1);
         $this->logger = new BufferingLogger();
         $this->monitoring = new Monitoring();

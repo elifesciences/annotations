@@ -4,7 +4,7 @@ namespace eLife\HypothesisClient\Model;
 
 use Assert\Assert;
 
-final class User implements Model
+final class User
 {
     use CanBeNew;
 
@@ -22,8 +22,8 @@ final class User implements Model
      */
     public function __construct(
         string $username,
-        string $email,
-        string $displayName,
+        string $email = null,
+        string $displayName = null,
         bool $new = false
     ) {
         $this->username = $username;
@@ -39,17 +39,17 @@ final class User implements Model
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail() : string
+    public function getEmail()
     {
         return $this->email;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDisplayName() : string
+    public function getDisplayName()
     {
         return $this->displayName;
     }

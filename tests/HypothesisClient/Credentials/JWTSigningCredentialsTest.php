@@ -2,7 +2,7 @@
 
 namespace tests\eLife\HypothesisClient\Credentials;
 
-use eLife\HypothesisClient\Clock\Clock;
+use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use Firebase\JWT\JWT;
 use PHPUnit_Framework_TestCase;
@@ -17,26 +17,20 @@ class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_generate_a_jwt_token()
     {
-        $now = 1500000000;
-        $clock = $this->createMock(Clock::class);
-        $clock
-            ->expects($this->once())
-            ->method('time')
-            ->willReturn($now);
-        $credentials = new JWTSigningCredentials('foo', 'baz', 'authority', $clock, 300);
+        $credentials = new JWTSigningCredentials($clientId = 'foo', $clientSecret = 'baz', $authority = 'authority', $clock = new FixedClock(), $expire = 300);
 
-        $generatedToken = $credentials->getJWT('username');
+        $generatedToken = $credentials->getJWT($username = 'username');
 
-        JWT::$timestamp = $now;
+        $start = $clock->time();
         $this->assertEquals(
             [
                 'aud' => 'hypothes.is',
-                'iss' => 'foo',
-                'sub' => 'acct:username@authority',
-                'nbf' => $now,
-                'exp' => $now + 300,
+                'iss' => $clientId,
+                'sub' => "acct:{$username}@{$authority}",
+                'nbf' => $start,
+                'exp' => $start + $expire,
             ],
-            (array) JWT::decode($generatedToken, 'baz', ['HS256'])
+            (array) JWT::decode($generatedToken, $clientSecret, ['HS256'])
         );
     }
 }

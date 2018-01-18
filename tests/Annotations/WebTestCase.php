@@ -2,19 +2,13 @@
 
 namespace tests\eLife\Annotations;
 
-use eLife\Annotations\AppKernel;
-use Silex\WebTestCase as SilexWebTestCase;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\BrowserKit\Client;
+use Symfony\Component\HttpKernel\Client as KernelClient;
 
-abstract class WebTestCase extends SilexWebTestCase
+abstract class WebTestCase extends ApplicationTestCase
 {
-    /** @var AppKernel */
-    protected $kernel;
-
-    public function createApplication() : HttpKernelInterface
+    final protected function createClient() : Client
     {
-        $this->kernel = new AppKernel('test');
-
-        return $this->kernel;
+        return new KernelClient($this->getApp());
     }
 }

@@ -2,7 +2,6 @@
 
 namespace tests\eLife\HypothesisClient\Model;
 
-use eLife\HypothesisClient\Model\Model;
 use eLife\HypothesisClient\Model\User;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -12,16 +11,6 @@ use PHPUnit_Framework_TestCase;
  */
 final class UserTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function it_is_a_model()
-    {
-        $user = new User('username', 'email@email.com', 'Display Name');
-
-        $this->assertInstanceOf(Model::class, $user);
-    }
-
     /**
      * @test
      */

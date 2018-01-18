@@ -10,7 +10,10 @@
     "autoload-dev": {
         "psr-4": {
             "tests\\eLife\\": "./tests"
-        }
+        },
+        "files": [
+            "src/Annotations/Serializer/CommonMark/functions.php"
+        ]
     },
     "require": {
         "beberlei/assert": "^2.7",
@@ -18,20 +21,29 @@
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
         "elife/bus-sdk": "^1.0@dev",
+        "elife/content-negotiator": "^1.0",
         "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
         "firebase/php-jwt": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
+        "league/commonmark": "^0.17.0",
         "silex/silex": "^2.2",
         "symfony/property-access": "^3.3",
-        "symfony/serializer": "^3.3"
+        "symfony/serializer": "^3.3",
+        "willdurand/negotiation": "^2.3"
     },
     "require-dev": {
+        "csa/guzzle-cache-middleware": "^1.0",
+        "elife/api": "dev-master",
+        "elife/api-validator": "^1.0@dev",
         "giorgiosironi/eris": "^0.9.0",
+        "mindplay/composer-locator": "^2.1",
         "mtdowling/jmespath.php": "^2.4",
         "phpunit/phpunit": "^5.7",
-        "symfony/browser-kit": "^3.3"
+        "symfony/browser-kit": "^3.3",
+        "symfony/psr-http-message-bridge": "^1.0",
+        "zendframework/zend-diactoros": "^1.6"
     },
     "suggest": {
         "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"

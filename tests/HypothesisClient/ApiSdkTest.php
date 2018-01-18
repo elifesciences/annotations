@@ -4,6 +4,8 @@ namespace tests\eLife\HypothesisClient;
 
 use eLife\HypothesisClient\ApiSdk;
 use eLife\HypothesisClient\Client\Users;
+use eLife\HypothesisClient\Clock\SystemClock;
+use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\User;
@@ -24,14 +26,14 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             Users::class,
-            (new ApiSdk($this->getMockBuilder(HttpClient::class)->getMock()))->users()
+            (new ApiSdk($this->getMockBuilder(HttpClient::class)->getMock(), null, new JWTSigningCredentials('client_it', 'client_secret', 'authority', new SystemClock())))->users()
         );
     }
 
     /**
      * @test
      */
-    public function it_may_have_credentials()
+    public function it_may_have_user_management_credentials()
     {
         $httpClient = $this->getMockBuilder(HttpClient::class)
             ->getMock();
@@ -43,7 +45,8 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
 
         $sdk = (new ApiSdk(
             $httpClient,
-            $userManagement
+            $userManagement,
+            new JWTSigningCredentials('client_it', 'client_secret', 'authority', new SystemClock())
         ));
 
         $request = new Request(

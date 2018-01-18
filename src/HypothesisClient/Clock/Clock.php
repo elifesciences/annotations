@@ -2,10 +2,7 @@
 
 namespace eLife\HypothesisClient\Clock;
 
-class Clock
+interface Clock
 {
-    public function time() : int
-    {
-        return time();
-    }
+    public function time() :int;
 }
