@@ -109,10 +109,10 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         $this->app->register(new ApiProblemProvider());
         $this->app->register(new ContentNegotiationProvider());
         $this->app->register(new PingControllerProvider());
+        $this->app->register(new ServiceControllerServiceProvider());
 
         if ($this->app['debug']) {
             $this->app->register(new HttpFragmentServiceProvider());
-            $this->app->register(new ServiceControllerServiceProvider());
             $this->app->register(new TwigServiceProvider());
         }
 
