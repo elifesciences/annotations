@@ -25,10 +25,10 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    sh "docker tag annotations_cli elifesciences/annotations_cli:latest && docker push elifesciences/annotations_cli:latest"
-                    sh "docker tag annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
-                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:latest && docker push elifesciences/annotations_fpm:latest"
-                    sh "docker tag annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
+                    sh "docker push elifesciences/annotations_cli"
+                    sh "docker tag elifesciences/annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
+                    sh "docker push elifesciences/annotations_fpm:latest"
+                    sh "docker tag elifesciences/annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
                 }
             }
         },
@@ -56,6 +56,12 @@ elifePipeline {
 
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
+            elifeOnNode(
+                {
+                    sh "docker tag elifesciences/annotations_fpm:${commit} elifesciences/annotations_fpm:approved && docker push elifesciences/annotations_fpm:approved"
+                },
+                'elife-libraries--ci'
+            )
         }
     }
 }
