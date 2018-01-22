@@ -25,9 +25,7 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    sh "docker push elifesciences/annotations_cli"
                     sh "docker tag elifesciences/annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
-                    sh "docker push elifesciences/annotations_fpm:latest"
                     sh "docker tag elifesciences/annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
                 }
             }
@@ -58,6 +56,7 @@ elifePipeline {
             elifeGitMoveToBranch commit, 'approved'
             elifeOnNode(
                 {
+                    sh "docker tag elifesciences/annotations_cli:${commit} elifesciences/annotations_cli:approved && docker push elifesciences/annotations_cli:approved"
                     sh "docker tag elifesciences/annotations_fpm:${commit} elifesciences/annotations_fpm:approved && docker push elifesciences/annotations_fpm:approved"
                 },
                 'elife-libraries--ci'
