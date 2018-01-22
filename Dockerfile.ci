@@ -1,4 +1,4 @@
-FROM annotations_cli
+FROM elifesciences/annotations_cli
 USER root
 
 # extract into another image
