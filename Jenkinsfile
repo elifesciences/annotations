@@ -9,7 +9,7 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh 'docker-compose -f docker-compose.ci.yml build'
+                sh 'IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build'
             }
 
             stage 'Project tests', {
@@ -25,8 +25,8 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    sh "docker tag elifesciences/annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
-                    sh "docker tag elifesciences/annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
+                    sh "docker push elifesciences/annotations_cli:${commit}"
+                    sh "docker push elifesciences/annotations_fpm:${commit}"
                 }
             }
         },
