@@ -59,7 +59,7 @@ services:
             args:
                 commit: "${IMAGE_TAG}"
             dockerfile: Dockerfile.ci
-        image: elifesciences/annotations_ci
+        image: elifesciences/annotations_ci:${IMAGE_TAG}
         volumes:
             - ./build:/srv/annotations/build
             - ./config/container.php:/srv/annotations/config.php

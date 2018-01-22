@@ -14,9 +14,9 @@ elifePipeline {
 
             stage 'Project tests', {
                 try {
-                    sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh'
+                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh"
                     step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                    sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web"
                 } finally {
                     sh 'docker-compose -f docker-compose.ci.yml stop'
                     sh 'docker-compose -f docker-compose.ci.yml rm -v -f'
