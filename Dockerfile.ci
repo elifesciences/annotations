@@ -1,4 +1,5 @@
-FROM elifesciences/annotations_cli
+ARG commit=develop
+FROM elifesciences/annotations_cli:${commit}
 USER root
 
 # extract into another image
