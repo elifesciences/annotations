@@ -35,4 +35,11 @@ Run PHPUnit:
 docker-compose run cli /usr/bin/env php vendor/bin/phpunit
 ```
 
+Run all project tests:
+
+```
+docker-compose -f docker-compose.ci.yml build
+docker-compose -f docker-compose.ci.yml run ci ./project_tests.sh
+```
+
 `-u` is needed to write to `vendor/`. Currently Composer prints some warning when git-cloning due to the user not being in /etc/passwd.

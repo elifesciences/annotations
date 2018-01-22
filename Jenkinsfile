@@ -9,14 +9,14 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh 'docker-compose -f docker-compose.ci.yml build'
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build"
             }
 
             stage 'Project tests', {
                 try {
-                    sh 'chmod 777 build/ && docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh'
+                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh"
                     step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                    sh 'docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web'
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./smoke_tests.sh web"
                 } finally {
                     sh 'docker-compose -f docker-compose.ci.yml stop'
                     sh 'docker-compose -f docker-compose.ci.yml rm -v -f'
@@ -25,8 +25,8 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    sh "docker tag elifesciences/annotations_cli elifesciences/annotations_cli:${commit} && docker push elifesciences/annotations_cli:${commit}"
-                    sh "docker tag elifesciences/annotations_fpm elifesciences/annotations_fpm:${commit} && docker push elifesciences/annotations_fpm:${commit}"
+                    sh "docker push elifesciences/annotations_cli:${commit}"
+                    sh "docker push elifesciences/annotations_fpm:${commit}"
                 }
             }
         },

@@ -17,7 +17,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile.fpm
-        image: elifesciences/annotations_fpm
+        image: elifesciences/annotations_fpm:${IMAGE_TAG}
         volumes:
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
@@ -29,7 +29,7 @@ services:
         build: 
             context: .
             dockerfile: Dockerfile.cli
-        image: elifesciences/annotations_cli
+        image: elifesciences/annotations_cli:${IMAGE_TAG}
         volumes:
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
@@ -56,8 +56,10 @@ services:
     ci:
         build: 
             context: .
+            args:
+                commit: "${IMAGE_TAG}"
             dockerfile: Dockerfile.ci
-        image: annotations_ci
+        image: elifesciences/annotations_ci:${IMAGE_TAG}
         volumes:
             - ./build:/srv/annotations/build
             - ./config/container.php:/srv/annotations/config.php
