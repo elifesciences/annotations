@@ -9,7 +9,7 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh 'IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build'
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build"
             }
 
             stage 'Project tests', {
