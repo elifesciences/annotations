@@ -8,6 +8,13 @@ elifePipeline {
     stage 'Deploy to prod', {
         elifeDeploySlackNotification 'annotations', 'prod'
         elifeGitMoveToBranch commit, 'master'
+        elifeOnNode(
+            {
+                sh "docker tag elifesciences/annotations_cli:${commit} elifesciences/annotations_cli:latest && docker push elifesciences/annotations_cli:latest"
+                sh "docker tag elifesciences/annotations_fpm:${commit} elifesciences/annotations_fpm:latest && docker push elifesciences/annotations_fpm:latest"
+            },
+            'elife-libraries--ci'
+        )
         builderDeployRevision 'annotations--prod', commit
         builderSmokeTests 'annotations--prod', '/srv/annotations'
     }
