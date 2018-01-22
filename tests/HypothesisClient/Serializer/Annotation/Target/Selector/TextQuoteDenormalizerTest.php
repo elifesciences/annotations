@@ -66,7 +66,7 @@ final class TextQuoteDenormalizerTest extends PHPUnit_Framework_TestCase
                     'prefix' => 'have been assigned to ',
                     'suffix' => ', Homo naledi',
                 ],
-                new TextQuote('a new human species', 'have been assigned to ', ', Homo naledi')
+                new TextQuote('a new human species', 'have been assigned to ', ', Homo naledi'),
             ],
         ];
     }

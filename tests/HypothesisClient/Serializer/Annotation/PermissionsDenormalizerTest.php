@@ -63,7 +63,7 @@ final class PermissionsDenormalizerTest extends PHPUnit_Framework_TestCase
             'complete' => [
                 [
                     'delete' => [
-                        'acct:scibot@hypothes.is'
+                        'acct:scibot@hypothes.is',
                     ],
                     'read' => [
                         'group:__world__',
