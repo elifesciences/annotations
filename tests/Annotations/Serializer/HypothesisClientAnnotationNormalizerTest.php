@@ -5,15 +5,17 @@ namespace tests\eLife\Annotations\Serializer;
 use DateTimeImmutable;
 use DateTimeZone;
 use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
-use eLife\ApiSdk\Serializer\Block;
-use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
+use HTMLPurifier;
 use League\CommonMark\Block as CommonMarkBlock;
+use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
+use League\HTMLToMarkdown\HtmlConverter;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -29,6 +31,8 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
     private $htmlRenderer;
     /** @var BufferingLogger */
     private $logger;
+    /** @var MarkdownSanitizer */
+    private $markdownSanitizer;
     /** @var HypothesisClientAnnotationNormalizer */
     private $normalizer;
 
@@ -39,11 +43,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
     {
         $environment = Environment::createCommonMarkEnvironment();
 
-        $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
-        $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
-
-        $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
-        $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
         $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
         $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
         $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
@@ -54,20 +53,12 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
         $environment->addInlineRenderer(CommonMarkInline\Element\HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
         $environment->addInlineRenderer(CommonMarkInline\Element\Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
 
-        $this->docParser = new CommonMark\DocParser($environment);
+        $this->docParser = new DocParser($environment);
         $this->htmlRenderer = new HtmlRenderer($environment);
+        $this->markdownSanitizer = new MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter(['italic_style' => '*']), new HTMLPurifier());
 
         $this->logger = new BufferingLogger();
-        // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
-        $this->normalizer = new NormalizerAwareSerializer([
-            new HypothesisClientAnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->logger),
-            new Block\CodeNormalizer(),
-            new Block\ListingNormalizer(),
-            new Block\MathMLNormalizer(),
-            new Block\ParagraphNormalizer(),
-            new Block\QuoteNormalizer(),
-            new Block\YouTubeNormalizer(),
-        ]);
+        $this->normalizer = new HypothesisClientAnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->markdownSanitizer, $this->logger);
     }
 
     /**
@@ -570,7 +561,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         ],
                         [
                             'type' => 'code',
-                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;\n",
+                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
                         ],
                         [
                             'type' => 'paragraph',
@@ -638,7 +629,13 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => "$$\n\\forall x \\in X,\n\\quad \\exists y\n\\leq \\epsilon\n$$",
+                            'text' => $this->lines([
+                                '$$',
+                                '\\forall x \\in X,',
+                                '\\quad \\exists y',
+                                '\\leq \\epsilon',
+                                '$$',
+                            ]),
                         ],
                     ],
                     'created' => $createdDate,
@@ -678,7 +675,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => 'iframe: ',
+                            'text' => 'iframe:',
                         ],
                         [
                             'type' => 'paragraph',
@@ -726,6 +723,81 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                 new Annotation(
                     'id',
                     '<iframe src="https://elifesciences.org"></iframe>',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider sanitizeProvider
+     */
+    public function it_will_sanitize_annotations(array $expected, Annotation $annotation)
+    {
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
+    }
+
+    public function sanitizeProvider() : array
+    {
+        $createdDate = '2017-11-29T17:41:28Z';
+
+        return [
+            'script-tags' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'NOTE: It is not possible to display this content.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    '<script>evil()</script>',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'anchor-onclick' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => '<a href="#">foobar</a>',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                    'parents' => [],
+                ],
+                new Annotation(
+                    'id',
+                    '<a href="#" onclick="evil()">foobar</a>',
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),
