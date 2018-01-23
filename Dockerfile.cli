@@ -1,4 +1,5 @@
 FROM elifesciences/php_cli
+
 USER root
 RUN docker-php-ext-install pcntl
 
@@ -21,3 +22,6 @@ RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p /var/www && chown www-data:www-data /var/www
 USER www-data
 CMD ["php", "bin/console", "queue:watch"]
+
+ARG dependencies_api_dummy
+LABEL org.elifesciences.dependencies.api-dummy="${dependencies_api_dummy}"
