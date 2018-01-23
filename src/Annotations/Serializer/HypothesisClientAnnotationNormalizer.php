@@ -42,13 +42,17 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
         $data = [
             'id' => $object->getId(),
             'access' => ($object->getPermissions()->getRead() === Annotation::PUBLIC_GROUP) ? 'public' : 'restricted',
-            'parents' => $object->getReferences() ?? [],
             'created' => $created,
             'document' => [
                 'title' => $object->getDocument()->getTitle(),
                 'uri' => $object->getUri(),
             ],
         ];
+
+        if ($object->getReferences()) {
+            $data['parents'] = $object->getReferences() ?? []; // TODO deprecated
+            $data['ancestors'] = $object->getReferences() ?? [];
+        }
 
         if ($object->getText()) {
             $data['content'] = $this->processText($object->getText());
