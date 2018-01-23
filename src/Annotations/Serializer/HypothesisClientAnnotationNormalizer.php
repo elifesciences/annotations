@@ -2,6 +2,7 @@
 
 namespace eLife\Annotations\Serializer;
 
+use eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer;
 use eLife\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\Model\Annotation;
 use League\CommonMark\Block\Element;
@@ -22,11 +23,13 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
     private $docParser;
     private $htmlRenderer;
     private $logger;
+    private $markdownSanitizer;
 
-    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, LoggerInterface $logger)
+    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, MarkdownSanitizer $markdownSanitizer, LoggerInterface $logger)
     {
         $this->docParser = $docParser;
         $this->htmlRenderer = $htmlRenderer;
+        $this->markdownSanitizer = $markdownSanitizer;
 
         $this->logger = $logger;
     }
@@ -80,7 +83,7 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
 
     private function processText(string $text) : array
     {
-        $blocks = $this->docParser->parse($text)->children();
+        $blocks = $this->docParser->parse($this->markdownSanitizer->parse($text))->children();
         $data = [];
 
         foreach ($blocks as $block) {
@@ -107,8 +110,6 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
                     ];
                     break;
                 case $block instanceof Element\HtmlBlock:
-                case $block instanceof CommonMark\Block\Element\Latex:
-                case $block instanceof CommonMark\Block\Element\MathML:
                 case $block instanceof Element\Paragraph:
                     $data[] = [
                         'type' => 'paragraph',

@@ -14,8 +14,6 @@ use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Serializer\Block;
-use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
@@ -40,13 +38,16 @@ use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use HTMLPurifier;
 use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
 use League\CommonMark\Block as CommonMarkBlock;
+use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
+use League\HTMLToMarkdown\HtmlConverter;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
@@ -352,12 +353,10 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app['annotation.serializer.common_mark.environment'] = function () {
             $environment = Environment::createCommonMarkEnvironment();
+            $environment->setConfig([
+                'allow_unsafe_links' => false,
+            ]);
 
-            $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
-            $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
-
-            $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
-            $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
@@ -379,16 +378,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
         };
 
+        $this->app['annotation.serializer.common_mark.markdown_sanitizer'] = function () {
+            return new CommonMark\MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter(['italic_style' => '*']), new HTMLPurifier());
+        };
+
         $this->app['annotation.serializer'] = function () {
-            return new NormalizerAwareSerializer([
-                new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
-                new Block\CodeNormalizer(),
-                new Block\ListingNormalizer(),
-                new Block\MathMLNormalizer(),
-                new Block\ParagraphNormalizer(),
-                new Block\QuoteNormalizer(),
-                new Block\YouTubeNormalizer(),
-            ]);
+            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['annotation.serializer.common_mark.markdown_sanitizer'], $this->app['logger']);
         };
 
         $this->app['controllers.annotations'] = function () {
