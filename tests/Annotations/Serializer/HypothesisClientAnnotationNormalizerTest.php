@@ -10,7 +10,7 @@ use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\HypothesisClient\Model\Annotation;
 use HTMLPurifier;
 use League\CommonMark\Block as CommonMarkBlock;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Converter;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
@@ -55,7 +55,10 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
 
         $this->docParser = new DocParser($environment);
         $this->htmlRenderer = new HtmlRenderer($environment);
-        $this->markdownSanitizer = new MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter(['italic_style' => '*']), new HTMLPurifier());
+        $this->markdownSanitizer = $this->getMockBuilder(MarkdownSanitizer::class)
+            ->setConstructorArgs([$this->createMock(Converter::class), $this->createMock(HtmlConverter::class), $this->createMock(HTMLPurifier::class)])
+            ->setMethods(['parse'])
+            ->getMock();
 
         $this->logger = new BufferingLogger();
         $this->normalizer = new HypothesisClientAnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->markdownSanitizer, $this->logger);
@@ -102,8 +105,19 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
      * @test
      * @dataProvider normalizeProvider
      */
-    public function it_will_normalize_annotations(array $expected, Annotation $annotation)
+    public function it_will_normalize_annotations(array $expected, Annotation $annotation, string $parsed = null)
     {
+        if ($annotation->getText()) {
+            $this->markdownSanitizer
+                ->expects($this->once())
+                ->method('parse')
+                ->with($annotation->getText())
+                ->willReturn($parsed ?? $annotation->getText());
+        } else {
+            $this->markdownSanitizer
+                ->expects($this->never())
+                ->method('parse');
+        }
         $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
@@ -154,6 +168,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     ],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
+                'text',
             ],
             'minimum' => [
                 [
@@ -613,6 +628,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     null,
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
+                '&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle mathcolor=&quot;blue&quot; fontfamily=&quot;serif&quot; displaystyle=&quot;true&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mstyle&gt;&lt;/math&gt;',
             ],
             'markdown-latex' => [
                 [
@@ -703,6 +719,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     null,
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
+                "Leading paragraph.\n\niframe:\n\nTrailing paragraph.",
             ],
             'markdown-strip-all-tags' => [
                 [
@@ -739,8 +756,13 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
      * @test
      * @dataProvider sanitizeProvider
      */
-    public function it_will_sanitize_annotations(array $expected, Annotation $annotation)
+    public function it_will_sanitize_annotations(array $expected, Annotation $annotation, string $parsed)
     {
+        $this->markdownSanitizer
+            ->expects($this->once())
+            ->method('parse')
+            ->with($annotation->getText())
+            ->willReturn($parsed ?? $annotation->getText());
         $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
@@ -777,6 +799,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     null,
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
+                '',
             ],
             'anchor-onclick' => [
                 [
@@ -806,6 +829,7 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     null,
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
+                '[foobar](#)',
             ],
         ];
     }
