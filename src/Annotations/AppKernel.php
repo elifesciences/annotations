@@ -104,7 +104,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'authority' => '',
                 'group' => '',
             ],
-            'html_purifier.cache_dir' => $config['html_purifier']['cache_dir'] ?? __DIR__.'/../../var/html_purifier/cache',
+            'html_purifier' => ($config['html_purifier'] ?? []) + [
+                'Cache.SerializerPath' => __DIR__.'/../../var/cache/html_purifier',
+            ],
+            'html_converter' => ($config['html_converter'] ?? []) + [
+                'italic_style' => '*',
+            ],
             'mock' => $config['mock'] ?? false,
         ]);
 
@@ -380,7 +385,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         };
 
         $this->app['annotation.serializer.common_mark.markdown_sanitizer'] = function (Application $app) {
-            return new CommonMark\MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter(['italic_style' => '*']), new HTMLPurifier(['Cache.SerializerPath' => $app['html_purifier.cache_dir']]));
+            return new CommonMark\MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter($app['html_converter']), new HTMLPurifier($app['html_purifier']));
         };
 
         $this->app['annotation.serializer'] = function () {
