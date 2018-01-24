@@ -21,5 +21,6 @@ function escape_math($text)
     $escaped = preg_replace_callback('~(?P<before>\$\$)(?P<latex>.+)(?P<after>\$\$)~s', function ($match) {
         return Xml::escape($match['before'].$match['latex'].$match['after']);
     }, $escaped);
+
     return $escaped;
 }
