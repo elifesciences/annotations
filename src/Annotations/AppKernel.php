@@ -102,6 +102,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'authority' => '',
                 'group' => '',
             ],
+            'common_mark.environment' => ($config['common_mark']['environment'] ?? []) + [
+                'allow_unsafe_links' => false,
+            ],
             'html_purifier' => ($config['html_purifier'] ?? []) + [
                 'Cache.SerializerPath' => __DIR__.'/../../var/cache/html_purifier',
             ],
@@ -355,11 +358,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'sqs.region' => $this->app['aws']['region'],
         ]);
 
-        $this->app['annotation.serializer.common_mark.environment'] = function () {
+        $this->app['annotation.serializer.common_mark.environment'] = function (Application $app) {
             $environment = Environment::createCommonMarkEnvironment();
-            $environment->setConfig([
-                'allow_unsafe_links' => false,
-            ]);
+            $environment->setConfig($app['common_mark.environment']);
 
             $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
@@ -386,7 +387,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new HTMLPurifier($app['html_purifier']);
         };
 
-        $this->app['annotation.serializer'] = function (Application $app) {
+        $this->app['annotation.serializer'] = function () {
             return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['annotation.serializer.html_purifier'], $this->app['logger']);
         };
 
