@@ -20,7 +20,6 @@ COPY web/ /srv/annotations/web/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p var/cache/html_purifier && chown www-data:www-data var/cache/html_purifier
-RUN mkdir -p /var/www && chown www-data:www-data /var/www
 USER www-data
 CMD ["php", "bin/console", "queue:watch"]
 
