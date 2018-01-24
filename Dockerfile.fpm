@@ -17,6 +17,7 @@ COPY tests/ /srv/annotations/tests/
 COPY web/ /srv/annotations/web/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
+RUN mkdir -p var/cache && chown www-data:www-data var/cache
 USER www-data
 
 ARG dependencies_api_dummy
