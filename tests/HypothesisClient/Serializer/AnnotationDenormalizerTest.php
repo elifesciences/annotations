@@ -122,8 +122,8 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                     ],
                     'uri' => 'https://elifesciences.org/articles/10627',
                     'references' => [
-                        'parent1',
-                        'parent2',
+                        'ancestor1',
+                        'ancestor2',
                     ],
                     'permissions' => [
                         'read' => [
@@ -144,7 +144,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                         )
                     ),
                     'https://elifesciences.org/articles/10627',
-                    ['parent1', 'parent2'],
+                    ['ancestor1', 'ancestor2'],
                     new Annotation\Permissions('group:__world__')
                 ),
             ],
@@ -173,8 +173,8 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                     ],
                     'uri' => 'https://elifesciences.org/articles/10627',
                     'references' => [
-                        'parent1',
-                        'parent2',
+                        'ancestor1',
+                        'ancestor2',
                     ],
                     'permissions' => [
                         'read' => [
@@ -195,7 +195,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                         )
                     ),
                     'https://elifesciences.org/articles/10627',
-                    ['parent1', 'parent2'],
+                    ['ancestor1', 'ancestor2'],
                     new Annotation\Permissions('group:__world__')
                 ),
             ],

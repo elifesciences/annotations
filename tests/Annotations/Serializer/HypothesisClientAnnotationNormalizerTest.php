@@ -139,13 +139,9 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [
-                        'parent1',
-                        'parent2',
-                    ],
                     'ancestors' => [
-                        'parent1',
-                        'parent2',
+                        'ancestor1',
+                        'ancestor2',
                     ],
                 ],
                 new Annotation(
@@ -162,8 +158,8 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     ),
                     'uri',
                     [
-                        'parent1',
-                        'parent2',
+                        'ancestor1',
+                        'ancestor2',
                     ],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),

@@ -118,8 +118,8 @@ class SearchTest extends PHPUnit_Framework_TestCase
                     ],
                 ],
                 'references' => [
-                    'parent1',
-                    'parent2',
+                    'ancestor1',
+                    'ancestor2',
                 ],
                 'uri' => 'uri1',
                 'permissions' => [
@@ -161,8 +161,8 @@ class SearchTest extends PHPUnit_Framework_TestCase
                 ),
                 'uri2',
                 [
-                    'parent1',
-                    'parent2',
+                    'ancestor1',
+                    'ancestor2',
                 ],
                 new Annotation\Permissions('read')
             ),
