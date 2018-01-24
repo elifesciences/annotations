@@ -29,6 +29,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
         "league/commonmark": "^0.17.0",
+        "psr/container": "^1.0",
         "silex/silex": "^2.2",
         "symfony/property-access": "^3.3",
         "symfony/serializer": "^3.3",
