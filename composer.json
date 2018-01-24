@@ -17,7 +17,6 @@
     },
     "require": {
         "beberlei/assert": "^2.7",
-        "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-problem": "^1.0",
         "elife/api-sdk": "^1.0@dev",
@@ -30,7 +29,6 @@
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
         "league/commonmark": "^0.17.0",
-        "league/html-to-markdown": "^4.6@dev",
         "psr/container": "^1.0",
         "silex/silex": "^2.2",
         "symfony/property-access": "^3.3",
@@ -55,12 +53,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
-        },
-        "composer-exit-on-patch-failure": true,
-        "patches": {
-            "league/html-to-markdown": {
-                "Add newlines after code block": "https://github.com/thephpleague/html-to-markdown/pull/148.patch"
-            }
         }
     },
     "config": {

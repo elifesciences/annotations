@@ -526,11 +526,11 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                         ],
                         [
                             'type' => 'code',
-                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
+                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => 'When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the &quot;content&quot; field. These offsets are then looked up in the &quot;offsets&quot; field to get the thread IDs.',
+                            'text' => 'When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the "content" field. These offsets are then looked up in the "offsets" field to get the thread IDs.',
                         ],
                     ],
                     'created' => $createdDate,
@@ -558,7 +558,7 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => '&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle mathcolor=&quot;blue&quot; fontfamily=&quot;serif&quot; displaystyle=&quot;true&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mstyle&gt;&lt;/math&gt;',
+                            'text' => '&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;&lt;mstyle mathcolor="blue" fontfamily="serif" displaystyle="true"&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mstyle&gt;&lt;/math&gt;',
                         ],
                     ],
                     'created' => $createdDate,
@@ -640,7 +640,7 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => 'iframe:',
+                            'text' => 'iframe: ',
                         ],
                         [
                             'type' => 'paragraph',
@@ -721,7 +721,7 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'NOTE: It is not possible to display this content.',
+                            'text' => 'evil()',
                         ],
                     ],
                     'created' => $createdDate,
@@ -761,6 +761,62 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                 new Annotation(
                     'id',
                     '<a href="#" onclick="evil()">foobar</a>',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'javascript' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => '<a>foobar</a>',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                ],
+                new Annotation(
+                    'id',
+                    '<a href="javascript:alert(\'evil\')">foobar</a>',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
+            'img-src-javascript' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'NOTE: It is not possible to display this content.',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                ],
+                new Annotation(
+                    'id',
+                    '<img src="javascript:alert(\'evil\')">',
                     new DateTimeImmutable($createdDate),
                     new DateTimeImmutable($createdDate),
                     new Annotation\Document('title'),

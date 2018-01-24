@@ -2,16 +2,18 @@
 
 namespace eLife\Annotations\Serializer;
 
-use eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer;
 use eLife\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\Model\Annotation;
+use HTMLPurifier;
 use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
+use League\CommonMark\Util\Xml;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use function eLife\Annotations\Serializer\CommonMark\escape_math;
 
 final class HypothesisClientAnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
@@ -21,15 +23,15 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
     use NormalizerAwareTrait;
 
     private $docParser;
+    private $htmlPurifier;
     private $htmlRenderer;
     private $logger;
-    private $markdownSanitizer;
 
-    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, MarkdownSanitizer $markdownSanitizer, LoggerInterface $logger)
+    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, HTMLPurifier $htmlPurifier, LoggerInterface $logger)
     {
         $this->docParser = $docParser;
+        $this->htmlPurifier = $htmlPurifier;
         $this->htmlRenderer = $htmlRenderer;
-        $this->markdownSanitizer = $markdownSanitizer;
 
         $this->logger = $logger;
     }
@@ -83,11 +85,11 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
 
     private function processText(string $text) : array
     {
-        $blocks = $this->docParser->parse($this->markdownSanitizer->parse($text))->children();
+        $blocks = $this->docParser->parse(escape_math($text))->children();
         $data = [];
 
         foreach ($blocks as $block) {
-            $rendered = $this->htmlRenderer->renderBlock($block);
+            $rendered = $this->purify($this->htmlRenderer->renderBlock($block));
             if (empty($rendered)) {
                 continue;
             }
@@ -146,8 +148,8 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
                 foreach ($item->children() as $child) {
                     if ($child instanceof Element\ListBlock) {
                         $items[] = [$render($child)];
-                    } else {
-                        $items[] = $this->htmlRenderer->renderBlock($child);
+                    } elseif ($item = $this->purify($this->htmlRenderer->renderBlock($child))) {
+                        $items[] = $item;
                     }
                 }
             }
@@ -169,5 +171,10 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
     public function supportsNormalization($data, $format = null) : bool
     {
         return $data instanceof Annotation;
+    }
+
+    private function purify(string $text) : string
+    {
+        return $this->htmlPurifier->purify($text);
     }
 }

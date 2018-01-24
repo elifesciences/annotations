@@ -11,6 +11,13 @@ function clean_paragraph($text)
     return strip_tags($text, $allowed_tags);
 }
 
+function escape_mathml($text)
+{
+    return preg_replace_callback('~(?P<before><math[^>]*>)(?P<mathml>.*)(?P<after></math>)~s', function ($match) {
+        return Xml::escape($match['before'].$match['mathml'].$match['after']);
+    }, $text);
+}
+
 function encode_mathml($text)
 {
     return preg_replace_callback('~(?P<before><math[^>]*>)(?P<mathml>.*)(?P<after></math>)~s', function ($match) {
@@ -23,6 +30,13 @@ function decode_mathml($text)
     return decode_string($text, 'MATH');
 }
 
+function escape_latex($text)
+{
+    return preg_replace_callback('~(?P<before>\$\$)(?P<latex>.+)(?P<after>\$\$)~s', function ($match) {
+        return Xml::escape($match['before'].$match['latex'].$match['after']);
+    }, $text);
+}
+
 function encode_latex($text)
 {
     return preg_replace_callback('~(?P<before>\$\$)(?P<latex>.+)(?P<after>\$\$)~s', function ($match) {
@@ -33,6 +47,11 @@ function encode_latex($text)
 function decode_latex($text)
 {
     return decode_string($text, 'LATEX');
+}
+
+function escape_math($text)
+{
+    return escape_latex(escape_mathml($text));
 }
 
 function encode_math($text)

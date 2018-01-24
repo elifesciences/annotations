@@ -42,12 +42,10 @@ use HTMLPurifier;
 use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
 use League\CommonMark\Block as CommonMarkBlock;
-use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
-use League\HTMLToMarkdown\HtmlConverter;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
@@ -384,12 +382,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
         };
 
-        $this->app['annotation.serializer.common_mark.markdown_sanitizer'] = function (Application $app) {
-            return new CommonMark\MarkdownSanitizer(new CommonMarkConverter(), new HtmlConverter($app['html_converter']), new HTMLPurifier($app['html_purifier']));
+        $this->app['annotation.serializer.html_purifier'] = function (Application $app) {
+            return new HTMLPurifier($app['html_purifier']);
         };
 
-        $this->app['annotation.serializer'] = function () {
-            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['annotation.serializer.common_mark.markdown_sanitizer'], $this->app['logger']);
+        $this->app['annotation.serializer'] = function (Application $app) {
+            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['annotation.serializer.html_purifier'], $this->app['logger']);
         };
 
         $this->app['controllers.annotations'] = function () {
