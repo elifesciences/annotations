@@ -108,9 +108,6 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'html_purifier' => ($config['html_purifier'] ?? []) + [
                 'Cache.SerializerPath' => __DIR__.'/../../var/cache/html_purifier',
             ],
-            'html_converter' => ($config['html_converter'] ?? []) + [
-                'italic_style' => '*',
-            ],
             'mock' => $config['mock'] ?? false,
         ]);
 
