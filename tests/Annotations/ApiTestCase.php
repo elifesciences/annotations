@@ -131,12 +131,12 @@ abstract class ApiTestCase extends TestCase
             $updated = ($i % 2 === 0);
             $text = ($i % 4 > 0);
             $highlight = !$text ? true : (($i + 1) % 4 > 0);
-            $parents = ($i % 3 === 0) ? ($i % 7) + 1 : 0;
-            yield $this->createAnnotation($i, $updated, $text, $highlight, $parents);
+            $ancestors = ($i % 3 === 0) ? ($i % 7) + 1 : 0;
+            yield $this->createAnnotation($i, $updated, $text, $highlight, $ancestors);
         }
     }
 
-    final protected function createAnnotation($id, $updated = true, $text = true, $highlight = true, int $parents = 0) : array
+    final protected function createAnnotation($id, $updated = true, $text = true, $highlight = true, int $ancestors = 0) : array
     {
         $created = '2017-12-18T15:11:30.887421+00:00';
 
@@ -179,7 +179,7 @@ abstract class ApiTestCase extends TestCase
                 ++$co;
 
                 return $v.$co;
-            }, array_fill(0, $parents, 'parent')),
+            }, array_fill(0, $ancestors, 'ancestor')),
             'permissions' => [
                 'read' => [
                     'group:__world__',
