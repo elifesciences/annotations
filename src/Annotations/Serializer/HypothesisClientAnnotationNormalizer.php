@@ -4,7 +4,6 @@ namespace eLife\Annotations\Serializer;
 
 use eLife\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\Model\Annotation;
-use HTMLPurifier;
 use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
@@ -21,14 +20,12 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
     use NormalizerAwareTrait;
 
     private $docParser;
-    private $htmlPurifier;
     private $htmlRenderer;
     private $logger;
 
-    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, HTMLPurifier $htmlPurifier, LoggerInterface $logger)
+    public function __construct(DocParser $docParser, ElementRendererInterface $htmlRenderer, LoggerInterface $logger)
     {
         $this->docParser = $docParser;
-        $this->htmlPurifier = $htmlPurifier;
         $this->htmlRenderer = $htmlRenderer;
 
         $this->logger = $logger;
@@ -87,7 +84,7 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
         $data = [];
 
         foreach ($blocks as $block) {
-            $rendered = $this->purify($this->htmlRenderer->renderBlock($block));
+            $rendered = $this->htmlRenderer->renderBlock($block);
             if (empty($rendered)) {
                 continue;
             }
@@ -146,7 +143,7 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
                 foreach ($item->children() as $child) {
                     if ($child instanceof Element\ListBlock) {
                         $items[] = [$render($child)];
-                    } elseif ($item = $this->purify($this->htmlRenderer->renderBlock($child))) {
+                    } elseif ($item = $this->htmlRenderer->renderBlock($child)) {
                         $items[] = $item;
                     }
                 }
@@ -169,10 +166,5 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
     public function supportsNormalization($data, $format = null) : bool
     {
         return $data instanceof Annotation;
-    }
-
-    private function purify(string $text) : string
-    {
-        return $this->htmlPurifier->purify($text);
     }
 }

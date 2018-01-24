@@ -8,6 +8,7 @@ use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\CommonMark\HtmlRenderer;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -44,7 +45,6 @@ use Knp\Provider\ConsoleServiceProvider;
 use League\CommonMark\Block as CommonMarkBlock;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
@@ -376,16 +376,16 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new DocParser($this->app['annotation.serializer.common_mark.environment']);
         };
 
-        $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
-            return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
-        };
-
         $this->app['annotation.serializer.html_purifier'] = function (Application $app) {
             return new HTMLPurifier($app['html_purifier']);
         };
 
+        $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
+            return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment'], $this->app['annotation.serializer.html_purifier']);
+        };
+
         $this->app['annotation.serializer'] = function () {
-            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['annotation.serializer.html_purifier'], $this->app['logger']);
+            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']);
         };
 
         $this->app['controllers.annotations'] = function () {
