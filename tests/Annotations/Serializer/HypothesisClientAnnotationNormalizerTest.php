@@ -143,6 +143,10 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'parent1',
                         'parent2',
                     ],
+                    'ancestors' => [
+                        'parent1',
+                        'parent2',
+                    ],
                 ],
                 new Annotation(
                     'id',
@@ -179,7 +183,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -208,7 +211,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -241,7 +243,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -294,7 +295,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -357,7 +357,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -414,7 +413,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -540,7 +538,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -589,7 +586,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -618,7 +614,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -655,7 +650,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -700,7 +694,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
@@ -733,7 +726,6 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         'title' => 'title',
                         'uri' => 'uri',
                     ],
-                    'parents' => [],
                 ],
                 new Annotation(
                     'id',
