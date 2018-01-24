@@ -579,6 +579,34 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
+            'markdown-mathml-multiple' => [
+                [
+                    'id' => 'id',
+                    'access' => 'public',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => '&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/math&gt; <a href="https://elifesciences.org">some other text</a> &lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/math&gt;',
+                        ],
+                    ],
+                    'created' => $createdDate,
+                    'document' => [
+                        'title' => 'title',
+                        'uri' => 'uri',
+                    ],
+                ],
+                new Annotation(
+                    'id',
+                    '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> <a href="https://elifesciences.org">some other text</a> <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> ',
+                    new DateTimeImmutable($createdDate),
+                    new DateTimeImmutable($createdDate),
+                    new Annotation\Document('title'),
+                    new Annotation\Target('source'),
+                    'uri',
+                    null,
+                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+                ),
+            ],
             'markdown-latex' => [
                 [
                     'id' => 'id',
