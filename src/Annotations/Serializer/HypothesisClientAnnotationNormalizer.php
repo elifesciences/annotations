@@ -8,7 +8,6 @@ use HTMLPurifier;
 use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
-use League\CommonMark\Util\Xml;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
