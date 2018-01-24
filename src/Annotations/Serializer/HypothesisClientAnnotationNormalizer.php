@@ -9,12 +9,11 @@ use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function eLife\Annotations\Serializer\CommonMark\escape_math;
 
-final class HypothesisClientAnnotationNormalizer implements NormalizerInterface, NormalizerAwareInterface
+final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
 {
     const CANNOT_RENDER_CONTENT_COPY = 'NOTE: It is not possible to display this content.';
     const UNAVAILABLE_CONTENT_COPY = 'NOTE: There is no content available to display.';
