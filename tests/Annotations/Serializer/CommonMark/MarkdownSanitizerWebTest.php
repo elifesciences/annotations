@@ -8,7 +8,7 @@ use tests\eLife\Annotations\WebTestCase;
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer
  */
-final class MarkdownSanitizerTest extends WebTestCase
+final class MarkdownSanitizerWebTest extends WebTestCase
 {
     /** @var MarkdownSanitizer */
     private $sanitizer;

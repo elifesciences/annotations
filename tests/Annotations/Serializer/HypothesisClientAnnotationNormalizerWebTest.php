@@ -12,7 +12,7 @@ use tests\eLife\Annotations\WebTestCase;
 /**
  * @covers \eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer
  */
-final class HypothesisClientAnnotationNormalizerTest extends WebTestCase
+final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
 {
     /** @var HypothesisClientAnnotationNormalizer */
     private $normalizer;
