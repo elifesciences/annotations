@@ -50,7 +50,6 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface,
         ];
 
         if ($object->getReferences()) {
-            $data['parents'] = $object->getReferences(); // TODO deprecated
             $data['ancestors'] = $object->getReferences();
         }
 
