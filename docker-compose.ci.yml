@@ -16,6 +16,8 @@ services:
     fpm:
         build: 
             context: .
+            args:
+                dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
             dockerfile: Dockerfile.fpm
         image: elifesciences/annotations_fpm:${IMAGE_TAG}
         volumes:
@@ -28,6 +30,8 @@ services:
     cli:
         build: 
             context: .
+            args:
+                dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
             dockerfile: Dockerfile.cli
         image: elifesciences/annotations_cli:${IMAGE_TAG}
         volumes:

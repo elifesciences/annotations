@@ -18,3 +18,6 @@ COPY web/ /srv/annotations/web/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 USER www-data
+
+ARG dependencies_api_dummy
+LABEL org.elifesciences.dependencies.api-dummy="${dependencies_api_dummy}"
