@@ -19,7 +19,7 @@
         "beberlei/assert": "^2.7",
         "elife/api-client": "^1.0@dev",
         "elife/api-problem": "^1.0",
-        "elife/api-sdk": "dev-annotation-ancestors as 1.0.0",
+        "elife/api-sdk": "^1.0@dev",
         "elife/bus-sdk": "^1.0@dev",
         "elife/content-negotiator": "^1.0",
         "elife/logging-sdk": "^1.0@dev",

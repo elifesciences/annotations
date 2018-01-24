@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e34da84ebccef2cb7f8868a4168d2da",
+    "content-hash": "2fa441c29ced6f4866efaa79540232d9",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -546,16 +546,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-annotation-ancestors",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "8282e59342d81a01190235e40df90d7a4c6c90e9"
+                "reference": "a2e479c91d118291ec2c391779b8b2c1d1bab417"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/8282e59342d81a01190235e40df90d7a4c6c90e9",
-                "reference": "8282e59342d81a01190235e40df90d7a4c6c90e9",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/a2e479c91d118291ec2c391779b8b2c1d1bab417",
+                "reference": "a2e479c91d118291ec2c391779b8b2c1d1bab417",
                 "shasum": ""
             },
             "require": {
@@ -591,7 +591,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-01-24T08:15:46+00:00"
+            "time": "2018-01-24T09:33:35+00:00"
         },
         {
             "name": "elife/bus-sdk",
@@ -4522,14 +4522,7 @@
             "time": "2017-10-12T15:24:51+00:00"
         }
     ],
-    "aliases": [
-        {
-            "alias": "1.0.0",
-            "alias_normalized": "1.0.0.0",
-            "version": "dev-annotation-ancestors",
-            "package": "elife/api-sdk"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "elife/api-client": 20,
