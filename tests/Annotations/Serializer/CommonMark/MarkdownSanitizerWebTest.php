@@ -3,23 +3,13 @@
 namespace tests\eLife\Annotations\Serializer\CommonMark;
 
 use eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer;
-use HTMLPurifier;
-use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\Converter;
-use League\HTMLToMarkdown\HtmlConverter;
-use PHPUnit_Framework_TestCase;
+use tests\eLife\Annotations\WebTestCase;
 
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\MarkdownSanitizer
  */
-final class MarkdownSanitizerTest extends PHPUnit_Framework_TestCase
+final class MarkdownSanitizerTest extends WebTestCase
 {
-    /** @var HtmlConverter */
-    private $htmlConverter;
-    /** @var HTMLPurifier */
-    private $htmlPurifier;
-    /** @var Converter */
-    private $markdownConverter;
     /** @var MarkdownSanitizer */
     private $sanitizer;
 
@@ -28,10 +18,8 @@ final class MarkdownSanitizerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpSanitizer()
     {
-        $this->htmlConverter = new HtmlConverter(['italic_style' => '*']);
-        $this->htmlPurifier = new HTMLPurifier();
-        $this->markdownConverter = new CommonMarkConverter();
-        $this->sanitizer = new MarkdownSanitizer($this->markdownConverter, $this->htmlConverter, $this->htmlPurifier);
+        $this->setUpApp();
+        $this->sanitizer = $this->getApp()->get('annotation.serializer.common_mark.markdown_sanitizer');
     }
 
     /**
