@@ -54,6 +54,8 @@ use Silex\Application;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Simple\NullCache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -76,6 +78,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
+            'cache.path' => $config['cache']['path'] ?? __DIR__.'/../../var/cache',
             'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
             'logging.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
@@ -237,6 +240,16 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             );
         };
 
+        $this->app['hypothesis.cache'] = function (Application $app) {
+            return new FilesystemCache('hypothesis', 0, $app['cache.path']);
+        };
+
+        if ($this->app['debug']) {
+            $this->app['hypothesis.cache'] = $this->app->extend('hypothesis.cache', function () {
+                return new NullCache();
+            });
+        }
+
         $this->app['hypothesis.sdk'] = function (Application $app) {
             $notifyingHttpClient = new HypothesisNotifyingHttpClient(
                 new HypothesisBatchingHttpClient(
@@ -259,7 +272,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 $app['hypothesis']['authority']
             );
 
-            return new HypothesisSdk($notifyingHttpClient, $userManagement, $app['hypothesis.sdk.jwt_signing'], $app['hypothesis']['group']);
+            return new HypothesisSdk($notifyingHttpClient, $userManagement, $app['hypothesis.sdk.jwt_signing'], $app['hypothesis']['group'], $app['hypothesis.cache']);
         };
 
         $this->app['api.guzzle'] = function () {

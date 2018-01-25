@@ -15,6 +15,7 @@ use eLife\HypothesisClient\Serializer\Annotation;
 use eLife\HypothesisClient\Serializer\AnnotationDenormalizer;
 use eLife\HypothesisClient\Serializer\TokenDenormalizer;
 use eLife\HypothesisClient\Serializer\UserDenormalizer;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 
@@ -37,7 +38,7 @@ final class ApiSdk
     /** @var UserManagementCredentials */
     private $userManagement;
 
-    public function __construct(HttpClient $httpClient, UserManagementCredentials $userManagement = null, JWTSigningCredentials $jwtSigning, string $group = '__world__')
+    public function __construct(HttpClient $httpClient, UserManagementCredentials $userManagement = null, JWTSigningCredentials $jwtSigning, string $group = '__world__', CacheInterface $cache = null)
     {
         $this->httpClient = $httpClient;
         $this->userManagement = $userManagement;
@@ -54,7 +55,7 @@ final class ApiSdk
             new UserDenormalizer(),
         ], [new JsonEncoder()]);
         $this->search = new Search(new SearchClient($this->httpClient, $this->group, []), $this->serializer);
-        $this->token = new Token(new TokenClient($this->httpClient, $this->jwtSigning, []), $this->serializer);
+        $this->token = new Token(new TokenClient($this->httpClient, $this->jwtSigning, []), $this->serializer, $cache);
         $this->users = new Users(new UsersClient($this->httpClient, $this->userManagement, []), $this->serializer);
     }
 
