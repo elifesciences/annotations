@@ -526,7 +526,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                         ],
                         [
                             'type' => 'code',
-                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
+                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
                         ],
                         [
                             'type' => 'paragraph',
@@ -749,7 +749,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'evil()',
+                            'text' => 'NOTE: It is not possible to display this content.',
                         ],
                     ],
                     'created' => $createdDate,

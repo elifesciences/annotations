@@ -9,7 +9,6 @@ use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use function eLife\Annotations\Serializer\CommonMark\escape_math;
 
 final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
 {
@@ -77,7 +76,7 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
 
     private function processText(string $text) : array
     {
-        $blocks = $this->docParser->parse(escape_math($text))->children();
+        $blocks = $this->docParser->parse($text)->children();
         $data = [];
 
         foreach ($blocks as $block) {

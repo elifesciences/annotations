@@ -2,23 +2,18 @@
 
 namespace eLife\Annotations\Serializer\CommonMark;
 
-use HTMLPurifier;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\ElementRendererInterface;
+use League\CommonMark\Util\Xml;
 
-class HtmlPurifierRenderer implements ElementRendererInterface
+class MathEscapeRenderer implements ElementRendererInterface
 {
-    const ALLOW_TAGS = '<i><strong><sub><sup><span><del><a><br><caption>';
-
-    /** @var HTMLPurifier */
-    private $htmlPurifier;
     /** @var ElementRendererInterface */
     private $renderer;
 
-    public function __construct(ElementRendererInterface $renderer, HTMLPurifier $htmlPurifier)
+    public function __construct(ElementRendererInterface $renderer)
     {
         $this->renderer = $renderer;
-        $this->htmlPurifier = $htmlPurifier;
     }
 
     public function getOption($option, $default = null)
@@ -33,7 +28,17 @@ class HtmlPurifierRenderer implements ElementRendererInterface
 
     public function renderBlock(AbstractBlock $block, $inTightList = false) : string
     {
-        return strip_tags($this->htmlPurifier->purify($this->renderer->renderBlock($block, $inTightList)), self::ALLOW_TAGS);
+        $rendered = $this->renderer->renderBlock($block, $inTightList);
+        // Escape MathML.
+        $escaped = preg_replace_callback('~<math[^>]*>.*?</math>~s', function ($match) {
+            return Xml::escape($match[0]);
+        }, $rendered);
+        // Escape LaTeX.
+        $escaped = preg_replace_callback('~\$\$.+\$\$~s', function ($match) {
+            return Xml::escape($match[0]);
+        }, $escaped);
+
+        return $escaped;
     }
 
     public function renderBlocks($blocks, $inTightList = false) : string
