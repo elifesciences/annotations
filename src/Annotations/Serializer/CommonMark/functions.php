@@ -6,7 +6,7 @@ use League\CommonMark\Util\Xml;
 
 function clean_paragraph(string $text) : string
 {
-    $allowed_tags = '<i><sub><sup><span><del><math><a><br><caption>';
+    $allowed_tags = '<i><sub><sup><span><del><a><br><caption>';
 
     return strip_tags($text, $allowed_tags);
 }
