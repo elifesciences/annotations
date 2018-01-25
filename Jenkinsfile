@@ -68,31 +68,3 @@ elifePipeline {
         }
     }
 }
-
-public class DockerImage implements Serializable {
-    private final def script
-    private final String repository
-    private final String tag
-
-    public static elifesciences(script, String project, String tag) {
-        return new DockerImage(script, "elifesciences/${project}", tag)
-    }
-
-    public DockerImage(script, repository, tag) {
-        this.script = script
-        this.repository = repository
-        this.tag = tag
-    }
-
-    public void push()
-    {
-        this.script.sh "docker push ${repository}:${tag}"
-    }
-
-    public DockerImage tag(newTag)
-    {
-        this.script.sh "docker tag ${repository}:${tag} ${repository}:${newTag}"
-        return new DockerImage(script, repository, newTag)
-    }
-}
-
