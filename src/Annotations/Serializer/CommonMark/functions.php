@@ -14,12 +14,12 @@ function clean_paragraph(string $text) : string
 function escape_math(string $text) : string
 {
     // Escape MathML.
-    $escaped = preg_replace_callback('~(?P<before><math[^>]*>)(?P<mathml>.*?)(?P<after></math>)~s', function ($match) {
-        return Xml::escape($match['before'].$match['mathml'].$match['after']);
+    $escaped = preg_replace_callback('~<math[^>]*>.*?</math>~s', function ($match) {
+        return Xml::escape($match[0]);
     }, $text);
     // Escape LaTeX.
-    $escaped = preg_replace_callback('~(?P<before>\$\$)(?P<latex>.+)(?P<after>\$\$)~s', function ($match) {
-        return Xml::escape($match['before'].$match['latex'].$match['after']);
+    $escaped = preg_replace_callback('~\$\$.+\$\$~s', function ($match) {
+        return Xml::escape($match[0]);
     }, $escaped);
 
     return $escaped;
