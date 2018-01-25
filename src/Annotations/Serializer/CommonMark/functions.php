@@ -14,7 +14,7 @@ function clean_paragraph(string $text) : string
 function escape_math(string $text) : string
 {
     // Escape MathML.
-    $escaped = preg_replace_callback('~(?P<before><math[^>]*>)(?P<mathml>.*)(?P<after></math>)~s', function ($match) {
+    $escaped = preg_replace_callback('~(?P<before><math[^>]*>)(?P<mathml>.*?)(?P<after></math>)~s', function ($match) {
         return Xml::escape($match['before'].$match['mathml'].$match['after']);
     }, $text);
     // Escape LaTeX.
