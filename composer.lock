@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2a9bb2ba4b40ccaa471f2c53e464aae",
+    "content-hash": "a40df5f043fdbdf5522c79ce9c4bb13a",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -785,16 +785,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "dev-master",
+            "version": "v4.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "6d6d88512a8146939a9161bb03e95e3e97840439"
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d6d88512a8146939a9161bb03e95e3e97840439",
-                "reference": "6d6d88512a8146939a9161bb03e95e3e97840439",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
+                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
                 "shasum": ""
             },
             "require": {
@@ -828,7 +828,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-12-30T05:23:44+00:00"
+            "time": "2017-06-03T02:28:16+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -4576,7 +4576,6 @@
         "elife/api-sdk": 20,
         "elife/bus-sdk": 20,
         "elife/logging-sdk": 20,
-        "ezyang/htmlpurifier": 20,
         "elife/api": 20,
         "elife/api-validator": 20
     },

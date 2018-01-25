@@ -7,12 +7,12 @@ use DateTimeZone;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\HypothesisClient\Model\Annotation;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use tests\eLife\Annotations\WebTestCase;
+use tests\eLife\Annotations\ApplicationTestCase;
 
 /**
  * @covers \eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer
  */
-final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
+final class HypothesisClientAnnotationNormalizerApplicationTest extends ApplicationTestCase
 {
     /** @var HypothesisClientAnnotationNormalizer */
     private $normalizer;
@@ -526,7 +526,7 @@ final class HypothesisClientAnnotationNormalizerWebTest extends WebTestCase
                         ],
                         [
                             'type' => 'code',
-                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
+                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
                         ],
                         [
                             'type' => 'paragraph',

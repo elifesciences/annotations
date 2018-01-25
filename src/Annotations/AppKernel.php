@@ -8,7 +8,7 @@ use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\CommonMark;
-use eLife\Annotations\Serializer\CommonMark\HtmlRenderer;
+use eLife\Annotations\Serializer\CommonMark\HtmlPurifierRenderer;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
@@ -381,7 +381,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         };
 
         $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
-            return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment'], $this->app['annotation.serializer.html_purifier']);
+            return new HtmlPurifierRenderer($this->app['annotation.serializer.common_mark.environment'], $this->app['annotation.serializer.html_purifier']);
         };
 
         $this->app['annotation.serializer'] = function () {

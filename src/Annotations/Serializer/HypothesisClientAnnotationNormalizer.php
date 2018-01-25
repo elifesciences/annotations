@@ -8,7 +8,6 @@ use League\CommonMark\Block\Element;
 use League\CommonMark\DocParser;
 use League\CommonMark\ElementRendererInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use function eLife\Annotations\Serializer\CommonMark\escape_math;
 
@@ -16,8 +15,6 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
 {
     const CANNOT_RENDER_CONTENT_COPY = 'NOTE: It is not possible to display this content.';
     const UNAVAILABLE_CONTENT_COPY = 'NOTE: There is no content available to display.';
-
-    use NormalizerAwareTrait;
 
     private $docParser;
     private $htmlRenderer;
@@ -84,11 +81,6 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
         $data = [];
 
         foreach ($blocks as $block) {
-            $rendered = $this->htmlRenderer->renderBlock($block);
-            if (empty($rendered)) {
-                continue;
-            }
-
             switch (true) {
                 case $block instanceof Element\ThematicBreak:
                     break;
@@ -96,29 +88,35 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
                     $data[] = $this->processListBlock($block);
                     break;
                 case $block instanceof Element\BlockQuote:
-                    $data[] = [
-                        'type' => 'quote',
-                        'text' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => $rendered,
+                    if ($rendered = $this->htmlRenderer->renderBlock($block)) {
+                        $data[] = [
+                            'type' => 'quote',
+                            'text' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => $rendered,
+                                ],
                             ],
-                        ],
-                    ];
+                        ];
+                    }
                     break;
                 case $block instanceof Element\HtmlBlock:
                 case $block instanceof Element\Paragraph:
-                    $data[] = [
-                        'type' => 'paragraph',
-                        'text' => $rendered,
-                    ];
+                    if ($rendered = $this->htmlRenderer->renderBlock($block)) {
+                        $data[] = [
+                            'type' => 'paragraph',
+                            'text' => $rendered,
+                        ];
+                    }
                     break;
                 case $block instanceof Element\FencedCode:
                 case $block instanceof Element\IndentedCode:
-                    $data[] = [
-                        'type' => 'code',
-                        'code' => $rendered,
-                    ];
+                    if ($rendered = $this->htmlRenderer->renderBlock($block)) {
+                        $data[] = [
+                            'type' => 'code',
+                            'code' => $rendered,
+                        ];
+                    }
                     break;
             }
         }
