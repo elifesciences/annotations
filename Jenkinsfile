@@ -1,5 +1,7 @@
 elifePipeline {
     def commit
+    DockerImage cli
+    DockerImage fpm
     stage 'Checkout', {
         checkout scm
         commit = elifeGitRevision()
@@ -25,8 +27,10 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    sh "docker push elifesciences/annotations_cli:${commit}"
-                    sh "docker push elifesciences/annotations_fpm:${commit}"
+                    cli = DockerImage.elifesciences("annotations_cli", commit)
+                    cli.push()
+                    fpm = DockerImage.elifesciences("annotations_fpm", commit)
+                    fpm.push()
                 }
             }
         },
@@ -56,12 +60,39 @@ elifePipeline {
             elifeGitMoveToBranch commit, 'approved'
             elifeOnNode(
                 {
-                    sh "docker tag elifesciences/annotations_cli:${commit} elifesciences/annotations_cli:approved && docker push elifesciences/annotations_cli:approved"
-                    sh "docker tag elifesciences/annotations_fpm:${commit} elifesciences/annotations_fpm:approved && docker push elifesciences/annotations_fpm:approved"
+                    cli.tag('approved').push()
+                    fpm.tag('approved').push()
                 },
                 'elife-libraries--ci'
             )
         }
+    }
+}
+
+public class DockerImage implements Serializable {
+    private final def script
+    private final String repository
+    private final String tag
+
+    public static elifesciences(String project) {
+        return new DockerImage("elifesciences/${project}")
+    }
+
+    public DockerImage(script, repository, tag) {
+        this.script = script
+        this.repository = repository
+        this.tag = tag
+    }
+
+    public void push()
+    {
+        this.script.sh "docker push ${repository}:${tag}"
+    }
+
+    public DockerImage tag(newTag)
+    {
+        this.script.sh "docker tag ${repository}:${tag} ${repository}:${newTag}"
+        return new DockerImage(repository, newTag)
     }
 }
 
