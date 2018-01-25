@@ -21,6 +21,9 @@ final class SearchResults
         return $this->total;
     }
 
+    /**
+     * @return Annotation[]
+     */
     public function getAnnotations() : array
     {
         return $this->annotations;
