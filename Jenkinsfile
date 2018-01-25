@@ -27,9 +27,9 @@ elifePipeline {
 
             elifeMainlineOnly {
                 stage 'Push images', {
-                    cli = DockerImage.elifesciences("annotations_cli", commit)
+                    cli = DockerImage.elifesciences(this, "annotations_cli", commit)
                     cli.push()
-                    fpm = DockerImage.elifesciences("annotations_fpm", commit)
+                    fpm = DockerImage.elifesciences(this, "annotations_fpm", commit)
                     fpm.push()
                 }
             }
@@ -74,8 +74,8 @@ public class DockerImage implements Serializable {
     private final String repository
     private final String tag
 
-    public static elifesciences(String project) {
-        return new DockerImage("elifesciences/${project}")
+    public static elifesciences(script, String project, String tag) {
+        return new DockerImage(script, "elifesciences/${project}", tag)
     }
 
     public DockerImage(script, repository, tag) {
@@ -92,7 +92,7 @@ public class DockerImage implements Serializable {
     public DockerImage tag(newTag)
     {
         this.script.sh "docker tag ${repository}:${tag} ${repository}:${newTag}"
-        return new DockerImage(repository, newTag)
+        return new DockerImage(script, repository, newTag)
     }
 }
 
