@@ -224,7 +224,10 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             return new Client([
                 'base_uri' => $this->app['hypothesis']['api_url'],
+                'connect_timeout' => 0.5,
+                'decode_content' => 'gzip',
                 'handler' => $this->app['hypothesis.guzzle.handler'],
+                'timeout' => 0.9,
             ]);
         };
 
@@ -285,7 +288,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
             return new Client([
                 'base_uri' => $this->app['api.url'],
+                'connect_timeout' => 0.5,
                 'handler' => $this->app['api.guzzle.handler'],
+                'timeout' => 0.9,
             ]);
         };
 
