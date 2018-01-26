@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'api_url' => 'https://api_dummy:8080',
+    'api_url' => 'http://api_dummy:8080',
     'hypothesis' => [
         // TODO: should be hypothesis-dummy
         'api_url' => 'https://hypothes.is/api/',
