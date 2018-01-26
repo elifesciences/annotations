@@ -7,6 +7,7 @@ use eLife\HypothesisClient\ApiClient\SearchClient;
 use eLife\HypothesisClient\Client\Search;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\Annotation;
+use eLife\HypothesisClient\Model\SearchResults;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
@@ -131,7 +132,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
         ];
         $response = new FulfilledPromise(new ArrayResult(
             [
-                'total' => 0,
+                'total' => 100,
                 'rows' => $rows,
             ]
         ));
@@ -184,6 +185,6 @@ class SearchTest extends PHPUnit_Framework_TestCase
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
         $query = $this->search->query('username', null, 0, 20, true, 'updated')->wait();
-        $this->assertEquals($annotations, $query);
+        $this->assertEquals(new SearchResults(100, $annotations), $query);
     }
 }
