@@ -33,7 +33,10 @@ class HtmlPurifierRenderer implements ElementRendererInterface
 
     public function renderBlock(AbstractBlock $block, $inTightList = false) : string
     {
-        return strip_tags($this->htmlPurifier->purify($this->renderer->renderBlock($block, $inTightList)), self::ALLOW_TAGS);
+        $rendered = $this->renderer->renderBlock($block, $inTightList);
+        $purified = $this->htmlPurifier->purify($rendered);
+
+        return strip_tags($purified, self::ALLOW_TAGS);
     }
 
     public function renderBlocks($blocks, $inTightList = false) : string
