@@ -23,6 +23,7 @@ services:
         env_file:
             - dev.env
         depends_on:
+            - api_dummy
             - goaws
     cli:
         build: 
@@ -36,6 +37,7 @@ services:
         env_file:
             - dev.env
         depends_on:
+            - api_dummy
             - goaws
     goaws:
         image: elifesciences/goaws:1.0.1
@@ -51,7 +53,8 @@ services:
         command: tail -f /logs/all.json
         depends_on:
             - cli
-    # TODO: api-dummy
+    api_dummy:
+        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
     # TODO: hypothesis-dummy
 
 volumes:
