@@ -526,7 +526,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                         ],
                         [
                             'type' => 'code',
-                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;",
+                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;\n",
                         ],
                         [
                             'type' => 'paragraph',

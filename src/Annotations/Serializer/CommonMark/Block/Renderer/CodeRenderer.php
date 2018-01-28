@@ -17,6 +17,6 @@ class CodeRenderer implements BlockRendererInterface
             throw new \InvalidArgumentException('Incompatible block type: '.get_class($block));
         }
 
-        return Xml::escape(trim($block->getStringContent()));
+        return Xml::escape($block->getStringContent());
     }
 }
