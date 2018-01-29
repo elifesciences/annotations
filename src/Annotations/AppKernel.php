@@ -8,14 +8,14 @@ use Csa\GuzzleHttp\Middleware\Cache\MockMiddleware;
 use eLife\Annotations\Controller\AnnotationsController;
 use eLife\Annotations\Provider\QueueCommandsProvider;
 use eLife\Annotations\Serializer\CommonMark;
+use eLife\Annotations\Serializer\CommonMark\HtmlPurifierRenderer;
+use eLife\Annotations\Serializer\CommonMark\MathEscapeRenderer;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
 use eLife\ApiClient\HttpClient\BatchingHttpClient;
 use eLife\ApiClient\HttpClient\Guzzle6HttpClient;
 use eLife\ApiClient\HttpClient\NotifyingHttpClient;
 use eLife\ApiProblem\Silex\ApiProblemProvider;
 use eLife\ApiSdk\ApiSdk;
-use eLife\ApiSdk\Serializer\Block;
-use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\ApiValidator\MessageValidator\JsonMessageValidator;
 use eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder;
 use eLife\Bus\Limit\CompositeLimit;
@@ -40,10 +40,12 @@ use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use HTMLPurifier;
 use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
 use League\CommonMark\Block as CommonMarkBlock;
 use League\CommonMark\DocParser;
+use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
@@ -74,8 +76,10 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             require __DIR__."/../../config/{$environment}.php"
         );
 
+        $cache_path = $config['cache']['path'] ?? __DIR__.'/../../var/cache';
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
+            'cache.path' => $cache_path,
             'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
             'logging.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
@@ -103,6 +107,12 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'authority' => '',
                 'group' => '',
             ],
+            'common_mark.environment' => ($config['common_mark']['environment'] ?? []) + [
+                'allow_unsafe_links' => false,
+            ],
+            'html_purifier' => ($config['html_purifier'] ?? []) + [
+                'Cache.SerializerPath' => $cache_path.'/html_purifier',
+            ],
             'mock' => $config['mock'] ?? false,
         ]);
 
@@ -116,8 +126,8 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             $this->app->register(new TwigServiceProvider());
         }
 
-        $this->app['logger'] = function (Application $app) {
-            $factory = new LoggingFactory($app['logging.path'], 'annotations', $app['logging.level']);
+        $this->app['logger'] = function () {
+            $factory = new LoggingFactory($this->app['logging.path'], 'annotations', $this->app['logging.level']);
 
             return $factory->logger();
         };
@@ -129,8 +139,8 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         /*
          * @internal
          */
-        $this->app['limit._memory'] = function (Application $app) {
-            return MemoryLimit::mb($app['process_memory_limit']);
+        $this->app['limit._memory'] = function () {
+            return MemoryLimit::mb($this->app['process_memory_limit']);
         };
         /*
          * @internal
@@ -139,20 +149,20 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return SignalsLimit::stopOn(['SIGINT', 'SIGTERM', 'SIGHUP']);
         };
 
-        $this->app['limit.long_running'] = function (Application $app) {
+        $this->app['limit.long_running'] = function () {
             return new LoggingLimit(
                 new CompositeLimit(
-                    $app['limit._memory'],
-                    $app['limit._signals']
+                    $this->app['limit._memory'],
+                    $this->app['limit._signals']
                 ),
-                $app['logger']
+                $this->app['logger']
             );
         };
 
-        $this->app['limit.interactive'] = function (Application $app) {
+        $this->app['limit.interactive'] = function () {
             return new LoggingLimit(
-                $app['limit._signals'],
-                $app['logger']
+                $this->app['limit._signals'],
+                $this->app['logger']
             );
         };
 
@@ -228,38 +238,38 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             ]);
         };
 
-        $this->app['hypothesis.sdk.jwt_signing'] = function (Application $app) {
+        $this->app['hypothesis.sdk.jwt_signing'] = function () {
             return new JWTSigningCredentials(
-                $app['hypothesis']['jwt_signing']['client_id'],
-                $app['hypothesis']['jwt_signing']['client_secret'],
-                $app['hypothesis']['authority'],
+                $this->app['hypothesis']['jwt_signing']['client_id'],
+                $this->app['hypothesis']['jwt_signing']['client_secret'],
+                $this->app['hypothesis']['authority'],
                 (!$this->app['mock']) ? new SystemClock() : new FixedClock()
             );
         };
 
-        $this->app['hypothesis.sdk'] = function (Application $app) {
+        $this->app['hypothesis.sdk'] = function () {
             $notifyingHttpClient = new HypothesisNotifyingHttpClient(
                 new HypothesisBatchingHttpClient(
                     new HypothesisGuzzle6HttpClient(
-                        $app['hypothesis.guzzle']
+                        $this->app['hypothesis.guzzle']
                     ),
-                    $app['api.requests_batch']
+                    $this->app['api.requests_batch']
                 )
             );
-            if ($app['debug']) {
-                $logger = $app['logger'];
+            if ($this->app['debug']) {
+                $logger = $this->app['logger'];
                 $notifyingHttpClient->addRequestListener(function ($request) use ($logger) {
                     $logger->debug("Request performed in NotifyingHttpClient: {$request->getUri()}");
                 });
             }
 
             $userManagement = new UserManagementCredentials(
-                $app['hypothesis']['user_management']['client_id'],
-                $app['hypothesis']['user_management']['client_secret'],
-                $app['hypothesis']['authority']
+                $this->app['hypothesis']['user_management']['client_id'],
+                $this->app['hypothesis']['user_management']['client_secret'],
+                $this->app['hypothesis']['authority']
             );
 
-            return new HypothesisSdk($notifyingHttpClient, $userManagement, $app['hypothesis.sdk.jwt_signing'], $app['hypothesis']['group']);
+            return new HypothesisSdk($notifyingHttpClient, $userManagement, $this->app['hypothesis.sdk.jwt_signing'], $this->app['hypothesis']['group']);
         };
 
         $this->app['api.guzzle'] = function () {
@@ -289,17 +299,17 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             ]);
         };
 
-        $this->app['api.sdk'] = function (Application $app) {
+        $this->app['api.sdk'] = function () {
             $notifyingHttpClient = new NotifyingHttpClient(
                 new BatchingHttpClient(
                     new Guzzle6HttpClient(
-                        $app['api.guzzle']
+                        $this->app['api.guzzle']
                     ),
-                    $app['api.requests_batch']
+                    $this->app['api.requests_batch']
                 )
             );
-            if ($app['debug']) {
-                $logger = $app['logger'];
+            if ($this->app['debug']) {
+                $logger = $this->app['logger'];
                 $notifyingHttpClient->addRequestListener(function ($request) use ($logger) {
                     $logger->debug("Request performed in NotifyingHttpClient: {$request->getUri()}");
                 });
@@ -308,34 +318,34 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new ApiSdk($notifyingHttpClient);
         };
 
-        $this->app['aws.sqs'] = function (Application $app) {
+        $this->app['aws.sqs'] = function () {
             $config = [
                 'version' => '2012-11-05',
-                'region' => $app['aws']['region'],
+                'region' => $this->app['aws']['region'],
             ];
-            if (isset($app['aws']['endpoint'])) {
-                $config['endpoint'] = $app['aws']['endpoint'];
+            if (isset($this->app['aws']['endpoint'])) {
+                $config['endpoint'] = $this->app['aws']['endpoint'];
             }
-            if (!isset($app['aws']['credential_file']) || $app['aws']['credential_file'] === false) {
+            if (!isset($this->app['aws']['credential_file']) || $this->app['aws']['credential_file'] === false) {
                 $config['credentials'] = [
-                    'key' => $app['aws']['key'],
-                    'secret' => $app['aws']['secret'],
+                    'key' => $this->app['aws']['key'],
+                    'secret' => $this->app['aws']['secret'],
                 ];
             }
 
             return new SqsClient($config);
         };
 
-        $this->app['aws.queue'] = function (Application $app) {
-            if ($app['aws']['stub']) {
+        $this->app['aws.queue'] = function () {
+            if ($this->app['aws']['stub']) {
                 return new WatchableQueueMock();
             } else {
-                return new SqsWatchableQueue($app['aws.sqs'], $app['aws']['queue_name']);
+                return new SqsWatchableQueue($this->app['aws.sqs'], $this->app['aws']['queue_name']);
             }
         };
 
-        $this->app['aws.queue_transformer'] = function (Application $app) {
-            return new SqsMessageTransformer($app['api.sdk']);
+        $this->app['aws.queue_transformer'] = function () {
+            return new SqsMessageTransformer($this->app['api.sdk']);
         };
 
         $this->app->register(new ConsoleServiceProvider(), [
@@ -352,12 +362,8 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app['annotation.serializer.common_mark.environment'] = function () {
             $environment = Environment::createCommonMarkEnvironment();
+            $environment->setConfig($this->app['common_mark.environment']);
 
-            $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
-            $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
-
-            $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
-            $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
             $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
@@ -375,20 +381,24 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new DocParser($this->app['annotation.serializer.common_mark.environment']);
         };
 
-        $this->app['annotation.serializer.common_mark.html_renderer'] = function () {
+        $this->app['annotation.serializer.common_mark.element_renderer'] = function () {
             return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
         };
 
+        $this->app['annotation.serializer.html_purifier'] = function () {
+            return new HTMLPurifier($this->app['html_purifier']);
+        };
+
+        $this->app->extend('annotation.serializer.common_mark.element_renderer', function (ElementRendererInterface $elementRenderer) {
+            return new MathEscapeRenderer($elementRenderer);
+        });
+
+        $this->app->extend('annotation.serializer.common_mark.element_renderer', function (ElementRendererInterface $elementRenderer) {
+            return new HtmlPurifierRenderer($elementRenderer, $this->app['annotation.serializer.html_purifier']);
+        });
+
         $this->app['annotation.serializer'] = function () {
-            return new NormalizerAwareSerializer([
-                new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_renderer'], $this->app['logger']),
-                new Block\CodeNormalizer(),
-                new Block\ListingNormalizer(),
-                new Block\MathMLNormalizer(),
-                new Block\ParagraphNormalizer(),
-                new Block\QuoteNormalizer(),
-                new Block\YouTubeNormalizer(),
-            ]);
+            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.element_renderer'], $this->app['logger']);
         };
 
         $this->app['controllers.annotations'] = function () {
@@ -400,7 +410,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'application/vnd.elife.annotation-list+json; version=1'
             ));
 
-        $this->app->after(function (Request $request, Response $response, Application $app) {
+        $this->app->after(function (Request $request, Response $response) {
             if ($response->isCacheable()) {
                 $response->headers->set('ETag', md5($response->getContent()));
                 $response->isNotModified($request);
