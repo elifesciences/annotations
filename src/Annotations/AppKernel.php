@@ -75,8 +75,10 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             require __DIR__."/../../config/{$environment}.php"
         );
 
+        $cache_path = $config['cache']['path'] ?? __DIR__.'/../../var/cache';
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
+            'cache.path' => $cache_path,
             'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
             'logging.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
@@ -108,7 +110,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
                 'allow_unsafe_links' => false,
             ],
             'html_purifier' => ($config['html_purifier'] ?? []) + [
-                'Cache.SerializerPath' => __DIR__.'/../../var/cache/html_purifier',
+                'Cache.SerializerPath' => $cache_path.'/html_purifier',
             ],
             'mock' => $config['mock'] ?? false,
         ]);
