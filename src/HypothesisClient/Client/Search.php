@@ -4,6 +4,7 @@ namespace eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\SearchClient;
 use eLife\HypothesisClient\Model\Annotation;
+use eLife\HypothesisClient\Model\SearchResults;
 use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -37,30 +38,13 @@ final class Search
                 $descendingOrder,
                 $sort
             )
-            ->then(function (Result $result) use ($username, $accessToken) {
-                return $result;
-            })
             ->then(function (Result $result) {
-                return array_map(function (array $annotation) {
-                    return $this->serializer->denormalize($annotation, Annotation::class);
-                }, $result['rows']);
+                return new SearchResults(
+                    $result['total'],
+                    array_map(function (array $annotation) {
+                        return $this->serializer->denormalize($annotation, Annotation::class);
+                    }, $result['rows'])
+                );
             });
-    }
-
-    public function count(
-        string $username = null,
-        string $accessToken = null
-    ) : int {
-        return $this->searchClient
-            ->query(
-                [],
-                $username,
-                $accessToken,
-                0,
-                1
-            )
-            ->then(function (Result $result) use ($username, $accessToken) {
-                return $result['total'];
-            })->wait();
     }
 }

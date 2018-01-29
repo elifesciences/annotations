@@ -7,6 +7,7 @@ use eLife\ApiClient\Exception\ApiProblemResponse;
 use eLife\ApiSdk\ApiSdk;
 use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Model\Annotation;
+use eLife\HypothesisClient\Model\SearchResults;
 use eLife\HypothesisClient\Model\Token;
 use Negotiation\Accept;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,12 +95,12 @@ final class AnnotationsController
 
         // Perform query to Hypothesis API.
         $content = $this->hypothesisSdk->search()->query($by, $accessToken, ($page - 1) * $perPage, $perPage, ('desc' === $order), $useDate)
-            ->then(function (array $result) use ($by, $accessToken) {
+            ->then(function (SearchResults $results) {
                 return [
-                    'total' => $this->hypothesisSdk->search()->count($by, $accessToken),
+                    'total' => $results->getTotal(),
                     'items' => array_map(function (Annotation $annotation) {
                         return $this->serializer->normalize($annotation, Annotation::class);
-                    }, $result),
+                    }, $results->getAnnotations()),
                 ];
             })->wait();
 
