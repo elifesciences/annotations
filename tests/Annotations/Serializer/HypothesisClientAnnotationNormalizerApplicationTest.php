@@ -554,6 +554,62 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
         ];
     }
 
+    /**
+     * @test
+     */
+    public function it_will_sanitize_annotations()
+    {
+        $annotation = new Annotation(
+            'id',
+            $this->lines([
+                '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>'.PHP_EOL,
+                '$$',
+                '\\forall x \\in X,',
+                '\\quad \\exists y',
+                '\\leq< \\epsilon',
+                '$$'.PHP_EOL,
+                'Unwanted tags: <foo>bar</foo>',
+            ]),
+            new DateTimeImmutable('2017-11-29T17:41:28Z'),
+            new DateTimeImmutable('2017-11-29T17:41:28Z'),
+            new Annotation\Document('title'),
+            new Annotation\Target('source'),
+            'uri',
+            null,
+            new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+        );
+        $expected = [
+            'id' => 'id',
+            'access' => 'public',
+            'content' => [
+                [
+                    'type' => 'paragraph',
+                    'text' => '&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/math&gt;',
+                ],
+                [
+                    'type' => 'paragraph',
+                    'text' => $this->lines([
+                        '$$',
+                        '\\forall x \\in X,',
+                        '\\quad \\exists y',
+                        '\\leq&lt; \\epsilon',
+                        '$$',
+                    ]),
+                ],
+                [
+                    'type' => 'paragraph',
+                    'text' => 'Unwanted tags: bar',
+                ],
+            ],
+            'created' => '2017-11-29T17:41:28Z',
+            'document' => [
+                'title' => 'title',
+                'uri' => 'uri',
+            ],
+        ];
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
+    }
+
     private function lines(array $lines)
     {
         return implode(PHP_EOL, $lines);

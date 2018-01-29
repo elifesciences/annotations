@@ -31,11 +31,11 @@ class MathEscapeRenderer implements ElementRendererInterface
         $rendered = $this->renderer->renderBlock($block, $inTightList);
         // Escape MathML.
         $escaped = preg_replace_callback('~<math[^>]*>.*?</math>~s', function ($match) {
-            return Xml::escape($match[0]);
+            return Xml::escape($match[0], true);
         }, $rendered);
         // Escape LaTeX.
         $escaped = preg_replace_callback('~\$\$.+\$\$~s', function ($match) {
-            return Xml::escape($match[0]);
+            return Xml::escape($match[0], true);
         }, $escaped);
 
         return $escaped;
