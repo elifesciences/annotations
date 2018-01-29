@@ -10,10 +10,7 @@
     "autoload-dev": {
         "psr-4": {
             "tests\\eLife\\": "./tests"
-        },
-        "files": [
-            "src/Annotations/Serializer/CommonMark/functions.php"
-        ]
+        }
     },
     "require": {
         "beberlei/assert": "^2.7",
@@ -24,10 +21,12 @@
         "elife/content-negotiator": "^1.0",
         "elife/logging-sdk": "^1.0@dev",
         "elife/ping": "^1.0",
+        "ezyang/htmlpurifier": "^4.9",
         "firebase/php-jwt": "^5.0",
         "guzzlehttp/guzzle": "^6.3",
         "knplabs/console-service-provider": "^2.1",
         "league/commonmark": "^0.17.0",
+        "psr/container": "^1.0",
         "silex/silex": "^2.2",
         "symfony/property-access": "^3.3",
         "symfony/serializer": "^3.3",

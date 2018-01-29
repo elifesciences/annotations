@@ -4,31 +4,16 @@ namespace tests\eLife\Annotations\Serializer;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use eLife\Annotations\Serializer\CommonMark;
 use eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer;
-use eLife\ApiSdk\Serializer\Block;
-use eLife\ApiSdk\Serializer\NormalizerAwareSerializer;
 use eLife\HypothesisClient\Model\Annotation;
-use League\CommonMark\Block as CommonMarkBlock;
-use League\CommonMark\DocParser;
-use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
-use League\CommonMark\Inline as CommonMarkInline;
-use PHPUnit_Framework_TestCase;
-use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use tests\eLife\Annotations\ApplicationTestCase;
 
 /**
  * @covers \eLife\Annotations\Serializer\HypothesisClientAnnotationNormalizer
  */
-final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_TestCase
+final class HypothesisClientAnnotationNormalizerApplicationTest extends ApplicationTestCase
 {
-    /** @var DocParser */
-    private $docParser;
-    /** @var HtmlRenderer */
-    private $htmlRenderer;
-    /** @var BufferingLogger */
-    private $logger;
     /** @var HypothesisClientAnnotationNormalizer */
     private $normalizer;
 
@@ -37,37 +22,8 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
      */
     protected function setUpNormalizer()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addBlockParser(new CommonMark\Block\Parser\LatexParser());
-        $environment->addBlockParser(new CommonMark\Block\Parser\MathMLParser());
-
-        $environment->addBlockRenderer(CommonMark\Block\Element\Latex::class, new CommonMark\Block\Renderer\LatexRenderer());
-        $environment->addBlockRenderer(CommonMark\Block\Element\MathML::class, new CommonMark\Block\Renderer\MathMLRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\BlockQuote::class, new CommonMark\Block\Renderer\BlockQuoteRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\FencedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\HtmlBlock::class, new CommonMark\Block\Renderer\HtmlBlockRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\IndentedCode::class, new CommonMark\Block\Renderer\CodeRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\ListItem::class, new CommonMark\Block\Renderer\ListItemRenderer());
-        $environment->addBlockRenderer(CommonMarkBlock\Element\Paragraph::class, new CommonMark\Block\Renderer\ParagraphRenderer());
-
-        $environment->addInlineRenderer(CommonMarkInline\Element\HtmlInline::class, new CommonMark\Inline\Renderer\HtmlInlineRenderer());
-        $environment->addInlineRenderer(CommonMarkInline\Element\Image::class, new CommonMark\Inline\Renderer\ImageRenderer());
-
-        $this->docParser = new CommonMark\DocParser($environment);
-        $this->htmlRenderer = new HtmlRenderer($environment);
-
-        $this->logger = new BufferingLogger();
-        // @todo - I'm not sure why Symfony\Component\Serializer\Serializer doesn't work here.
-        $this->normalizer = new NormalizerAwareSerializer([
-            new HypothesisClientAnnotationNormalizer($this->docParser, $this->htmlRenderer, $this->logger),
-            new Block\CodeNormalizer(),
-            new Block\ListingNormalizer(),
-            new Block\MathMLNormalizer(),
-            new Block\ParagraphNormalizer(),
-            new Block\QuoteNormalizer(),
-            new Block\YouTubeNormalizer(),
-        ]);
+        $this->setUpApp();
+        $this->normalizer = $this->getApp()->get('annotation.serializer');
     }
 
     /**
@@ -570,11 +526,11 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                         ],
                         [
                             'type' => 'code',
-                            'code' => "&quot;content&quot; field: annotation content | first reply | second reply\n&quot;offsets&quot; field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;\n",
+                            'code' => "\"content\" field: annotation content | first reply | second reply\n\"offsets\" field: &lt;first reply ID&gt;:&lt;offset of first reply&gt;,&lt;second reply ID&gt;:&lt;offset of second reply&gt;\n",
                         ],
                         [
                             'type' => 'paragraph',
-                            'text' => 'When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the &quot;content&quot; field. These offsets are then looked up in the &quot;offsets&quot; field to get the thread IDs.',
+                            'text' => 'When a search query is received, an ES query is performed to find the matching documents and get the offsets of matches within the "content" field. These offsets are then looked up in the "offsets" field to get the thread IDs.',
                         ],
                     ],
                     'created' => $createdDate,
@@ -595,147 +551,63 @@ final class HypothesisClientAnnotationNormalizerTest extends PHPUnit_Framework_T
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
-            'markdown-mathml' => [
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_sanitize_annotations()
+    {
+        $annotation = new Annotation(
+            'id',
+            $this->lines([
+                '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>'.PHP_EOL,
+                '$$',
+                '\\forall x \\in X,',
+                '\\quad \\exists y',
+                '\\leq< \\epsilon',
+                '$$'.PHP_EOL,
+                'Unwanted tags: <foo>bar</foo>',
+            ]),
+            new DateTimeImmutable('2017-11-29T17:41:28Z'),
+            new DateTimeImmutable('2017-11-29T17:41:28Z'),
+            new Annotation\Document('title'),
+            new Annotation\Target('source'),
+            'uri',
+            null,
+            new Annotation\Permissions(Annotation::PUBLIC_GROUP)
+        );
+        $expected = [
+            'id' => 'id',
+            'access' => 'public',
+            'content' => [
                 [
-                    'id' => 'id',
-                    'access' => 'public',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => '&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mstyle mathcolor=&quot;blue&quot; fontfamily=&quot;serif&quot; displaystyle=&quot;true&quot;&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;msup&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mstyle&gt;&lt;/math&gt;',
-                        ],
-                    ],
-                    'created' => $createdDate,
-                    'document' => [
-                        'title' => 'title',
-                        'uri' => 'uri',
-                    ],
+                    'type' => 'paragraph',
+                    'text' => '&lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;/math&gt;',
                 ],
-                new Annotation(
-                    'id',
-                    '<math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle mathcolor="blue" fontfamily="serif" displaystyle="true"><mi>a</mi><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>b</mi><mi>x</mi><mo>+</mo><mi>c</mi><mo>=</mo><mn>0</mn></mstyle></math>',
-                    new DateTimeImmutable($createdDate),
-                    new DateTimeImmutable($createdDate),
-                    new Annotation\Document('title'),
-                    new Annotation\Target('source'),
-                    'uri',
-                    null,
-                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
-                ),
-            ],
-            'markdown-latex' => [
                 [
-                    'id' => 'id',
-                    'access' => 'public',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Math inline (k_{n+1} = n^2 + k_n^2 - k_{n-1})',
-                        ],
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'And a block of math for larger equations:',
-                        ],
-                        [
-                            'type' => 'paragraph',
-                            'text' => "$$\n\\forall x \\in X,\n\\quad \\exists y\n\\leq \\epsilon\n$$",
-                        ],
-                    ],
-                    'created' => $createdDate,
-                    'document' => [
-                        'title' => 'title',
-                        'uri' => 'uri',
-                    ],
-                ],
-                new Annotation(
-                    'id',
-                    $this->lines([
-                        'Math inline \\(k_{n+1} = n^2 + k_n^2 - k_{n-1}\\)'.PHP_EOL,
-                        'And a block of math for larger equations:'.PHP_EOL,
+                    'type' => 'paragraph',
+                    'text' => $this->lines([
                         '$$',
                         '\\forall x \\in X,',
                         '\\quad \\exists y',
-                        '\\leq \\epsilon',
+                        '\\leq&lt; \\epsilon',
                         '$$',
                     ]),
-                    new DateTimeImmutable($createdDate),
-                    new DateTimeImmutable($createdDate),
-                    new Annotation\Document('title'),
-                    new Annotation\Target('source'),
-                    'uri',
-                    null,
-                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
-                ),
-            ],
-            'markdown-strip-tags' => [
-                [
-                    'id' => 'id',
-                    'access' => 'public',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Leading paragraph.',
-                        ],
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'iframe: ',
-                        ],
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Trailing paragraph.',
-                        ],
-                    ],
-                    'created' => $createdDate,
-                    'document' => [
-                        'title' => 'title',
-                        'uri' => 'uri',
-                    ],
                 ],
-                new Annotation(
-                    'id',
-                    $this->lines([
-                        'Leading paragraph.'.PHP_EOL,
-                        'iframe: <iframe src="https://elifesciences.org"></iframe>'.PHP_EOL,
-                        'Trailing paragraph.',
-                    ]),
-                    new DateTimeImmutable($createdDate),
-                    new DateTimeImmutable($createdDate),
-                    new Annotation\Document('title'),
-                    new Annotation\Target('source'),
-                    'uri',
-                    null,
-                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
-                ),
-            ],
-            'markdown-strip-all-tags' => [
                 [
-                    'id' => 'id',
-                    'access' => 'public',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'NOTE: It is not possible to display this content.',
-                        ],
-                    ],
-                    'created' => $createdDate,
-                    'document' => [
-                        'title' => 'title',
-                        'uri' => 'uri',
-                    ],
+                    'type' => 'paragraph',
+                    'text' => 'Unwanted tags: bar',
                 ],
-                new Annotation(
-                    'id',
-                    '<iframe src="https://elifesciences.org"></iframe>',
-                    new DateTimeImmutable($createdDate),
-                    new DateTimeImmutable($createdDate),
-                    new Annotation\Document('title'),
-                    new Annotation\Target('source'),
-                    'uri',
-                    null,
-                    new Annotation\Permissions(Annotation::PUBLIC_GROUP)
-                ),
+            ],
+            'created' => '2017-11-29T17:41:28Z',
+            'document' => [
+                'title' => 'title',
+                'uri' => 'uri',
             ],
         ];
+        $this->assertEquals($expected, $this->normalizer->normalize($annotation));
     }
 
     private function lines(array $lines)
