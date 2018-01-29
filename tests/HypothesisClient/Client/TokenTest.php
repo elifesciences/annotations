@@ -13,6 +13,9 @@ use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit_Framework_TestCase;
+use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Simple\ArrayCache;
+use Symfony\Component\Cache\Simple\TraceableCache;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;
 
@@ -32,6 +35,8 @@ class TokenTest extends PHPUnit_Framework_TestCase
     private $token;
     /** @var TokenClient */
     private $tokenClient;
+    /** @var TraceableCache */
+    private $cache;
 
     /**
      * @before
@@ -53,6 +58,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->tokenClient = new TokenClient($this->httpClient, $this->credentials);
         $this->token = new Token($this->tokenClient, $this->denormalizer);
+        $this->cache = new TraceableCache(new ArrayCache());
     }
 
     /**
@@ -90,5 +96,105 @@ class TokenTest extends PHPUnit_Framework_TestCase
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
         $this->assertEquals($token, $this->token->get('username')->wait());
+    }
+
+    /**
+     * @test
+     */
+    public function it_caches_tokens()
+    {
+        $tokens = new Token($this->tokenClient, $this->denormalizer, $this->cache);
+
+        $this->credentials
+            ->method('getJWT')
+            ->with('username')
+            ->willReturn('jwt');
+        $request = new Request(
+            'POST',
+            'token',
+            ['User-Agent' => 'HypothesisClient'],
+            http_build_query([
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion' => 'jwt',
+            ])
+        );
+        $response = new FulfilledPromise(new ArrayResult([
+            'access_token' => 'access_token',
+            'token_type' => 'Bearer',
+            'expires_in' => (float) 3600,
+            'refresh_token' => 'refresh_token',
+        ]));
+        $expected = new ModelToken('access_token', 'Bearer', 3600, 'refresh_token');
+        $this->denormalizer
+            ->method('denormalize')
+            ->with($response->wait()->toArray(), ModelToken::class)
+            ->willReturn($expected);
+        $this->httpClient
+            ->expects($this->once())
+            ->method('send')
+            ->with(RequestConstraint::equalTo($request))
+            ->willReturn($response);
+
+        $this->assertEquals($expected, $tokens->get('username')->wait());
+
+        $cacheCalls = $this->cache->getCalls();
+        $this->assertCount(2, $cacheCalls);
+
+        $this->assertEquals($expected, $tokens->get('username')->wait());
+
+        $cacheCalls = $this->cache->getCalls();
+        $this->assertCount(1, $cacheCalls);
+    }
+
+    /**
+     * @test
+     */
+    public function it_ignores_broken_cached_tokens()
+    {
+        $cache = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
+
+        $tokens = new Token($this->tokenClient, $this->denormalizer, $cache);
+
+        $this->credentials
+            ->method('getJWT')
+            ->with('username')
+            ->willReturn('jwt');
+        $request = new Request(
+            'POST',
+            'token',
+            ['User-Agent' => 'HypothesisClient'],
+            http_build_query([
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion' => 'jwt',
+            ])
+        );
+        $response = new FulfilledPromise(new ArrayResult([
+            'access_token' => 'access_token',
+            'token_type' => 'Bearer',
+            'expires_in' => (float) 3600,
+            'refresh_token' => 'refresh_token',
+        ]));
+        $expected = new ModelToken('access_token', 'Bearer', 3600, 'refresh_token');
+        $this->denormalizer
+            ->method('denormalize')
+            ->with($response->wait()->toArray(), ModelToken::class)
+            ->willReturn($expected);
+        $this->httpClient
+            ->expects($this->once())
+            ->method('send')
+            ->with(RequestConstraint::equalTo($request))
+            ->willReturn($response);
+        $cache
+            ->expects($this->once())
+            ->method('get')
+            ->with('hypothesis.token.username')
+            ->willReturn('foo');
+        $cache
+            ->expects($this->once())
+            ->method('set')
+            ->with('hypothesis.token.username', $expected, 3600);
+
+        $this->assertEquals($expected, $tokens->get('username')->wait());
     }
 }
