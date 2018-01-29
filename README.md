@@ -32,7 +32,7 @@ docker-compose run cli /usr/bin/env php ...
 Run PHPUnit:
 
 ```
-docker-compose run cli /usr/bin/env php vendor/bin/phpunit
+docker-compose run cli vendor/bin/phpunit
 ```
 
 Run all project tests:
