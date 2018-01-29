@@ -45,6 +45,7 @@ use JsonSchema\Validator;
 use Knp\Provider\ConsoleServiceProvider;
 use League\CommonMark\Block as CommonMarkBlock;
 use League\CommonMark\DocParser;
+use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
@@ -380,7 +381,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new DocParser($this->app['annotation.serializer.common_mark.environment']);
         };
 
-        $this->app['annotation.serializer.common_mark.html_renderer'] = function (Application $app) {
+        $this->app['annotation.serializer.common_mark.element_renderer'] = function () {
             return new HtmlRenderer($this->app['annotation.serializer.common_mark.environment']);
         };
 
@@ -388,16 +389,16 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             return new HTMLPurifier($app['html_purifier']);
         };
 
-        $this->app['annotation.serializer.common_mark.math_escape_renderer'] = function () {
-            return new MathEscapeRenderer($this->app['annotation.serializer.common_mark.html_renderer']);
-        };
+        $this->app->extend('annotation.serializer.common_mark.element_renderer', function (ElementRendererInterface $elementRenderer) {
+            return new MathEscapeRenderer($elementRenderer);
+        });
 
-        $this->app['annotation.serializer.common_mark.html_purifier_renderer'] = function () {
-            return new HtmlPurifierRenderer($this->app['annotation.serializer.common_mark.math_escape_renderer'], $this->app['annotation.serializer.html_purifier']);
-        };
+        $this->app->extend('annotation.serializer.common_mark.element_renderer', function (ElementRendererInterface $elementRenderer) {
+            return new HtmlPurifierRenderer($elementRenderer, $this->app['annotation.serializer.html_purifier']);
+        });
 
         $this->app['annotation.serializer'] = function () {
-            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.html_purifier_renderer'], $this->app['logger']);
+            return new HypothesisClientAnnotationNormalizer($this->app['annotation.serializer.common_mark.doc_parser'], $this->app['annotation.serializer.common_mark.element_renderer'], $this->app['logger']);
         };
 
         $this->app['controllers.annotations'] = function () {
