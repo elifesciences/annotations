@@ -26,7 +26,7 @@ class HtmlPurifierRendererTest extends PHPUnit_Framework_TestCase
         $this->renderer = $this->getMockBuilder(ElementRendererInterface::class)
             ->getMock();
         $this->abstractBlock = $this->createMock(AbstractBlock::class);
-        $this->htmlPurifierRenderer = new HtmlPurifierRenderer($this->renderer, new HTMLPurifier(['Cache.SerializerPath' => '/tmp']));
+        $this->htmlPurifierRenderer = new HtmlPurifierRenderer($this->renderer, new HTMLPurifier(['Cache.SerializerPath' => sys_get_temp_dir()]));
     }
 
     /**
