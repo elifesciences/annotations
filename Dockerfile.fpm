@@ -22,3 +22,5 @@ USER www-data
 
 ARG dependencies_api_dummy
 LABEL org.elifesciences.dependencies.api-dummy="${dependencies_api_dummy}"
+ARG dependencies_hypothesis_dummy
+LABEL org.elifesciences.dependencies.hypothesis-dummy="${dependencies_hypothesis_dummy}"
