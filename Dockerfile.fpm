@@ -1,4 +1,4 @@
-FROM elifesciences/php_fpm
+FROM elifesciences/php_fpm:20180129144019
 USER root
 RUN docker-php-ext-install pcntl
 

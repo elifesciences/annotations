@@ -11,6 +11,7 @@ final class InMemoryStorageAdapter implements StorageAdapterInterface
 {
     private $array = [];
     private $requestHeadersBlacklist = [
+        'Accept-Encoding',
         'User-Agent',
         'Host',
         CacheMiddleware::DEBUG_HEADER,
