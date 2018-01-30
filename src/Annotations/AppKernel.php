@@ -34,8 +34,8 @@ use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\BatchingHttpClient as HypothesisBatchingHttpClient;
 use eLife\HypothesisClient\HttpClient\Guzzle6HttpClient as HypothesisGuzzle6HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient as HypothesisNotifyingHttpClient;
-use eLife\Logging\LoggingFactory;
 use eLife\Logging\Monitoring;
+use eLife\Logging\Silex\LoggerProvider;
 use eLife\Ping\Silex\PingControllerProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -49,6 +49,7 @@ use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
+use LogicException;
 use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
@@ -80,8 +81,9 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
         $this->app = new Application([
             'debug' => $config['debug'] ?? false,
             'cache.path' => $cache_path,
-            'logging.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
-            'logging.level' => $config['logging']['level'] ?? Logger::INFO,
+            'logger.channel' => 'annotations',
+            'logger.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
+            'logger.level' => $config['logging']['level'] ?? Logger::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
             'api.requests_batch' => $config['api_requests_batch'] ?? 10,
             'process_memory_limit' => $config['process_memory_limit'] ?? 256,
@@ -118,19 +120,20 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
 
         $this->app->register(new ApiProblemProvider());
         $this->app->register(new ContentNegotiationProvider());
+        $this->app->register(new LoggerProvider());
         $this->app->register(new PingControllerProvider());
         $this->app->register(new ServiceControllerServiceProvider());
+
+        $this->app['api_problem.factory.include_exception_details'] = $config['api_problem']['factory']['include_exception_details'] ?? $this->app['debug'];
 
         if ($this->app['debug']) {
             $this->app->register(new HttpFragmentServiceProvider());
             $this->app->register(new TwigServiceProvider());
+            $this->app->get('/error', function () {
+                $this->app['logger']->debug('Simulating error');
+                throw new LogicException('Simulated error');
+            });
         }
-
-        $this->app['logger'] = function () {
-            $factory = new LoggingFactory($this->app['logging.path'], 'annotations', $this->app['logging.level']);
-
-            return $factory->logger();
-        };
 
         $this->app['monitoring'] = function () {
             return new Monitoring();
