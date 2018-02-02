@@ -22,9 +22,7 @@ elifePipeline {
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
                 } finally {
-                    // TODO: use down instead of this pair?
-                    sh 'docker-compose -f docker-compose.ci.yml stop'
-                    sh 'docker-compose -f docker-compose.ci.yml rm -v -f'
+                    sh 'docker-compose -f docker-compose.ci.yml down'
                 }
             }
 
