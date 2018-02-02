@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+# TODO: this script must be moved to the base fpm image
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 PATH"
+    echo "Example: $0 /ping"
+    exit 1
+fi
+
+if [ -z "${PROJECT_FOLDER}" ]; then
+    echo "PROJECT_FOLDER environment variable must be set"
+    echo "Example: PROJECT_FOLDER=/srv/annotations"
+    exit 1
+fi
+
+path="$1"
+PHP_ENTRYPOINT="${PHP_ENTRYPOINT:-/web/app.php}"
+
+SCRIPT_FILENAME="${PROJECT_FOLDER}${PHP_ENTRYPOINT}${path}" REQUEST_URI="${path}" REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000

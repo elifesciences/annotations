@@ -3,6 +3,7 @@ USER root
 RUN docker-php-ext-install pcntl
 # TODO: move in base image
 RUN apt-get update && apt-get install libfcgi0ldbl
+COPY curl_fpm /srv/bin/
 
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
