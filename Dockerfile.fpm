@@ -1,6 +1,8 @@
 FROM elifesciences/php_fpm:20180129144019
 USER root
 RUN docker-php-ext-install pcntl
+# TODO: move in base image
+RUN apt-get update && apt-get install libfcgi0ldbl
 
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
@@ -11,10 +13,10 @@ RUN composer install
 # yes this is how you copy directories
 COPY bin/ /srv/annotations/bin/
 COPY config/ /srv/annotations/config/
-COPY phpunit.xml.dist /srv/annotations/
 COPY src/ /srv/annotations/src/
 COPY tests/ /srv/annotations/tests/
 COPY web/ /srv/annotations/web/
+COPY smoke_tests_fpm.sh /srv/annotations/
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p var/cache/html_purifier && chown www-data:www-data var/cache/html_purifier
