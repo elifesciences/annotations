@@ -5,6 +5,7 @@ RUN docker-php-ext-install pcntl
 
 USER elife
 ENV PROJECT_FOLDER=/srv/annotations
+RUN mkdir ${PROJECT_FOLDER}
 WORKDIR /srv/annotations
 COPY --chown=elife:elife composer.json composer.lock /srv/annotations/
 # TODO: extract into standard script in base image
@@ -19,8 +20,10 @@ COPY --chown=elife:elife smoke_tests_cli.sh /srv/annotations/
 # TODO: extract into standard script in base image
 RUN composer dump-autoload --no-dev --classmap-authoritative
 
-RUN mkdir -p var/logs && chown www-data:www-data var/logs
-RUN mkdir -p var/cache/html_purifier && chown www-data:www-data var/cache/html_purifier
+RUN mkdir -p var/logs var/cache/html_purifier 
+USER root
+RUN chown www-data:www-data var/logs var/cache/html_purifier
+
 USER www-data
 CMD ["php", "bin/console", "queue:watch"]
 
