@@ -6,7 +6,7 @@ RUN docker-php-ext-install pcntl
 ENV PROJECT_FOLDER=/srv/annotations
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
-RUN composer --no-interaction install --no-suggest --no-dev
+RUN composer --no-interaction install --no-suggest --no-dev --no-autoloader
 
 # yes this is how you copy directories
 COPY bin/ /srv/annotations/bin/
