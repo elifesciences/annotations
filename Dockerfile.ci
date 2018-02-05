@@ -10,7 +10,7 @@ COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreade
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
 USER root
-RUN composer --no-interaction install --no-suggest
+RUN composer --no-interaction install --no-suggest --classmap-authoritative
 
 USER www-data
 COPY tests/ /srv/annotations/tests/
