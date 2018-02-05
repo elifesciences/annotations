@@ -8,7 +8,7 @@ COPY curl_fpm /srv/bin/
 ENV PROJECT_FOLDER=/srv/annotations
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
-RUN composer --no-interaction install --no-suggest --no-dev
+RUN composer --no-interaction install --no-suggest --no-dev --classmap-authoritative
 
 # yes this is how you copy directories
 COPY bin/ /srv/annotations/bin/
