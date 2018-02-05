@@ -8,7 +8,7 @@ COPY curl_fpm /srv/bin/
 ENV PROJECT_FOLDER=/srv/annotations
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
-RUN composer --no-interaction install --no-suggest --no-dev --classmap-authoritative
+RUN composer --no-interaction install --no-suggest --no-dev
 
 # yes this is how you copy directories
 COPY bin/ /srv/annotations/bin/
@@ -16,6 +16,7 @@ COPY config/ /srv/annotations/config/
 COPY src/ /srv/annotations/src/
 COPY web/ /srv/annotations/web/
 COPY smoke_tests_fpm.sh /srv/annotations/
+RUN composer dump-autoload --classmap-authoritative
 
 RUN mkdir -p var/logs && chown www-data:www-data var/logs
 RUN mkdir -p var/cache/html_purifier && chown www-data:www-data var/cache/html_purifier
