@@ -10,7 +10,6 @@ WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
 RUN composer --no-interaction install --no-suggest --no-dev
 
-# TODO: remove phpunit.xml.dist from here?
 # yes this is how you copy directories
 COPY bin/ /srv/annotations/bin/
 COPY config/ /srv/annotations/config/
