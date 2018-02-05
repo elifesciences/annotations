@@ -16,4 +16,4 @@ USER www-data
 COPY tests/ /srv/annotations/tests/
 COPY .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
 
-CMD ["/bin/bash", "project_tests.sh"]
+CMD ["/bin/bash"]
