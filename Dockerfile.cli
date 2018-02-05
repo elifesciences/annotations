@@ -3,6 +3,7 @@ FROM elifesciences/php_cli:20180129144044
 USER root
 RUN docker-php-ext-install pcntl
 
+ENV PROJECT_FOLDER=/srv/annotations
 WORKDIR /srv/annotations
 COPY composer.json composer.lock /srv/annotations/
 # could probably use --no-dev and other optimizations,
