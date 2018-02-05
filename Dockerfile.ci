@@ -13,8 +13,8 @@ USER root
 RUN composer --no-interaction install --no-suggest --no-autoloader
 
 COPY tests/ /srv/annotations/tests/
-RUN composer dump-autoload --classmap-authoritative
 COPY .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
+RUN composer dump-autoload --classmap-authoritative
 
 USER www-data
 CMD ["/bin/bash"]
