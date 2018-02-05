@@ -15,7 +15,6 @@ RUN composer install
 COPY bin/ /srv/annotations/bin/
 COPY config/ /srv/annotations/config/
 COPY src/ /srv/annotations/src/
-COPY tests/ /srv/annotations/tests/
 COPY web/ /srv/annotations/web/
 COPY smoke_tests_cli.sh /srv/annotations/
 
