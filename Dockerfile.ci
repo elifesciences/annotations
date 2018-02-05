@@ -3,9 +3,6 @@ FROM elifesciences/proofreader-php:latest AS proofreader
 FROM elifesciences/annotations_cli:${commit}
 USER root
 
-# extract into another image
-RUN git clone https://github.com/asm89/smoke.sh /opt/smoke.sh
-
 RUN mkdir -p build && chown www-data:www-data build
 
 USER elife
