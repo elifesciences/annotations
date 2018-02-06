@@ -5,6 +5,7 @@ RUN docker-php-ext-install pcntl
 
 USER elife
 ENV PROJECT_FOLDER=/srv/annotations
+#ENV PHP_ENTRYPOINT=web/app.php
 RUN mkdir ${PROJECT_FOLDER}
 WORKDIR /srv/annotations
 COPY --chown=elife:elife composer.json composer.lock /srv/annotations/
