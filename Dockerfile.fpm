@@ -2,9 +2,6 @@ FROM elifesciences/php_fpm:fb9dfb5dd1c658496d133efba92c731f003b1cf3
 
 USER root
 RUN docker-php-ext-install pcntl
-# TODO: move in base image
-RUN apt-get update && apt-get install libfcgi0ldbl
-COPY --chown=elife:elife curl_fpm /srv/bin/
 
 USER elife
 ENV PROJECT_FOLDER=/srv/annotations
