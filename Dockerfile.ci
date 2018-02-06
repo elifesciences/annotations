@@ -1,19 +1,18 @@
 ARG commit=develop
 FROM elifesciences/proofreader-php:latest AS proofreader
 FROM elifesciences/annotations_cli:${commit}
-USER root
 
+USER root
 RUN mkdir -p build && chown www-data:www-data build
 
 USER elife
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
-USER root
 RUN composer --no-interaction install --no-suggest --no-autoloader
 
-COPY tests/ /srv/annotations/tests/
-COPY .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
+COPY --chown=elife:elife tests/ /srv/annotations/tests/
+COPY --chown=elife:elife .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
 RUN composer dump-autoload --classmap-authoritative
 
 USER www-data
