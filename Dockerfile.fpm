@@ -4,7 +4,7 @@ USER root
 RUN docker-php-ext-install pcntl
 # TODO: move in base image
 RUN apt-get update && apt-get install libfcgi0ldbl
-COPY curl_fpm /srv/bin/
+COPY --chown=elife:elife curl_fpm /srv/bin/
 
 USER elife
 ENV PROJECT_FOLDER=/srv/annotations
