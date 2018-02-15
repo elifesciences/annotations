@@ -9,11 +9,10 @@ USER elife
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
-RUN composer --no-interaction install --no-suggest --no-autoloader
-
+RUN composer-install
 COPY --chown=elife:elife tests/ /srv/annotations/tests/
 COPY --chown=elife:elife .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
-RUN composer dump-autoload --classmap-authoritative
+RUN composer-post
 
 USER www-data
 CMD ["/bin/bash"]
