@@ -1,15 +1,15 @@
-FROM elifesciences/php_cli:20180129144044
+FROM elifesciences/php_cli:d83fc4714914898b0842199578e1cc88d9feab2a
 
 USER root
 RUN docker-php-ext-install pcntl
 
 USER elife
 ENV PROJECT_FOLDER=/srv/annotations
+ENV PHP_ENTRYPOINT=web/app.php
 RUN mkdir ${PROJECT_FOLDER}
 WORKDIR /srv/annotations
 COPY --chown=elife:elife composer.json composer.lock /srv/annotations/
-# TODO: extract into standard script in base image
-RUN composer --no-interaction install --no-suggest --no-dev --no-autoloader
+RUN composer-install
 
 # yes this is how you copy directories
 COPY --chown=elife:elife bin/ /srv/annotations/bin/
@@ -17,8 +17,7 @@ COPY --chown=elife:elife config/ /srv/annotations/config/
 COPY --chown=elife:elife src/ /srv/annotations/src/
 COPY --chown=elife:elife web/ /srv/annotations/web/
 COPY --chown=elife:elife smoke_tests_cli.sh /srv/annotations/
-# TODO: extract into standard script in base image
-RUN composer dump-autoload --no-dev --classmap-authoritative
+RUN composer-post
 
 RUN mkdir -p var/logs var/cache/html_purifier 
 USER root
