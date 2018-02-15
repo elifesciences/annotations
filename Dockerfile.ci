@@ -1,6 +1,7 @@
 ARG commit=develop
 FROM elifesciences/proofreader-php:latest AS proofreader
 FROM elifesciences/annotations_cli:${commit}
+ENV DEBUG=1
 
 USER root
 RUN mkdir -p build && chown www-data:www-data build
