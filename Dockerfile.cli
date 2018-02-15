@@ -1,4 +1,4 @@
-FROM elifesciences/php_cli:fb9dfb5dd1c658496d133efba92c731f003b1cf3
+FROM elifesciences/php_cli:d83fc4714914898b0842199578e1cc88d9feab2a
 
 USER root
 RUN docker-php-ext-install pcntl
