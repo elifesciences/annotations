@@ -43,8 +43,10 @@
         "symfony/psr-http-message-bridge": "^1.0",
         "zendframework/zend-diactoros": "^1.6"
     },
-    "suggest": {
-        "mtdowling/jmespath.php": "^2.4, to use the Result::search() method"
+    "replace": {
+        "paragonie/random_compat": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php70": "*"
     },
     "extra": {
         "branch-alias": {
