@@ -6,7 +6,6 @@ use ArrayIterator;
 use BadMethodCallException;
 use Iterator;
 use IteratorAggregate;
-use function JmesPath\search;
 
 final class ArrayResult implements IteratorAggregate, Result
 {
@@ -20,15 +19,6 @@ final class ArrayResult implements IteratorAggregate, Result
     public function toArray() : array
     {
         return $this->data;
-    }
-
-    public function search(string $expression)
-    {
-        if (false === function_exists('JmesPath\search')) {
-            throw new BadMethodCallException('Requires mtdowling/jmespath.php');
-        }
-
-        return search($expression, $this->data);
     }
 
     public function offsetExists($offset) : bool

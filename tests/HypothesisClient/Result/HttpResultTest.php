@@ -54,14 +54,6 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_can_be_searched()
-    {
-        $this->assertEquals(array_pop($this->data['one']), $this->result->search('one[1]'));
-    }
-
-    /**
-     * @test
-     */
     public function it_can_be_counted()
     {
         $this->assertInstanceOf(Countable::class, $this->result);

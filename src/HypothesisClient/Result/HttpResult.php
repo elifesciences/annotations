@@ -38,11 +38,6 @@ final class HttpResult implements IteratorAggregate, Result
         return $this->response;
     }
 
-    public function search(string $expression)
-    {
-        return $this->result->search($expression);
-    }
-
     public function offsetExists($offset) : bool
     {
         return isset($this->result[$offset]);
