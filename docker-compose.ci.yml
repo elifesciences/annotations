@@ -75,7 +75,6 @@ services:
         volumes:
             - ./build:/srv/annotations/build
             - ./config/container.php:/srv/annotations/config.php
-            - .php_cs.cache:/srv/annotations/.php_cs.cache
         env_file:
             - dev.env
         depends_on:
