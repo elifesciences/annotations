@@ -38,7 +38,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
             $this->document = new Annotation\Document('title'),
             $this->target = new Annotation\Target('source'),
             'uri',
-            null,
+            [],
             $this->permissions = new Annotation\Permissions('read')
         );
     }
@@ -69,7 +69,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
                 )
             ),
             'uri',
-            null,
+            [],
             $this->permissions = new Annotation\Permissions('read')
         );
         $with = $this->annotation;

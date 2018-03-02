@@ -232,7 +232,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                         'https://elifesciences.org/articles/10627'
                     ),
                     'https://elifesciences.org/articles/10627',
-                    null,
+                    [],
                     new Annotation\Permissions('group:__world__')
                 ),
             ],

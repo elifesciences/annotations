@@ -145,7 +145,7 @@ class SearchTest extends PHPUnit_Framework_TestCase
                 new Annotation\Document('title1'),
                 new Annotation\Target('source1'),
                 'uri1',
-                null,
+                [],
                 new Annotation\Permissions('read')
             ),
             new Annotation(
