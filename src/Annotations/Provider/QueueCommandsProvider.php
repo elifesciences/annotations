@@ -16,11 +16,6 @@ use ReflectionClass;
 
 class QueueCommandsProvider implements ServiceProviderInterface
 {
-    /**
-     * Registers the annotations service console commands.
-     *
-     * @param Container $container
-     */
     public function register(Container $container)
     {
         if (!isset($container['console'])) {

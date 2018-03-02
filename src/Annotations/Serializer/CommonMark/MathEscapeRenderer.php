@@ -8,7 +8,6 @@ use League\CommonMark\Util\Xml;
 
 class MathEscapeRenderer implements ElementRendererInterface
 {
-    /** @var ElementRendererInterface */
     private $renderer;
 
     public function __construct(ElementRendererInterface $renderer)

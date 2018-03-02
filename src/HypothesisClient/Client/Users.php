@@ -35,10 +35,6 @@ final class Users
 
     /**
      * Upsert the user by create first then, if user already detected, update.
-     *
-     * @param User $user
-     *
-     * @return PromiseInterface
      */
     public function upsert(User $user) : PromiseInterface
     {
