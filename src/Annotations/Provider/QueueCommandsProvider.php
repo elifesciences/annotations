@@ -14,7 +14,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use ReflectionClass;
 
-class QueueCommandsProvider implements ServiceProviderInterface
+final class QueueCommandsProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {

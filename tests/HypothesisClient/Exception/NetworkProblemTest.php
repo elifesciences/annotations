@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @covers \eLife\HypothesisClient\Exception\NetworkProblem
  */
-class NetworkProblemTest extends PHPUnit_Framework_TestCase
+final class NetworkProblemTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

@@ -9,7 +9,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\HypothesisClient\Clock\FixedClock
  */
-class FixedClockTest extends PHPUnit_Framework_TestCase
+final class FixedClockTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

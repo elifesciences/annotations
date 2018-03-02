@@ -17,7 +17,7 @@ use function Eris\Generator\vector;
 /**
  * @covers \eLife\HypothesisClient\HttpClient\BatchingHttpClient
  */
-class BatchingHttpClientTest extends PHPUnit_Framework_TestCase
+final class BatchingHttpClientTest extends PHPUnit_Framework_TestCase
 {
     use TestTrait;
 

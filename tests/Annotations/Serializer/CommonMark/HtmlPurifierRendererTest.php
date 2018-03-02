@@ -11,7 +11,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\HtmlPurifierRenderer
  */
-class HtmlPurifierRendererTest extends PHPUnit_Framework_TestCase
+final class HtmlPurifierRendererTest extends PHPUnit_Framework_TestCase
 {
     private $abstractBlock;
     /** @var HtmlPurifierRenderer */

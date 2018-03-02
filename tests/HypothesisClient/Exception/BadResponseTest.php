@@ -13,7 +13,7 @@ use TypeError;
 /**
  * @covers \eLife\HypothesisClient\Exception\BadResponse
  */
-class BadResponseTest extends PHPUnit_Framework_TestCase
+final class BadResponseTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

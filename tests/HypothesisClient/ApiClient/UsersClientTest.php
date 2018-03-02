@@ -30,15 +30,7 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpClient()
     {
-        $this->credentials = $this->getMockBuilder(UserManagementCredentials::class)
-            ->setConstructorArgs(['client_id', 'secret_key', 'authority'])
-            ->getMock();
-        $this->credentials
-            ->method('getAuthorizationBasic')
-            ->willReturn('Basic '.base64_encode('client_id:secret_key'));
-        $this->credentials
-            ->method('getAuthority')
-            ->willReturn('authority');
+        $this->credentials = new UserManagementCredentials('client_id', 'secret_key', 'authority');
         $this->httpClient = $this->createMock(HttpClient::class);
         $this->usersClient = new UsersClient(
             $this->httpClient,

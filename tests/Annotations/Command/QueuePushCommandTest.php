@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @covers \eLife\Annotations\Command\QueuePushCommand
  */
-class QueuePushCommandTest extends PHPUnit_Framework_TestCase
+final class QueuePushCommandTest extends PHPUnit_Framework_TestCase
 {
     /** @var Application */
     private $application;

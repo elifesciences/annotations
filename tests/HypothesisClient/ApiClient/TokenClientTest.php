@@ -3,7 +3,7 @@
 namespace tests\eLife\HypothesisClient\HttpClient;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
-use eLife\HypothesisClient\Clock\SystemClock;
+use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
@@ -17,7 +17,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
  */
 final class TokenClientTest extends PHPUnit_Framework_TestCase
 {
-    private $clock;
+    /** @var JWTSigningCredentials */
     private $credentials;
     private $httpClient;
     /** @var TokenClient */
@@ -28,9 +28,7 @@ final class TokenClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpClient()
     {
-        $this->credentials = $this->getMockBuilder(JWTSigningCredentials::class)
-            ->setConstructorArgs(['client_id', 'secret_key', 'authority', new SystemClock(), 600])
-            ->getMock();
+        $this->credentials = new JWTSigningCredentials('client_id', 'secret_key', 'authority', new FixedClock(), 600);
         $this->httpClient = $this->createMock(HttpClient::class);
         $this->tokenClient = new TokenClient(
             $this->httpClient,
@@ -44,17 +42,13 @@ final class TokenClientTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_claim_a_token()
     {
-        $this->credentials
-            ->method('getJWT')
-            ->with('username')
-            ->willReturn('jwt');
         $request = new Request(
             'POST',
             'token',
             ['X-Foo' => 'bar', 'User-Agent' => 'HypothesisClient'],
             http_build_query([
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                'assertion' => 'jwt',
+                'assertion' => $this->credentials->getJWT('username'),
             ])
         );
         $response = new FulfilledPromise(new ArrayResult(['foo' => ['bar', 'baz']]));

@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiTimeout
  */
-class ApiTimeoutTest extends PHPUnit_Framework_TestCase
+final class ApiTimeoutTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

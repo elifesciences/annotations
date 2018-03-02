@@ -11,7 +11,7 @@ use TypeError;
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiException
  */
-class ApiExceptionTest extends PHPUnit_Framework_TestCase
+final class ApiExceptionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

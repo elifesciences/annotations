@@ -2,7 +2,7 @@
 
 namespace eLife\HypothesisClient\Clock;
 
-class FixedClock implements Clock
+final class FixedClock implements Clock
 {
     private $fixed_time;
 

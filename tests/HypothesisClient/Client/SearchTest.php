@@ -18,7 +18,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
 /**
  * @covers \eLife\HypothesisClient\Client\Search
  */
-class SearchTest extends PHPUnit_Framework_TestCase
+final class SearchTest extends PHPUnit_Framework_TestCase
 {
     private $denormalizer;
     private $group;

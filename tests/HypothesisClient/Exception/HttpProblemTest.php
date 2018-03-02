@@ -12,7 +12,7 @@ use TypeError;
 /**
  * @covers \eLife\HypothesisClient\Exception\HttpProblem
  */
-class HttpProblemTest extends PHPUnit_Framework_TestCase
+final class HttpProblemTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
