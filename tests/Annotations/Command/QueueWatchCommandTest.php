@@ -21,6 +21,7 @@ use eLife\HypothesisClient\Credentials\UserManagementCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use eLife\Logging\Monitoring;
+use Exception;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit_Framework_TestCase;
@@ -97,6 +98,22 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->queue->count());
         $this->commandTesterExecute();
         $this->assertEquals(0, $this->queue->count());
+    }
+
+    /**
+     * @test
+     */
+    public function it_retries_failures()
+    {
+        $this->transformer
+            ->expects($this->once())
+            ->method('transform')
+            ->will($this->throwException(new Exception()));
+        $this->prepareCommandTester();
+        $this->queue->enqueue(new InternalSqsMessage('profile', 'username'));
+        $this->assertEquals(1, $this->queue->count());
+        $this->commandTesterExecute();
+        $this->assertEquals(1, $this->queue->count());
     }
 
     /**

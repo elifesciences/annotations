@@ -600,12 +600,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/bus-sdk-php.git",
-                "reference": "721aad836fac8ff621cb1471f17cb1bb39bb4a0f"
+                "reference": "8e8a21ba42b8ad367e84877236109c440b6c9615"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/bus-sdk-php/zipball/721aad836fac8ff621cb1471f17cb1bb39bb4a0f",
-                "reference": "721aad836fac8ff621cb1471f17cb1bb39bb4a0f",
+                "url": "https://api.github.com/repos/elifesciences/bus-sdk-php/zipball/8e8a21ba42b8ad367e84877236109c440b6c9615",
+                "reference": "8e8a21ba42b8ad367e84877236109c440b6c9615",
                 "shasum": ""
             },
             "require": {
@@ -618,7 +618,7 @@
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.0",
+                "phpunit/phpunit": "^5.7.1 || ^6.0",
                 "symfony/console": "^2.7 || ^3.2"
             },
             "suggest": {
@@ -640,7 +640,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences Bus SDK",
-            "time": "2017-11-16T13:04:40+00:00"
+            "time": "2018-03-01T11:45:31+00:00"
         },
         {
             "name": "elife/content-negotiator",
