@@ -114,10 +114,10 @@ abstract class ApiTestCase extends TestCase
     {
         for ($i = 1; $i <= $total; ++$i) {
             // Allow a variety of annotation structures to be present, without being random.
-            $updated = ($i % 2 === 0);
+            $updated = (0 === $i % 2);
             $text = ($i % 4 > 0);
             $highlight = !$text ? true : (($i + 1) % 4 > 0);
-            $ancestors = ($i % 3 === 0) ? ($i % 7) + 1 : 0;
+            $ancestors = (0 === $i % 3) ? ($i % 7) + 1 : 0;
             yield $this->createAnnotation($i, $updated, $text, $highlight, $ancestors);
         }
     }
