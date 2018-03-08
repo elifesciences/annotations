@@ -1,12 +1,17 @@
 <?php
 
-$finder = Symfony\CS\Finder\DefaultFinder::create()
+$finder = PhpCsFixer\Finder::create()
     ->exclude('var')
-    ->name('console')
+    ->in(__DIR__)
 ;
 
-return Symfony\CS\Config\Config::create()
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
-    ->fixers(['-empty_return', 'ordered_use'])
-    ->finder($finder)
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        // not sure what should be the equivalent
+        //'empty_return' => false,
+        'ordered_imports' => true,
+        'return_type_declaration' => ['space_before' => 'one'],
+    ])
+    ->setFinder($finder)
 ;
