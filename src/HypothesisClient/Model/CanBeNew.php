@@ -6,7 +6,7 @@ trait CanBeNew
 {
     protected $new = false;
 
-    public function isNew(): bool
+    public function isNew() : bool
     {
         return $this->new;
     }
