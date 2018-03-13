@@ -2,6 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('var')
+    ->name('console')
     ->in(__DIR__)
 ;
 
