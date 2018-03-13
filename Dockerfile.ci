@@ -1,6 +1,5 @@
 ARG commit=develop
-# TODO: should be :0.2
-FROM elifesciences/proofreader-php AS proofreader
+FROM elifesciences/proofreader-php:0.2 AS proofreader
 FROM elifesciences/annotations_cli:${commit}
 ENV DEBUG=1
 
