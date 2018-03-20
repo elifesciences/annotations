@@ -4,5 +4,5 @@ namespace eLife\HypothesisClient\Clock;
 
 interface Clock
 {
-    public function time() :int;
+    public function time() : int;
 }

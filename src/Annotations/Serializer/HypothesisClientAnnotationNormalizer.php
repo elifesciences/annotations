@@ -37,7 +37,7 @@ final class HypothesisClientAnnotationNormalizer implements NormalizerInterface
 
         $data = [
             'id' => $object->getId(),
-            'access' => ($object->getPermissions()->getRead() === Annotation::PUBLIC_GROUP) ? 'public' : 'restricted',
+            'access' => (Annotation::PUBLIC_GROUP === $object->getPermissions()->getRead()) ? 'public' : 'restricted',
             'created' => $created,
             'document' => [
                 'title' => $object->getDocument()->getTitle(),

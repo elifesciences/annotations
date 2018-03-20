@@ -73,6 +73,7 @@ services:
             dockerfile: Dockerfile.ci
         image: elifesciences/annotations_ci:${IMAGE_TAG}
         volumes:
+            # TODO: stop doing this and use docker-compose cp or similar to retrieve artifacts
             - ./build:/srv/annotations/build
             - ./config/container.php:/srv/annotations/config.php
         env_file:

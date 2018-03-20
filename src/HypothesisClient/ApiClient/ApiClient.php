@@ -2,7 +2,6 @@
 
 namespace eLife\HypothesisClient\ApiClient;
 
-use eLife\HypothesisClient\HttpClient\HttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\UriInterface;
