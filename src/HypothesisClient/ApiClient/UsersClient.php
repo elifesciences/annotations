@@ -21,17 +21,9 @@ final class UsersClient
         $this->credentials = $credentials;
     }
 
-    /**
-     * @return UserManagementCredentials|null
-     */
-    private function getCredentials()
-    {
-        return $this->credentials;
-    }
-
     private function getAuthorizationBasic() : array
     {
-        return ($this->getCredentials() instanceof UserManagementCredentials) ? ['Authorization' => $this->getCredentials()->getAuthorizationBasic()] : [];
+        return ($this->credentials instanceof UserManagementCredentials) ? ['Authorization' => $this->credentials->getAuthorizationBasic()] : [];
     }
 
     public function getUser(
@@ -59,7 +51,7 @@ final class UsersClient
             ]),
             $this->getAuthorizationBasic() + $headers,
             json_encode([
-                'authority' => $this->getCredentials()->getAuthority(),
+                'authority' => $this->credentials->getAuthority(),
                 'username' => $username,
                 'email' => $email,
                 'display_name' => $display_name,

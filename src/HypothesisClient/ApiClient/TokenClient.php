@@ -21,19 +21,11 @@ final class TokenClient
         $this->credentials = $credentials;
     }
 
-    /**
-     * @return JWTSigningCredentials|null
-     */
-    private function getCredentials()
-    {
-        return $this->credentials;
-    }
-
     public function getToken(
         array $headers,
         string $username
     ) : PromiseInterface {
-        $jwt = $this->getCredentials()->getJWT($username);
+        $jwt = $this->credentials->getJWT($username);
 
         return $this->postRequest(
             Uri::fromParts([
