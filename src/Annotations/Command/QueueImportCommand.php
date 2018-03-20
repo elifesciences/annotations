@@ -63,7 +63,7 @@ final class QueueImportCommand extends Command
         $this->output = $output;
         $entity = $input->getArgument('entity');
         // Only the configured.
-        if ($entity !== 'all' && !in_array($entity, self::$supports)) {
+        if ('all' !== $entity && !in_array($entity, self::$supports)) {
             $message = sprintf('Entity with name "%s" not supported.', $entity);
             $this->logger->error($message);
             $io->error($message);
@@ -73,7 +73,7 @@ final class QueueImportCommand extends Command
         try {
             $this->monitoring->nameTransaction($this->getName());
             $this->monitoring->startTransaction();
-            $entities = ($entity === 'all') ? self::$supports : [$entity];
+            $entities = ('all' === $entity) ? self::$supports : [$entity];
             foreach ($entities as $e) {
                 $this->{'import'.ucfirst($e)}();
             }
@@ -112,7 +112,7 @@ final class QueueImportCommand extends Command
             $progress->advance();
             try {
                 $item = $items->current();
-                if ($item === null) {
+                if (null === $item) {
                     $items->next();
                     continue;
                 }

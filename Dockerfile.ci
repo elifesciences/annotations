@@ -1,10 +1,11 @@
 ARG commit=develop
-FROM elifesciences/proofreader-php:latest AS proofreader
+FROM elifesciences/proofreader-php:0.2 AS proofreader
 FROM elifesciences/annotations_cli:${commit}
 ENV DEBUG=1
 
 USER root
-RUN mkdir -p build && chown www-data:www-data build
+RUN mkdir -p build && chown www-data:www-data build && \
+    touch .php_cs.cache && chown www-data:www-data .php_cs.cache
 
 USER elife
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
