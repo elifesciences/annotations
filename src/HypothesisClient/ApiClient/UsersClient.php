@@ -16,14 +16,13 @@ final class UsersClient
 
     public function __construct(HttpClient $httpClient, UserManagementCredentials $credentials = null, array $headers = [])
     {
+        if ($credentials) {
+            $headers['Authorization'] = $credentials->getAuthorizationBasic();
+        }
+
         $this->httpClient = new UserAgentPrependingHttpClient($httpClient, 'HypothesisClient');
         $this->headers = $headers;
         $this->credentials = $credentials;
-    }
-
-    private function getAuthorizationBasic() : array
-    {
-        return ($this->credentials instanceof UserManagementCredentials) ? ['Authorization' => $this->credentials->getAuthorizationBasic()] : [];
     }
 
     public function getUser(
@@ -34,7 +33,7 @@ final class UsersClient
             Uri::fromParts([
                 'path' => 'users/'.$username,
             ]),
-            $this->getAuthorizationBasic() + $headers,
+            $headers,
             '{}'
         );
     }
@@ -49,7 +48,7 @@ final class UsersClient
             Uri::fromParts([
                 'path' => 'users',
             ]),
-            $this->getAuthorizationBasic() + $headers,
+            $headers,
             json_encode([
                 'authority' => $this->credentials->getAuthority(),
                 'username' => $username,
@@ -69,7 +68,7 @@ final class UsersClient
             Uri::fromParts([
                 'path' => 'users/'.$username,
             ]),
-            $this->getAuthorizationBasic() + $headers,
+            $headers,
             json_encode(array_filter([
                 'email' => $email,
                 'display_name' => $display_name,
