@@ -20,7 +20,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
 /**
  * @covers \eLife\HypothesisClient\Client\Users
  */
-class UsersTest extends PHPUnit_Framework_TestCase
+final class UsersTest extends PHPUnit_Framework_TestCase
 {
     private $authority;
     private $authorization;

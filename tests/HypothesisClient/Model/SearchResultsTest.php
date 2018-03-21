@@ -29,7 +29,7 @@ final class SearchResultsTest extends PHPUnit_Framework_TestCase
                 new Annotation\Document('title'),
                 new Annotation\Target('source'),
                 'uri',
-                null,
+                [],
                 new Annotation\Permissions('read')
             ),
         ];

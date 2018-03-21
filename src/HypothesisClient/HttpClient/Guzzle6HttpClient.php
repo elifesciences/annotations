@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\default_user_agent;
 use function GuzzleHttp\Promise\exception_for;
 
-class Guzzle6HttpClient implements HttpClient
+final class Guzzle6HttpClient implements HttpClient
 {
     private $client;
 

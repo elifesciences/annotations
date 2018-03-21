@@ -39,14 +39,6 @@ final class ArrayResultTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_can_be_searched()
-    {
-        $this->assertSame(array_pop($this->data['foo']), $this->result->search('foo[1]'));
-    }
-
-    /**
-     * @test
-     */
     public function it_can_be_counted()
     {
         $this->assertInstanceOf(Countable::class, $this->result);

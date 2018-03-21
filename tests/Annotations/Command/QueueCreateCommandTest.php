@@ -16,7 +16,7 @@ use Symfony\Component\Debug\BufferingLogger;
 /**
  * @covers \eLife\Annotations\Command\QueueCreateCommand
  */
-class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
+final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
 {
     /** @var Application */
     private $application;

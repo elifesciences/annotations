@@ -20,21 +20,13 @@ use Symfony\Component\Serializer\Serializer;
 
 final class ApiSdk
 {
-    /** @var string */
     private $group;
-    /** @var HttpClient */
     private $httpClient;
-    /** @var JWTSigningCredentials */
     private $jwtSigning;
-    /** @var Search */
     private $search;
-    /** @var Serializer */
     private $serializer;
-    /** @var Token */
     private $token;
-    /** @var Users */
     private $users;
-    /** @var UserManagementCredentials */
     private $userManagement;
 
     public function __construct(HttpClient $httpClient, UserManagementCredentials $userManagement = null, JWTSigningCredentials $jwtSigning, string $group = '__world__')

@@ -10,7 +10,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\HypothesisClient\Exception\NetworkProblem
  */
-class NetworkProblemTest extends PHPUnit_Framework_TestCase
+final class NetworkProblemTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

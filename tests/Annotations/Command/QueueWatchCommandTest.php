@@ -34,7 +34,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
 /**
  * @covers \eLife\Annotations\Command\QueueWatchCommand
  */
-class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
+final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
 {
     /** @var Application */
     private $application;

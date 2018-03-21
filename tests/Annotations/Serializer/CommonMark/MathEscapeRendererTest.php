@@ -10,7 +10,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\MathEscapeRenderer
  */
-class MathEscapeRendererTest extends PHPUnit_Framework_TestCase
+final class MathEscapeRendererTest extends PHPUnit_Framework_TestCase
 {
     private $abstractBlock;
     /** @var MathEscapeRenderer */

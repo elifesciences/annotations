@@ -22,26 +22,16 @@ final class Annotation
 
     /**
      * @internal
-     *
-     * @param string            $id
-     * @param string|null       $text
-     * @param DateTimeImmutable $created
-     * @param DateTimeImmutable $updated
-     * @param Document          $document
-     * @param Target            $target
-     * @param string            $uri
-     * @param array|null        $references
-     * @param $permissions
      */
     public function __construct(
         string $id,
-        $text,
+        string $text = null,
         DateTimeImmutable $created,
         DateTimeImmutable $updated,
         Document $document,
         Target $target,
         string $uri,
-        $references,
+        array $references,
         Permissions $permissions
     ) {
         $this->id = $id;
@@ -93,10 +83,7 @@ final class Annotation
         return $this->uri;
     }
 
-    /**
-     * @return array|null
-     */
-    public function getReferences()
+    public function getReferences() : array
     {
         return $this->references;
     }

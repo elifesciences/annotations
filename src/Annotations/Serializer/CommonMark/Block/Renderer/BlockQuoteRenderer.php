@@ -7,7 +7,7 @@ use League\CommonMark\Block\Element\BlockQuote;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class BlockQuoteRenderer implements BlockRendererInterface
+final class BlockQuoteRenderer implements BlockRendererInterface
 {
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {

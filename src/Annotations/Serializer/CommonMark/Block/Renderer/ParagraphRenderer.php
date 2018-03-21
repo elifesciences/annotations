@@ -7,7 +7,7 @@ use League\CommonMark\Block\Element\Paragraph;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class ParagraphRenderer implements BlockRendererInterface
+final class ParagraphRenderer implements BlockRendererInterface
 {
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {

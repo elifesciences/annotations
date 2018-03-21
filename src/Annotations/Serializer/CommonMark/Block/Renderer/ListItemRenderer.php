@@ -7,7 +7,7 @@ use League\CommonMark\Block\Element\ListItem;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 
-class ListItemRenderer implements BlockRendererInterface
+final class ListItemRenderer implements BlockRendererInterface
 {
     public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false)
     {

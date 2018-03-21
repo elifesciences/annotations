@@ -5,7 +5,7 @@ namespace eLife\HypothesisClient\Credentials;
 use eLife\HypothesisClient\Clock\Clock;
 use Firebase\JWT\JWT;
 
-class JWTSigningCredentials extends Credentials
+final class JWTSigningCredentials extends Credentials
 {
     private $clock;
     private $expire;

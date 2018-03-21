@@ -31,7 +31,7 @@ final class AnnotationDenormalizer implements DenormalizerInterface, Denormalize
             $data['document'],
             $data['target'],
             $data['uri'],
-            $data['references'] ?? null,
+            $data['references'] ?? [],
             $data['permissions']
         );
     }

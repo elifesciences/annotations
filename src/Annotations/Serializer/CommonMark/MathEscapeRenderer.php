@@ -6,9 +6,8 @@ use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\Util\Xml;
 
-class MathEscapeRenderer implements ElementRendererInterface
+final class MathEscapeRenderer implements ElementRendererInterface
 {
-    /** @var ElementRendererInterface */
     private $renderer;
 
     public function __construct(ElementRendererInterface $renderer)

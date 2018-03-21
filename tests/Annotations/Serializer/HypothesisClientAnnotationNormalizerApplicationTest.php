@@ -53,7 +53,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
             new Annotation\Document('title'),
             new Annotation\Target('source'),
             'uri',
-            null,
+            [],
             new Annotation\Permissions('read')
         );
 
@@ -144,7 +144,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -172,7 +172,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -207,7 +207,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -264,7 +264,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -324,7 +324,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -379,7 +379,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -499,7 +499,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -547,7 +547,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
                     new Annotation\Document('title'),
                     new Annotation\Target('source'),
                     'uri',
-                    null,
+                    [],
                     new Annotation\Permissions(Annotation::PUBLIC_GROUP)
                 ),
             ],
@@ -575,7 +575,7 @@ final class HypothesisClientAnnotationNormalizerApplicationTest extends Applicat
             new Annotation\Document('title'),
             new Annotation\Target('source'),
             'uri',
-            null,
+            [],
             new Annotation\Permissions(Annotation::PUBLIC_GROUP)
         );
         $expected = [

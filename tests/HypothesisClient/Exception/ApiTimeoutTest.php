@@ -10,7 +10,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiTimeout
  */
-class ApiTimeoutTest extends PHPUnit_Framework_TestCase
+final class ApiTimeoutTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

@@ -2,7 +2,7 @@
 
 namespace eLife\HypothesisClient\Credentials;
 
-class UserManagementCredentials extends Credentials
+final class UserManagementCredentials extends Credentials
 {
     public function getAuthorizationBasic() : string
     {

@@ -6,13 +6,11 @@ use HTMLPurifier;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\ElementRendererInterface;
 
-class HtmlPurifierRenderer implements ElementRendererInterface
+final class HtmlPurifierRenderer implements ElementRendererInterface
 {
     const ALLOW_TAGS = '<i><strong><sub><sup><span><del><a><br><caption>';
 
-    /** @var HTMLPurifier */
     private $htmlPurifier;
-    /** @var ElementRendererInterface */
     private $renderer;
 
     public function __construct(ElementRendererInterface $renderer, HTMLPurifier $htmlPurifier)

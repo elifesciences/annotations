@@ -10,7 +10,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * @covers \eLife\HypothesisClient\Credentials\JWTSigningCredentials
  */
-class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
+final class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

@@ -21,7 +21,7 @@ use Symfony\Component\Debug\BufferingLogger;
 /**
  * @covers \eLife\Annotations\Command\QueueImportCommand
  */
-class QueueImportCommandTest extends PHPUnit_Framework_TestCase
+final class QueueImportCommandTest extends PHPUnit_Framework_TestCase
 {
     /** @var ApiSdk */
     private $apiSdk;
