@@ -5,10 +5,9 @@ namespace tests\eLife\HypothesisClient\Exception;
 use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Exception\HttpProblem;
 use Exception;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use TypeError;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\BadResponse
@@ -20,14 +19,7 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_a_message()
     {
-        try {
-            $this->getMockBuilder(BadResponse::class)->getMock();
-            $this->fail('A message is required');
-        } catch (TypeError $error) {
-            $this->assertTrue(true, 'A message is required');
-            $this->assertContains('must be of the type string', $error->getMessage());
-        }
-        $e = new BadResponse('foo', $this->createMock(RequestInterface::class), $this->createMock(ResponseInterface::class));
+        $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response());
         $this->assertEquals('foo', $e->getMessage());
     }
 
@@ -36,17 +28,8 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_a_request()
     {
-        try {
-            $this->getMockBuilder(BadResponse::class)
-                ->setConstructorArgs(['foo'])
-                ->getMock();
-            $this->fail('A request is required');
-        } catch (TypeError $error) {
-            $this->assertTrue(true, 'A request is required');
-            $this->assertContains('none given', $error->getMessage());
-        }
-        $request = $this->createMock(RequestInterface::class);
-        $e = new BadResponse('foo', $request, $this->createMock(ResponseInterface::class));
+        $request = new Request('GET', 'http://www.example.com/');
+        $e = new BadResponse('foo', $request, new Response());
         $this->assertSame($request, $e->getRequest());
     }
 
@@ -55,17 +38,8 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_a_response()
     {
-        try {
-            $this->getMockBuilder(BadResponse::class)
-                ->setConstructorArgs(['foo', $this->createMock(RequestInterface::class)])
-                ->getMock();
-            $this->fail('A response is required');
-        } catch (TypeError $error) {
-            $this->assertTrue(true, 'A response is required');
-            $this->assertContains('none given', $error->getMessage());
-        }
-        $response = $this->createMock(ResponseInterface::class);
-        $e = new BadResponse('foo', $this->createMock(RequestInterface::class), $response);
+        $response = new Response();
+        $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), $response);
         $this->assertSame($response, $e->getResponse());
     }
 
@@ -74,7 +48,7 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_is_an_instance_of_http_problem()
     {
-        $e = new BadResponse('foo', $this->createMock(RequestInterface::class), $this->createMock(ResponseInterface::class));
+        $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response());
         $this->assertInstanceOf(HttpProblem::class, $e);
     }
 
@@ -83,7 +57,7 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_may_not_have_a_previous_exception()
     {
-        $e = new BadResponse('foo', $this->createMock(RequestInterface::class), $this->createMock(ResponseInterface::class));
+        $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response());
         $this->assertNull($e->getPrevious());
     }
 
@@ -92,8 +66,8 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
      */
     public function it_may_have_a_previous_exception()
     {
-        $previous = $this->createMock(Exception::class);
-        $e = new BadResponse('foo', $this->createMock(RequestInterface::class), $this->createMock(ResponseInterface::class), $previous);
+        $previous = new Exception('bar');
+        $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response(), $previous);
         $this->assertEquals($previous, $e->getPrevious());
     }
 }

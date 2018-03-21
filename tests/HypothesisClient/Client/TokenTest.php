@@ -4,7 +4,7 @@ namespace tests\eLife\HypothesisClient\Client;
 
 use eLife\HypothesisClient\ApiClient\TokenClient;
 use eLife\HypothesisClient\Client\Token;
-use eLife\HypothesisClient\Clock\SystemClock;
+use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Model\Token as ModelToken;
@@ -19,11 +19,12 @@ use tests\eLife\HypothesisClient\RequestConstraint;
 /**
  * @covers \eLife\HypothesisClient\Client\Token
  */
-class TokenTest extends PHPUnit_Framework_TestCase
+final class TokenTest extends PHPUnit_Framework_TestCase
 {
     private $authority;
     private $clientId;
     private $clientSecret;
+    /** @var JWTSigningCredentials */
     private $credentials;
     private $denormalizer;
     private $group;
@@ -42,9 +43,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
         $this->clientSecret = 'client_secret';
         $this->authority = 'authority';
         $this->group = 'group';
-        $this->credentials = $this->getMockBuilder(JWTSigningCredentials::class)
-            ->setConstructorArgs([$this->clientId, $this->clientSecret, $this->authority, new SystemClock()])
-            ->getMock();
+        $this->credentials = new JWTSigningCredentials($this->clientId, $this->clientSecret, $this->authority, new FixedClock());
         $this->denormalizer = $this->getMockBuilder(DenormalizerInterface::class)
             ->setMethods(['denormalize', 'supportsDenormalization'])
             ->getMock();
@@ -60,17 +59,13 @@ class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_will_get_a_token()
     {
-        $this->credentials
-            ->method('getJWT')
-            ->with('username')
-            ->willReturn('jwt');
         $request = new Request(
             'POST',
             'token',
             ['User-Agent' => 'HypothesisClient'],
             http_build_query([
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                'assertion' => 'jwt',
+                'assertion' => $this->credentials->getJWT('username'),
             ])
         );
         $response = new FulfilledPromise(new ArrayResult([

@@ -6,7 +6,7 @@ use eLife\Annotations\Command\QueueImportCommand;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\Result\HttpResult;
 use eLife\ApiSdk\ApiSdk;
-use eLife\Bus\Limit\Limit;
+use eLife\Bus\Limit\MockLimit;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Logging\Monitoring;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -50,7 +50,7 @@ class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->apiSdk = new ApiSdk($this->httpClient);
         $this->application = new Application();
-        $this->limit = $this->createMock(Limit::class);
+        $this->limit = new MockLimit();
         $this->logger = new BufferingLogger();
         $this->monitoring = new Monitoring();
         $this->queue = new WatchableQueueMock();

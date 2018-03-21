@@ -37,11 +37,7 @@ final class ApiSdkTest extends PHPUnit_Framework_TestCase
     {
         $httpClient = $this->getMockBuilder(HttpClient::class)
             ->getMock();
-        $userManagement = $this->getMockBuilder(UserManagementCredentials::class)
-            ->setConstructorArgs(['client_id', 'secret_key', 'authority'])
-            ->getMock();
-
-        $userManagement->expects($this->atLeastOnce())->method('getAuthorizationBasic')->willReturn('Basic '.base64_encode('client_id:secret_key'));
+        $userManagement = new UserManagementCredentials('client_id', 'secret_key', 'authority');
 
         $sdk = (new ApiSdk(
             $httpClient,
