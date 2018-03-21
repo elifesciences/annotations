@@ -48,7 +48,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_id()
     {
-        $this->assertEquals('id', $this->annotation->getId());
+        $this->assertSame('id', $this->annotation->getId());
     }
 
     /**
@@ -74,7 +74,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
         );
         $with = $this->annotation;
         $this->assertNull($without->getText());
-        $this->assertEquals('text', $with->getText());
+        $this->assertSame('text', $with->getText());
     }
 
     /**
@@ -82,7 +82,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_created_date()
     {
-        $this->assertEquals($this->created, $this->annotation->getCreatedDate());
+        $this->assertSame($this->created, $this->annotation->getCreatedDate());
     }
 
     /**
@@ -90,7 +90,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_updated_date()
     {
-        $this->assertEquals($this->updated, $this->annotation->getUpdatedDate());
+        $this->assertSame($this->updated, $this->annotation->getUpdatedDate());
     }
 
     /**
@@ -98,7 +98,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_document()
     {
-        $this->assertEquals($this->document, $this->annotation->getDocument());
+        $this->assertSame($this->document, $this->annotation->getDocument());
     }
 
     /**
@@ -106,7 +106,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_target()
     {
-        $this->assertEquals($this->target, $this->annotation->getTarget());
+        $this->assertSame($this->target, $this->annotation->getTarget());
     }
 
     /**
@@ -114,7 +114,7 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_uri()
     {
-        $this->assertEquals('uri', $this->annotation->getUri());
+        $this->assertSame('uri', $this->annotation->getUri());
     }
 
     /**
@@ -122,6 +122,6 @@ final class AnnotationTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_permissions()
     {
-        $this->assertEquals($this->permissions, $this->annotation->getPermissions());
+        $this->assertSame($this->permissions, $this->annotation->getPermissions());
     }
 }

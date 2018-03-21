@@ -26,6 +26,6 @@ final class PermissionsTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_read_permission()
     {
-        $this->assertEquals('read', $this->permissions->getRead());
+        $this->assertSame('read', $this->permissions->getRead());
     }
 }

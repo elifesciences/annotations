@@ -18,7 +18,7 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $user = new User('username', 'email@email.com', 'Display Name');
 
-        $this->assertEquals('username', $user->getUsername());
+        $this->assertSame('username', $user->getUsername());
     }
 
     /**
@@ -28,7 +28,7 @@ final class UserTest extends PHPUnit_Framework_TestCase
     {
         $user = new User('username', 'email@email.com', 'Display Name');
 
-        $this->assertEquals('username', $user->getUsername());
+        $this->assertSame('username', $user->getUsername());
     }
 
     /**

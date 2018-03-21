@@ -26,7 +26,7 @@ final class TextQuoteTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_exact_text()
     {
-        $this->assertEquals('exact', $this->textQuote->getExact());
+        $this->assertSame('exact', $this->textQuote->getExact());
     }
 
     /**
@@ -34,7 +34,7 @@ final class TextQuoteTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_prefix()
     {
-        $this->assertEquals('prefix', $this->textQuote->getPrefix());
+        $this->assertSame('prefix', $this->textQuote->getPrefix());
     }
 
     /**
@@ -42,6 +42,6 @@ final class TextQuoteTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_suffix()
     {
-        $this->assertEquals('suffix', $this->textQuote->getSuffix());
+        $this->assertSame('suffix', $this->textQuote->getSuffix());
     }
 }

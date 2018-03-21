@@ -20,7 +20,7 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
     public function it_requires_a_message()
     {
         $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response());
-        $this->assertEquals('foo', $e->getMessage());
+        $this->assertSame('foo', $e->getMessage());
     }
 
     /**
@@ -68,6 +68,6 @@ class BadResponseTest extends PHPUnit_Framework_TestCase
     {
         $previous = new Exception('bar');
         $e = new BadResponse('foo', new Request('GET', 'http://www.example.com/'), new Response(), $previous);
-        $this->assertEquals($previous, $e->getPrevious());
+        $this->assertSame($previous, $e->getPrevious());
     }
 }

@@ -69,7 +69,7 @@ class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->willReturn($this->prepareMockResponse(5));
         $this->commandTesterExecute('all');
-        $this->assertEquals(5, $this->queue->count());
+        $this->assertSame(5, $this->queue->count());
         $this->assertStringEndsWith('[OK] All entities queued.', trim($this->commandTester->getDisplay()));
     }
 
@@ -103,7 +103,7 @@ class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             [LogLevel::INFO, 'Item (profile, id0) enqueued successfully.', []],
             [LogLevel::INFO, 'All entities queued.', []],
         ];
-        $this->assertEquals($expected_logs, $this->logger->cleanLogs());
+        $this->assertSame($expected_logs, $this->logger->cleanLogs());
     }
 
     /**

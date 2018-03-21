@@ -40,7 +40,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_casts_to_any_array()
     {
-        $this->assertEquals($this->data, $this->result->toArray());
+        $this->assertSame($this->data, $this->result->toArray());
     }
 
     /**
@@ -48,7 +48,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_response()
     {
-        $this->assertEquals($this->response, $this->result->getResponse());
+        $this->assertSame($this->response, $this->result->getResponse());
     }
 
     /**
@@ -56,7 +56,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_can_be_searched()
     {
-        $this->assertEquals(array_pop($this->data['one']), $this->result->search('one[1]'));
+        $this->assertSame(array_pop($this->data['one']), $this->result->search('one[1]'));
     }
 
     /**
@@ -65,7 +65,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
     public function it_can_be_counted()
     {
         $this->assertInstanceOf(Countable::class, $this->result);
-        $this->assertEquals(count($this->data), $this->result->count());
+        $this->assertSame(count($this->data), $this->result->count());
     }
 
     /**
@@ -84,7 +84,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ArrayAccess::class, $this->result);
         $this->assertTrue($this->result->offsetExists('one'));
-        $this->assertEquals($this->data['one'], $this->result->offsetGet('one'));
+        $this->assertSame($this->data['one'], $this->result->offsetGet('one'));
     }
 
     /**

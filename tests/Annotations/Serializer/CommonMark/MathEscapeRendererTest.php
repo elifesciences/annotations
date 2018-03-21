@@ -37,7 +37,7 @@ class MathEscapeRendererTest extends PHPUnit_Framework_TestCase
         $this->renderer
             ->method('renderBlock')
             ->willReturn($rendered ?? $expected);
-        $this->assertEquals($expected, $this->mathEscapeRenderer->renderBlock($this->abstractBlock));
+        $this->assertSame($expected, $this->mathEscapeRenderer->renderBlock($this->abstractBlock));
     }
 
     public function mathMlAndLatexProvider()

@@ -18,7 +18,7 @@ class ApiExceptionTest extends PHPUnit_Framework_TestCase
     public function it_requires_a_message()
     {
         $e = new ApiException('foo');
-        $this->assertEquals('foo', $e->getMessage());
+        $this->assertSame('foo', $e->getMessage());
     }
 
     /**
@@ -27,7 +27,7 @@ class ApiExceptionTest extends PHPUnit_Framework_TestCase
     public function it_has_an_error_code_of_zero()
     {
         $e = new ApiException('foo');
-        $this->assertEquals(0, $e->getCode());
+        $this->assertSame(0, $e->getCode());
     }
 
     /**
@@ -55,6 +55,6 @@ class ApiExceptionTest extends PHPUnit_Framework_TestCase
     {
         $previous = new Exception('bar');
         $e = new ApiException('foo', $previous);
-        $this->assertEquals($previous, $e->getPrevious());
+        $this->assertSame($previous, $e->getPrevious());
     }
 }

@@ -26,7 +26,7 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_access_token()
     {
-        $this->assertEquals('access_token', $this->token->getAccessToken());
+        $this->assertSame('access_token', $this->token->getAccessToken());
     }
 
     /**
@@ -34,7 +34,7 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_token_type()
     {
-        $this->assertEquals('token_type', $this->token->getTokenType());
+        $this->assertSame('token_type', $this->token->getTokenType());
     }
 
     /**
@@ -42,7 +42,7 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_expires_in_value()
     {
-        $this->assertEquals(1000.99, $this->token->getExpiresIn());
+        $this->assertSame(1000.99, $this->token->getExpiresIn());
     }
 
     /**
@@ -50,6 +50,6 @@ final class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_refresh_token()
     {
-        $this->assertEquals('refresh_token', $this->token->getRefreshToken());
+        $this->assertSame('refresh_token', $this->token->getRefreshToken());
     }
 }
