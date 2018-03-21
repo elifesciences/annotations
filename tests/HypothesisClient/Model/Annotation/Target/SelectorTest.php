@@ -30,6 +30,6 @@ final class SelectorTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_text_quote()
     {
-        $this->assertEquals($this->textQuote, $this->selector->getTextQuote());
+        $this->assertSame($this->textQuote, $this->selector->getTextQuote());
     }
 }

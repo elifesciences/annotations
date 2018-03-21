@@ -57,6 +57,6 @@ final class TokenClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->tokenClient->getToken([], 'username'));
+        $this->assertSame($response, $this->tokenClient->getToken([], 'username'));
     }
 }

@@ -108,7 +108,7 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->usersClient->createUser([], 'userid', 'email@email.com', 'display_name'));
+        $this->assertSame($response, $this->usersClient->createUser([], 'userid', 'email@email.com', 'display_name'));
     }
 
     /**
@@ -128,7 +128,7 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->usersClient->updateUser([], 'userid', 'email@email.com'));
+        $this->assertSame($response, $this->usersClient->updateUser([], 'userid', 'email@email.com'));
     }
 
     /**
@@ -148,6 +148,6 @@ final class UsersClientTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($response, $this->usersClient->getUser([], 'user'));
+        $this->assertSame($response, $this->usersClient->getUser([], 'user'));
     }
 }

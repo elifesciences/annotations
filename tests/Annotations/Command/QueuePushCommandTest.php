@@ -45,7 +45,7 @@ class QueuePushCommandTest extends PHPUnit_Framework_TestCase
         $this->prepareCommandTester();
         $this->assertEmpty($this->queue->count());
         $this->commandTesterExecute('id', 'profiles');
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
         $this->assertEquals(new InternalSqsMessage('profiles', 'id'), $this->queue->dequeue());
     }
 
