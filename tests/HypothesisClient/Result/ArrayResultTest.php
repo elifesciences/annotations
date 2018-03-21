@@ -33,7 +33,7 @@ final class ArrayResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_casts_to_any_array()
     {
-        $this->assertEquals($this->data, $this->result->toArray());
+        $this->assertSame($this->data, $this->result->toArray());
     }
 
     /**
@@ -42,7 +42,7 @@ final class ArrayResultTest extends PHPUnit_Framework_TestCase
     public function it_can_be_counted()
     {
         $this->assertInstanceOf(Countable::class, $this->result);
-        $this->assertEquals(count($this->data), $this->result->count());
+        $this->assertSame(count($this->data), $this->result->count());
     }
 
     /**
@@ -61,7 +61,7 @@ final class ArrayResultTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ArrayAccess::class, $this->result);
         $this->assertTrue($this->result->offsetExists('foo'));
-        $this->assertEquals($this->data['foo'], $this->result->offsetGet('foo'));
+        $this->assertSame($this->data['foo'], $this->result->offsetGet('foo'));
     }
 
     /**

@@ -89,7 +89,7 @@ final class UsersTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->with(RequestConstraint::equalTo($request))
             ->willReturn($response);
-        $this->assertEquals($user, $this->usersAnonymous->get('username')->wait());
+        $this->assertSame($user, $this->usersAnonymous->get('username')->wait());
     }
 
     /**
@@ -125,7 +125,7 @@ final class UsersTest extends PHPUnit_Framework_TestCase
             ->willReturn($response);
         $createdUser = $this->users->create($user)->wait();
         $this->assertTrue($createdUser->isNew());
-        $this->assertEquals($expectedUser, $createdUser);
+        $this->assertSame($expectedUser, $createdUser);
     }
 
     /**

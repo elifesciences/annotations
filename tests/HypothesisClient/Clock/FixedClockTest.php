@@ -18,6 +18,6 @@ final class FixedClockTest extends PHPUnit_Framework_TestCase
     {
         $clock = new FixedClock(1000);
         $this->assertInstanceOf(Clock::class, $clock);
-        $this->assertEquals(1000, $clock->time());
+        $this->assertSame(1000, $clock->time());
     }
 }

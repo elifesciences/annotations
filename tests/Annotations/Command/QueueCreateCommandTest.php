@@ -48,7 +48,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareCommandTester();
         $this->mockNewQueueExpectation('newQueue');
-        $this->assertEquals('[OK] Queue "newQueue" created successfully.', trim($this->commandTester->getDisplay()));
+        $this->assertSame('[OK] Queue "newQueue" created successfully.', trim($this->commandTester->getDisplay()));
     }
 
     /**
@@ -61,7 +61,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
         $expected_logs = [
             [LogLevel::INFO, 'Queue "newQueue" created successfully.', []],
         ];
-        $this->assertEquals($expected_logs, $this->logger->cleanLogs());
+        $this->assertSame($expected_logs, $this->logger->cleanLogs());
     }
 
     /**
@@ -71,7 +71,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareCommandTester();
         $this->mockExistingQueueExpectation('existingQueue');
-        $this->assertEquals('[WARNING] Queue "existingQueue" already exists.', trim($this->commandTester->getDisplay()));
+        $this->assertSame('[WARNING] Queue "existingQueue" already exists.', trim($this->commandTester->getDisplay()));
     }
 
     /**
@@ -92,7 +92,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareCommandTester('defaultQueue');
         $this->mockNewQueueExpectation('defaultQueue', null, false);
-        $this->assertEquals('[OK] Queue "defaultQueue" created successfully.', trim($this->commandTester->getDisplay()));
+        $this->assertSame('[OK] Queue "defaultQueue" created successfully.', trim($this->commandTester->getDisplay()));
     }
 
     /**
@@ -102,7 +102,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareCommandTester();
         $this->mockNewQueueExpectation('newQueue', 'optionRegion');
-        $this->assertEquals('[OK] Queue "newQueue" (optionRegion) created successfully.', trim($this->commandTester->getDisplay()));
+        $this->assertSame('[OK] Queue "newQueue" (optionRegion) created successfully.', trim($this->commandTester->getDisplay()));
     }
 
     /**
@@ -112,7 +112,7 @@ final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
     {
         $this->prepareCommandTester(null, 'defaultRegion');
         $this->mockNewQueueExpectation('newQueue', 'defaultRegion', null, false);
-        $this->assertEquals('[OK] Queue "newQueue" (defaultRegion) created successfully.', trim($this->commandTester->getDisplay()));
+        $this->assertSame('[OK] Queue "newQueue" (defaultRegion) created successfully.', trim($this->commandTester->getDisplay()));
     }
 
     private function prepareCommandTester($queueName = null, $region = null)

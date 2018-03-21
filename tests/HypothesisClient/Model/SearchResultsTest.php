@@ -49,6 +49,6 @@ final class SearchResultsTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_annotations()
     {
-        $this->assertEquals($this->annotations, $this->searchResults->getAnnotations());
+        $this->assertSame($this->annotations, $this->searchResults->getAnnotations());
     }
 }

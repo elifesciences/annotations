@@ -6,7 +6,7 @@ use eLife\Annotations\Command\QueueImportCommand;
 use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\Result\HttpResult;
 use eLife\ApiSdk\ApiSdk;
-use eLife\Bus\Limit\Limit;
+use eLife\Bus\Limit\MockLimit;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Logging\Monitoring;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -50,7 +50,7 @@ final class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->apiSdk = new ApiSdk($this->httpClient);
         $this->application = new Application();
-        $this->limit = $this->createMock(Limit::class);
+        $this->limit = new MockLimit();
         $this->logger = new BufferingLogger();
         $this->monitoring = new Monitoring();
         $this->queue = new WatchableQueueMock();
@@ -69,7 +69,7 @@ final class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             ->method('send')
             ->willReturn($this->prepareMockResponse(5));
         $this->commandTesterExecute('all');
-        $this->assertEquals(5, $this->queue->count());
+        $this->assertSame(5, $this->queue->count());
         $this->assertStringEndsWith('[OK] All entities queued.', trim($this->commandTester->getDisplay()));
     }
 
@@ -103,7 +103,7 @@ final class QueueImportCommandTest extends PHPUnit_Framework_TestCase
             [LogLevel::INFO, 'Item (profile, id0) enqueued successfully.', []],
             [LogLevel::INFO, 'All entities queued.', []],
         ];
-        $this->assertEquals($expected_logs, $this->logger->cleanLogs());
+        $this->assertSame($expected_logs, $this->logger->cleanLogs());
     }
 
     /**

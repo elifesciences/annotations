@@ -45,7 +45,7 @@ final class NotifyingHttpClientTest extends PHPUnit_Framework_TestCase
 
         $this->client->send($request);
 
-        $this->assertEquals([$request], $this->sentRequests);
+        $this->assertSame([$request], $this->sentRequests);
     }
 
     /**

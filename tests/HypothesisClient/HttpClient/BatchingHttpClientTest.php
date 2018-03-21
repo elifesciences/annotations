@@ -74,7 +74,7 @@ final class BatchingHttpClientTest extends PHPUnit_Framework_TestCase
                             $promises[$step['what']] = $client->send($request);
                             break;
                         case 'wait':
-                            $this->assertEquals(
+                            $this->assertSame(
                                 '/'.$step['what'],
                                 (string) $promises[$step['what']]->wait()->getBody()
                             );

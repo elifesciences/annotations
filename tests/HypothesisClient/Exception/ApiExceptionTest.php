@@ -6,7 +6,6 @@ use eLife\HypothesisClient\Exception\ApiException;
 use Exception;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
-use TypeError;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiException
@@ -18,15 +17,8 @@ final class ApiExceptionTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_a_message()
     {
-        try {
-            $this->getMockBuilder(ApiException::class)->getMock();
-            $this->fail('A message is required');
-        } catch (TypeError $error) {
-            $this->assertTrue(true, 'A message is required');
-            $this->assertContains('must be of the type string', $error->getMessage());
-        }
         $e = new ApiException('foo');
-        $this->assertEquals('foo', $e->getMessage());
+        $this->assertSame('foo', $e->getMessage());
     }
 
     /**
@@ -34,8 +26,8 @@ final class ApiExceptionTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_an_error_code_of_zero()
     {
-        $e = $this->createMock(ApiException::class);
-        $this->assertEquals(0, $e->getCode());
+        $e = new ApiException('foo');
+        $this->assertSame(0, $e->getCode());
     }
 
     /**
@@ -61,8 +53,8 @@ final class ApiExceptionTest extends PHPUnit_Framework_TestCase
      */
     public function it_may_have_a_previous_exception()
     {
-        $previous = $this->createMock(Exception::class);
+        $previous = new Exception('bar');
         $e = new ApiException('foo', $previous);
-        $this->assertEquals($previous, $e->getPrevious());
+        $this->assertSame($previous, $e->getPrevious());
     }
 }

@@ -22,7 +22,7 @@ final class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
         $generatedToken = $credentials->getJWT($username = 'username');
 
         $start = $clock->time();
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'aud' => 'hypothes.is',
                 'iss' => $clientId,

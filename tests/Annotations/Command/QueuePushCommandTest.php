@@ -7,7 +7,7 @@ use eLife\Annotations\Command\QueuePushCommand;
 use eLife\Bus\Queue\InternalSqsMessage;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use PHPUnit_Framework_TestCase;
-use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -33,7 +33,7 @@ final class QueuePushCommandTest extends PHPUnit_Framework_TestCase
     public function prepareDependencies()
     {
         $this->application = new Application();
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = new NullLogger();
         $this->queue = new WatchableQueueMock();
     }
 
@@ -45,7 +45,7 @@ final class QueuePushCommandTest extends PHPUnit_Framework_TestCase
         $this->prepareCommandTester();
         $this->assertEmpty($this->queue->count());
         $this->commandTesterExecute('id', 'profiles');
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
         $this->assertEquals(new InternalSqsMessage('profiles', 'id'), $this->queue->dequeue());
     }
 

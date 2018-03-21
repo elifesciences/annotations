@@ -106,7 +106,7 @@ final class QueueImportCommand extends Command
 
         $items->rewind();
         while ($items->valid()) {
-            if ($limit()) {
+            if ($limit->hasBeenReached()) {
                 throw new RuntimeException(sprintf('Command cannot complete because: %s.', implode(', ', $limit->getReasons())));
             }
             $progress->advance();

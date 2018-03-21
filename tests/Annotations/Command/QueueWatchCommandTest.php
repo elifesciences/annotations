@@ -95,9 +95,9 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(['foo' => 'bar']));
         $this->prepareCommandTester();
         $this->queue->enqueue(new InternalSqsMessage('profile', 'username'));
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
         $this->commandTesterExecute();
-        $this->assertEquals(0, $this->queue->count());
+        $this->assertSame(0, $this->queue->count());
     }
 
     /**
@@ -111,9 +111,9 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->will($this->throwException(new Exception()));
         $this->prepareCommandTester();
         $this->queue->enqueue(new InternalSqsMessage('profile', 'username'));
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
         $this->commandTesterExecute();
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
     }
 
     /**
@@ -144,9 +144,9 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->willReturn($response);
         $this->prepareCommandTester();
         $this->queue->enqueue($item);
-        $this->assertEquals(1, $this->queue->count());
+        $this->assertSame(1, $this->queue->count());
         $this->commandTesterExecute();
-        $this->assertEquals(0, $this->queue->count());
+        $this->assertSame(0, $this->queue->count());
         $actual_logs = $this->logger->cleanLogs();
         $this->assertContains([LogLevel::INFO, 'Hypothesis user "username" successfully created.', []], $actual_logs);
         if (!empty($logs)) {

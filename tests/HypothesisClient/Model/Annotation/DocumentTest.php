@@ -26,6 +26,6 @@ final class DocumentTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_title()
     {
-        $this->assertEquals('title', $this->document->getTitle());
+        $this->assertSame('title', $this->document->getTitle());
     }
 }

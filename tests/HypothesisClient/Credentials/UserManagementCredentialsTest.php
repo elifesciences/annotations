@@ -16,6 +16,6 @@ final class UserManagementCredentialsTest extends PHPUnit_Framework_TestCase
     public function it_will_return_basic_authorization_string()
     {
         $credentials = new UserManagementCredentials('foo', 'baz', 'authority');
-        $this->assertEquals(sprintf('Basic %s', base64_encode('foo:baz')), $credentials->getAuthorizationBasic());
+        $this->assertSame(sprintf('Basic %s', base64_encode('foo:baz')), $credentials->getAuthorizationBasic());
     }
 }

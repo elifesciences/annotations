@@ -26,7 +26,7 @@ final class TargetTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_source()
     {
-        $this->assertEquals('source', $this->target->getSource());
+        $this->assertSame('source', $this->target->getSource());
     }
 
     /**
@@ -42,6 +42,6 @@ final class TargetTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->assertNull($targetWithoutSelector->getSelector());
-        $this->assertEquals($selector, $targetWithSelector->getSelector());
+        $this->assertSame($selector, $targetWithSelector->getSelector());
     }
 }
