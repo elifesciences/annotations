@@ -11,18 +11,18 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build"
+                sh "IMAGE_TAG=${commit} docker-compose build"
             }
 
             stage 'Project tests', {
                 try {
-                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh"
+                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose run --rm ci ./project_tests.sh"
                     step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml up -d"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
+                    sh "IMAGE_TAG=${commit} docker-compose up -d"
+                    sh "IMAGE_TAG=${commit} docker-compose exec -T cli ./smoke_tests_cli.sh"
+                    sh "IMAGE_TAG=${commit} docker-compose exec -T fpm ./smoke_tests_fpm.sh"
                 } finally {
-                    sh 'docker-compose -f docker-compose.ci.yml down'
+                    sh 'docker-compose down'
                 }
             }
 

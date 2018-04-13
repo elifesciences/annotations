@@ -1,20 +1,30 @@
-ARG commit=develop
+ARG image_tag=develop
 FROM elifesciences/proofreader-php:0.2 AS proofreader
-FROM elifesciences/annotations_cli:${commit}
-ENV DEBUG=1
+FROM elifesciences/annotations_composer:${image_tag}-dev AS build
+FROM elifesciences/php_cli:d83fc4714914898b0842199578e1cc88d9feab2a
+
+ENV PROJECT_FOLDER=/srv/annotations
 
 USER root
-RUN mkdir -p build && chown www-data:www-data build && \
-    touch .php_cs.cache && chown www-data:www-data .php_cs.cache
+RUN docker-php-ext-install pcntl
+
+WORKDIR ${PROJECT_FOLDER}
+RUN mkdir -p build var/logs var/cache/html_purifier && \
+    touch .php_cs.cache && \
+    chown --recursive elife:elife . && \
+    chown www-data:www-data build var/logs var/cache/html_purifier .php_cs.cache
 
 USER elife
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
-RUN composer-install
-COPY --chown=elife:elife tests/ /srv/annotations/tests/
-COPY --chown=elife:elife .php_cs phpunit.xml.dist project_tests.sh /srv/annotations/
-RUN composer-post
+COPY --chown=elife:elife .php_cs phpunit.xml.dist project_tests.sh ./
+COPY --chown=elife:elife bin/ bin/
+COPY --chown=elife:elife web/ web/
+COPY --chown=elife:elife config/ config/
+COPY --from=build --chown=elife:elife /app/vendor/ vendor/
+COPY --from=build --chown=elife:elife /app/tests/ tests/
+COPY --from=build --chown=elife:elife /app/src/ src/
 
 USER www-data
 CMD ["/bin/bash"]

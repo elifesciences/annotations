@@ -1,44 +1,66 @@
 version: '3'
 
 services:
+    composer-dev:
+        build:
+            context: .
+            dockerfile: Dockerfile.composer.dev
+        image: elifesciences/annotations_composer:${IMAGE_TAG}-dev
+        command: /bin/bash
+    composer-no-dev:
+        build:
+            context: .
+            dockerfile: Dockerfile.composer.no-dev
+        image: elifesciences/annotations_composer:${IMAGE_TAG}-no-dev
+        command: /bin/bash
     web:
         image: nginx:1.13.7
         ports:
             - "8080:80"
         volumes:
-            - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
-            # can we avoid this by removing try_files?
-            - ./web:/srv/annotations/web
+            - ./.docker/nginx-default.conf:/etc/nginx/conf.d/default.conf
+            - web:/srv/annotations/web
         depends_on:
             - fpm
     fpm:
-        build: 
+        build:
             context: .
             dockerfile: Dockerfile.fpm
-        image: elifesciences/annotations_fpm
+            args:
+                composer_type: ${COMPOSER_TYPE}
+                image_tag: ${IMAGE_TAG}
+                dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
+                dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
+        image: elifesciences/annotations_fpm:${IMAGE_TAG}
         volumes:
-            - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
+            - web:/srv/annotations/web
         env_file:
             - dev.env
         depends_on:
             - api_dummy
+            - composer-${COMPOSER_TYPE}
             - hypothesis_dummy
             - goaws
     cli:
-        build: 
+        build:
             context: .
             dockerfile: Dockerfile.cli
-        image: elifesciences/annotations_cli
+            args:
+                composer_type: ${COMPOSER_TYPE}
+                image_tag: ${IMAGE_TAG}
+                dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
+                dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
+        image: elifesciences/annotations_cli:${IMAGE_TAG}
         volumes:
-            - ./:/srv/annotations
             - ./config/container.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
         env_file:
             - dev.env
         depends_on:
             - api_dummy
+            - composer-${COMPOSER_TYPE}
             - hypothesis_dummy
             - goaws
     goaws:
@@ -46,7 +68,7 @@ services:
         ports:
             - 4100:4100
         volumes:
-            - ./config/goaws.yaml:/conf/goaws.yaml
+            - ./.docker/goaws.yaml:/conf/goaws.yaml
     logger:
         image: busybox:1.27.2
         volumes:
@@ -59,6 +81,23 @@ services:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
     hypothesis_dummy:
         image: elifesciences/hypothesis-dummy:${DEPENDENCIES_HYPOTHESIS_DUMMY}
+    ci:
+        build:
+            context: .
+            args:
+                image_tag: ${IMAGE_TAG}
+            dockerfile: Dockerfile.ci
+        image: elifesciences/annotations_ci:${IMAGE_TAG}
+        volumes:
+            # TODO: stop doing this and use docker-compose cp or similar to retrieve artifacts
+            - ./build:/srv/annotations/build
+            - ./config/container.php:/srv/annotations/config.php
+        env_file:
+            - dev.env
+        depends_on:
+            - web
+            - cli
 
 volumes:
     logs:
+    web:
