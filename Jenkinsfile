@@ -16,7 +16,9 @@ elifePipeline {
 
             stage 'Project tests', {
                 try {
-                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose run --rm ci ./project_tests.sh"
+                    def container = sh(script: "docker run -d elifesciences/annotations_ci:${commit}", returnStdout: true).trim()
+                    sh "IMAGE_TAG=${commit} docker-compose run --rm ci ./project_tests.sh"
+                    sh "docker cp ${container}:/srv/annotations/build/. build"
                     step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
                     sh "IMAGE_TAG=${commit} docker-compose up -d"
                     sh "IMAGE_TAG=${commit} docker-compose exec -T cli ./smoke_tests_cli.sh"
