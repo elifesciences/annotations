@@ -7,7 +7,6 @@ ENV PROJECT_FOLDER=/srv/annotations
 ENV PHP_ENTRYPOINT=web/app.php
 
 USER root
-RUN docker-php-ext-install pcntl
 
 WORKDIR ${PROJECT_FOLDER}
 RUN mkdir -p var/logs var/cache/html_purifier && \
