@@ -11,7 +11,7 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh "IMAGE_TAG=${commit} docker-compose build"
+                sh "IMAGE_TAG=${commit} COMPOSER_TYPE=no-dev docker-compose build"
             }
 
             stage 'Project tests', {

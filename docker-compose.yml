@@ -84,17 +84,16 @@ services:
     ci:
         build:
             context: .
+            dockerfile: Dockerfile.ci
             args:
                 image_tag: ${IMAGE_TAG}
-            dockerfile: Dockerfile.ci
         image: elifesciences/annotations_ci:${IMAGE_TAG}
         volumes:
             - ./config/container.php:/srv/annotations/config.php
         env_file:
             - dev.env
         depends_on:
-            - web
-            - cli
+            - composer-dev
 
 volumes:
     logs:
