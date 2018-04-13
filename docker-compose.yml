@@ -33,7 +33,7 @@ services:
                 dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
         image: elifesciences/annotations_fpm:${IMAGE_TAG}
         volumes:
-            - ./config/container.php:/srv/annotations/config.php
+            - ./.docker/config.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
             - web:/srv/annotations/web
         env_file:
@@ -54,7 +54,7 @@ services:
                 dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
         image: elifesciences/annotations_cli:${IMAGE_TAG}
         volumes:
-            - ./config/container.php:/srv/annotations/config.php
+            - ./.docker/config.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
         env_file:
             - dev.env
