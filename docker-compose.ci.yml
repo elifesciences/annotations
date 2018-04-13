@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    ci:
+        build:
+            context: .
+            dockerfile: Dockerfile.ci
+            args:
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/annotations_ci:${IMAGE_TAG}
+        volumes:
+            # TODO: stop doing this and use docker-compose cp or similar to retrieve artifacts
+            - ./build:/srv/annotations/build
+            - ./config/container.php:/srv/annotations/config.php
+        env_file:
+            - dev.env
+        depends_on:
+            - composer-dev
