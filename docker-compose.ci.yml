@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+    composer:
+        build:
+            args:
+                composer_dev: --no-dev
+    composer-dev:
+        extends: composer
+        build:
+            args:
+                composer_dev:
     fpm:
         env_file:
             - ci.env

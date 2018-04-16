@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-    composer-dev:
+    composer:
         volumes:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
@@ -14,8 +14,6 @@ services:
             - vendor:/srv/annotations/vendor
         env_file:
             - dev.env
-        depends_on:
-            - composer-dev
     cli:
         volumes:
             - ./:/srv/annotations
@@ -24,8 +22,6 @@ services:
             - vendor:/srv/annotations/vendor
         env_file:
             - dev.env
-        depends_on:
-            - composer-dev
 
 volumes:
     vendor:

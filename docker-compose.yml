@@ -1,17 +1,13 @@
 version: '3'
 
 services:
-    composer-dev:
+    composer:
         build:
             context: .
-            dockerfile: Dockerfile.composer.dev
-        image: elifesciences/annotations_composer:${IMAGE_TAG}-dev
-        command: /bin/bash
-    composer-no-dev:
-        build:
-            context: .
-            dockerfile: Dockerfile.composer.no-dev
-        image: elifesciences/annotations_composer:${IMAGE_TAG}-no-dev
+            dockerfile: Dockerfile.composer
+            args:
+                composer_dev: ${COMPOSER_DEV}
+        image: elifesciences/annotations_composer:${IMAGE_TAG}
         command: /bin/bash
     web:
         image: nginx:1.13.7
@@ -27,7 +23,6 @@ services:
             context: .
             dockerfile: Dockerfile.fpm
             args:
-                composer_type: ${COMPOSER_TYPE}
                 image_tag: ${IMAGE_TAG}
                 dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
                 dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
@@ -38,7 +33,7 @@ services:
             - web:/srv/annotations/web
         depends_on:
             - api_dummy
-            - composer-${COMPOSER_TYPE}
+            - composer
             - hypothesis_dummy
             - goaws
     cli:
@@ -46,7 +41,6 @@ services:
             context: .
             dockerfile: Dockerfile.cli
             args:
-                composer_type: ${COMPOSER_TYPE}
                 image_tag: ${IMAGE_TAG}
                 dependencies_api_dummy: "${DEPENDENCIES_API_DUMMY}"
                 dependencies_hypothesis_dummy: "${DEPENDENCIES_HYPOTHESIS_DUMMY}"
@@ -56,7 +50,7 @@ services:
             - logs:/srv/annotations/var/logs
         depends_on:
             - api_dummy
-            - composer-${COMPOSER_TYPE}
+            - composer
             - hypothesis_dummy
             - goaws
     goaws:

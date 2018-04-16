@@ -1,6 +1,5 @@
-ARG composer_type=no-dev
 ARG image_tag=latest
-FROM elifesciences/annotations_composer:${image_tag}-${composer_type} AS build
+FROM elifesciences/annotations_composer:${image_tag} AS build
 FROM elifesciences/php_fpm:d83fc4714914898b0842199578e1cc88d9feab2a
 
 ENV PROJECT_FOLDER=/srv/annotations
