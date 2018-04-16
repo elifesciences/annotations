@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+    composer-dev:
+        volumes:
+            - ./composer.json:/app/composer.json
+            - ./composer.lock:/app/composer.lock
+            - vendor:/app/vendor
+    fpm:
+        volumes:
+            - ./:/srv/annotations
+            - /srv/annotations/build
+            - /srv/annotations/var
+            - vendor:/srv/annotations/vendor
+        env_file:
+            - dev.env
+        depends_on:
+            - composer-dev
+    cli:
+        volumes:
+            - ./:/srv/annotations
+            - /srv/annotations/build
+            - /srv/annotations/var
+            - vendor:/srv/annotations/vendor
+        env_file:
+            - dev.env
+        depends_on:
+            - composer-dev
+
+volumes:
+    vendor:

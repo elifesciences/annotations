@@ -36,8 +36,6 @@ services:
             - ./.docker/config.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
             - web:/srv/annotations/web
-        env_file:
-            - dev.env
         depends_on:
             - api_dummy
             - composer-${COMPOSER_TYPE}
@@ -56,8 +54,6 @@ services:
         volumes:
             - ./.docker/config.php:/srv/annotations/config.php
             - logs:/srv/annotations/var/logs
-        env_file:
-            - dev.env
         depends_on:
             - api_dummy
             - composer-${COMPOSER_TYPE}
