@@ -1,6 +1,6 @@
 ARG image_tag=develop
 FROM elifesciences/proofreader-php:0.2 AS proofreader
-FROM elifesciences/annotations_composer:${image_tag}-dev AS build
+FROM elifesciences/annotations_composer_dev:${image_tag} AS build
 FROM elifesciences/php_cli:d83fc4714914898b0842199578e1cc88d9feab2a
 
 ENV PROJECT_FOLDER=/srv/annotations

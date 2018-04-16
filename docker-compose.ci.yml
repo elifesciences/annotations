@@ -6,10 +6,13 @@ services:
             args:
                 composer_dev: --no-dev
     composer-dev:
-        extends: composer
         build:
+            context: .
+            dockerfile: Dockerfile.composer
             args:
                 composer_dev:
+        image: elifesciences/annotations_composer_dev:${IMAGE_TAG}
+        command: /bin/bash
     fpm:
         env_file:
             - ci.env
