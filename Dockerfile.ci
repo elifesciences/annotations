@@ -27,4 +27,4 @@ COPY --from=build --chown=elife:elife /app/tests/ tests/
 COPY --from=build --chown=elife:elife /app/src/ src/
 
 USER www-data
-CMD ["/bin/bash"]
+CMD ["./project_tests.sh"]

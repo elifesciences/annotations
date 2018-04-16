@@ -26,9 +26,6 @@ services:
             args:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/annotations_ci:${IMAGE_TAG}
-        volumes:
-            # TODO: stop doing this and use docker-compose cp or similar to retrieve artifacts
-            - ./build:/srv/annotations/build
         env_file:
             - ci.env
         depends_on:
