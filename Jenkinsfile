@@ -16,8 +16,8 @@ elifePipeline {
 
             stage 'Project tests', {
                 try {
-                    def container = sh(script: "docker run -d elifesciences/annotations_ci:${commit}", returnStdout: true).trim()
-                    sh "docker cp ${container}:/srv/annotations/build/. build"
+                    sh "docker run --name annotations_tests elifesciences/annotations_ci:${commit}"
+                    sh "docker cp annotations_tests:/srv/annotations/build/. build"
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
