@@ -1,16 +1,15 @@
 FROM composer:1.6.3
 
-ARG composer_dev
+ARG composer_dev_arg
 
 COPY composer.json \
     composer.lock \
     ./
 
-RUN echo "composer --no-interaction install ${composer_dev} --ignore-platform-reqs --no-autoloader --no-scripts --no-suggest"
-RUN composer --no-interaction install ${composer_dev} --ignore-platform-reqs --no-autoloader --no-scripts --no-suggest
+RUN composer --no-interaction install ${composer_dev_arg} --ignore-platform-reqs --no-autoloader --no-scripts --no-suggest
 
 COPY tests/ tests/
 COPY src/ src/
 
-RUN composer --no-interaction dump-autoload ${composer_dev} --classmap-authoritative
+RUN composer --no-interaction dump-autoload ${composer_dev_arg} --classmap-authoritative
 RUN composer --no-interaction run-script post-install-cmd
