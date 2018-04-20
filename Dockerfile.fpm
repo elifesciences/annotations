@@ -1,6 +1,6 @@
 ARG image_tag=latest
 FROM elifesciences/annotations_composer:${image_tag} AS build
-FROM elifesciences/php_fpm:d83fc4714914898b0842199578e1cc88d9feab2a
+FROM elifesciences/php_fpm:9d7a445aa361e62c2078b74e568134e63d036c41
 
 ENV PROJECT_FOLDER=/srv/annotations
 ENV PHP_ENTRYPOINT=web/app.php
