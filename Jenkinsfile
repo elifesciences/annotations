@@ -17,9 +17,9 @@ elifePipeline {
             stage 'Project tests', {
                 try {
                     sh "docker run --name annotations_tests_${commit} elifesciences/annotations_ci:${commit}"
+                } finally {
                     sh "docker cp annotations_tests_${commit}:/srv/annotations/build/. build"
                     step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                } finally {
                     sh "docker rm annotations_tests_${commit}"
                 }
                 try {
