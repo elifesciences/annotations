@@ -1,27 +1,22 @@
-FROM elifesciences/php_cli:9d7a445aa361e62c2078b74e568134e63d036c41
+ARG image_tag=latest
+FROM elifesciences/annotations_composer:${image_tag} AS build
+FROM elifesciences/php_7.0_cli:656bb4bdf1e49a5e80337e2a7c4f44f10c3f52b0
+
+ENV PROJECT_FOLDER=/srv/annotations
 
 USER root
 RUN docker-php-ext-install pcntl
 
-USER elife
-ENV PROJECT_FOLDER=/srv/annotations
-ENV PHP_ENTRYPOINT=web/app.php
-RUN mkdir ${PROJECT_FOLDER}
-WORKDIR /srv/annotations
-COPY --chown=elife:elife composer.json composer.lock /srv/annotations/
-RUN composer-install
+WORKDIR ${PROJECT_FOLDER}
+RUN mkdir -p var/logs var/cache/html_purifier && \
+    chown --recursive elife:elife . && \
+    chown www-data:www-data var/logs var/cache/html_purifier
 
-# yes this is how you copy directories
-COPY --chown=elife:elife bin/ /srv/annotations/bin/
-COPY --chown=elife:elife config/ /srv/annotations/config/
-COPY --chown=elife:elife src/ /srv/annotations/src/
-COPY --chown=elife:elife web/ /srv/annotations/web/
-COPY --chown=elife:elife smoke_tests_cli.sh /srv/annotations/
-RUN composer-post
-
-RUN mkdir -p var/logs var/cache/html_purifier 
-USER root
-RUN chown www-data:www-data var/logs var/cache/html_purifier
+COPY --chown=elife:elife smoke_tests_cli.sh .
+COPY --chown=elife:elife bin/ bin/
+COPY --chown=elife:elife config/ config/
+COPY --from=build --chown=elife:elife /app/vendor/ vendor/
+COPY --from=build --chown=elife:elife /app/src/ src/
 
 USER www-data
 CMD ["php", "bin/console", "queue:watch"]

@@ -11,18 +11,23 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml build"
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build"
             }
 
             stage 'Project tests', {
                 try {
-                    sh "chmod 777 build/ && IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml run --rm ci ./project_tests.sh"
-                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml up -d"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
+                    sh "docker run --name annotations_tests_${commit} elifesciences/annotations_ci:${commit}"
                 } finally {
-                    sh 'docker-compose -f docker-compose.ci.yml down'
+                    sh "docker cp annotations_tests_${commit}:/srv/annotations/build/. build"
+                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                    sh "docker rm annotations_tests_${commit}"
+                }
+                try {
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
+                } finally {
+                    sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml down'
                 }
             }
 

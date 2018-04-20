@@ -1,7 +1,10 @@
 build/
 config.php
-docker-compose.yml
-.git
-Jenkinsfile
+config.php.example
+docker-compose*.yml
+.git/
+.gitignore
+Jenkinsfile*
+maintainers.txt
 var/
 vendor/
