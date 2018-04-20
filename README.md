@@ -20,7 +20,7 @@ docker-compose run cli /bin/bash
 Run composer:
 
 ```
-docker-compose run -u $(id -u) cli composer install
+docker-compose run composer composer install
 ```
 
 Run a PHP interpreter:
@@ -38,11 +38,9 @@ docker-compose run cli vendor/bin/phpunit
 Run all project tests:
 
 ```
-docker-compose -f docker-compose.ci.yml build
-docker-compose -f docker-compose.ci.yml run ci ./project_tests.sh
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml build
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci
 ```
-
-`-u` is needed to write to `vendor/`. Currently Composer prints some warning when git-cloning due to the user not being in /etc/passwd.
 
 ## Journey of a request to the annotations api
 1. Query received via the `annotations` api.
