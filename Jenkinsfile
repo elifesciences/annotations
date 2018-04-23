@@ -15,13 +15,7 @@ elifePipeline {
             }
 
             stage 'Project tests', {
-                try {
-                    sh "docker run --name annotations_tests_${commit} elifesciences/annotations_ci:${commit}"
-                } finally {
-                    sh "docker cp annotations_tests_${commit}:/srv/annotations/build/. build"
-                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                    sh "docker rm annotations_tests_${commit}"
-                }
+                dockerProjectTests 'annotations', commit
                 try {
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
