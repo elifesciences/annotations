@@ -11,18 +11,18 @@ elifePipeline {
         {
             stage 'Build images', {
                 checkout scm
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build"
+                dockerComposeBuild commit
             }
 
             stage 'Project tests', {
                 dockerProjectTests 'annotations', commit
-                try {
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T cli ./smoke_tests_cli.sh"
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T fpm ./smoke_tests_fpm.sh"
-                } finally {
-                    sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml down'
-                }
+
+                dockerComposeSmokeTests('profiles', commit, [
+                    'scripts': [
+                        'cli': './smoke_tests_cli.sh',
+                        'fpm': './smoke_tests_fpm.sh',
+                    ],
+                ])
             }
 
             elifeMainlineOnly {
