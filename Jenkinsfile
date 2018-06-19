@@ -17,7 +17,7 @@ elifePipeline {
             stage 'Project tests', {
                 dockerProjectTests 'annotations', commit
 
-                dockerComposeSmokeTests('profiles', commit, [
+                dockerComposeSmokeTests(commit, [
                     'scripts': [
                         'cli': './smoke_tests_cli.sh',
                         'fpm': './smoke_tests_fpm.sh',
