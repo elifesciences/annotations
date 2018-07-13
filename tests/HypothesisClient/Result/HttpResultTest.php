@@ -8,11 +8,11 @@ use BadMethodCallException;
 use Countable;
 use eLife\HypothesisClient\Result\HttpResult;
 use GuzzleHttp\Psr7\Response;
+use InvalidArgumentException;
 use IteratorAggregate;
 use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\ResponseInterface;
 use TypeError;
-use UnexpectedValueException;
 
 /**
  * @covers \eLife\HypothesisClient\Result\HttpResult
@@ -113,7 +113,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_data()
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         HttpResult::fromResponse(new Response(200));
     }
@@ -123,7 +123,7 @@ final class HttpResultTest extends PHPUnit_Framework_TestCase
      */
     public function it_requires_json_data()
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         HttpResult::fromResponse(new Response(200, [], 'foo'));
     }
