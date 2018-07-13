@@ -7,6 +7,7 @@ use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
+use function GuzzleHttp\json_encode;
 
 final class UsersClient
 {

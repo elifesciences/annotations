@@ -50,9 +50,9 @@ use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use League\CommonMark\Inline as CommonMarkInline;
 use LogicException;
-use Monolog\Logger;
 use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LogLevel;
 use Silex\Application;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
@@ -83,7 +83,7 @@ final class AppKernel implements ContainerInterface, HttpKernelInterface, Termin
             'cache.path' => $cache_path,
             'logger.channel' => 'annotations',
             'logger.path' => $config['logging']['path'] ?? __DIR__.'/../../var/logs',
-            'logger.level' => $config['logging']['level'] ?? Logger::INFO,
+            'logger.level' => $config['logging']['level'] ?? LogLevel::INFO,
             'api.url' => $config['api_url'] ?? 'https://api.elifesciences.org/',
             'api.requests_batch' => $config['api_requests_batch'] ?? 10,
             'process_memory_limit' => $config['process_memory_limit'] ?? 256,

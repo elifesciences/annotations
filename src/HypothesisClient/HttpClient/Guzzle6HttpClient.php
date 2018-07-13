@@ -14,6 +14,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use const CURLE_OPERATION_TIMEOUTED;
 use function GuzzleHttp\default_user_agent;
 use function GuzzleHttp\Promise\exception_for;
 
