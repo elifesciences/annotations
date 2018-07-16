@@ -16,6 +16,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;
+use Traversable;
 
 /**
  * @covers \eLife\HypothesisClient\Client\Users
@@ -200,8 +201,9 @@ final class UsersTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider existingUserProvider
      */
-    public function it_will_upsert_an_existing_user()
+    public function it_will_upsert_an_existing_user(int $responseCode)
     {
         $post_data = [
             'authority' => 'authority',
@@ -216,7 +218,7 @@ final class UsersTest extends PHPUnit_Framework_TestCase
             json_encode($post_data)
         );
         $post_response_mess = json_encode(['status' => 'failure', 'reason' => 'user with username username already exists']);
-        $post_response = new Response(400, [], $post_response_mess);
+        $post_response = new Response($responseCode, [], $post_response_mess);
         $rejected_post_response = new RejectedPromise(new BadResponse($post_response_mess, $post_request, $post_response));
         $patch_data = [
             'email' => 'email@email.com',
@@ -250,6 +252,12 @@ final class UsersTest extends PHPUnit_Framework_TestCase
         $upsertedUser = $this->users->upsert($user)->wait();
         $this->assertFalse($upsertedUser->isNew());
         $this->assertEquals($expectedUser, $upsertedUser);
+    }
+
+    public function existingUserProvider() : Traversable
+    {
+        yield '409 Conflict response' => [409];
+        yield '400 Bad Request response' => [400];
     }
 
     /**
