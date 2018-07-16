@@ -7,6 +7,7 @@ use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\Result;
 use GuzzleHttp\Promise\PromiseInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use function GuzzleHttp\Promise\rejection_for;
 
@@ -40,16 +41,12 @@ final class Users
     {
         return $this->create($user)
             ->otherwise(function ($reason) use ($user) {
-                /*
-                 * The most likely cause of BadResponse is if the username
-                 * already exists. Because this can only be determined by the
-                 * text in the response, it is considered a bit fragile. Until
-                 * Hypothesis set an error code in their response we will treat
-                 * all BadResponse's as if they are for a known username and
-                 * attempt an update request.
-                 */
                 if ($reason instanceof BadResponse) {
-                    if (400 === $reason->getResponse()->getStatusCode()) {
+                    if (Response::HTTP_CONFLICT === $reason->getResponse()->getStatusCode()) {
+                        // Probably means that the username already exists
+                        return $this->update($user);
+                    } elseif (Response::HTTP_BAD_REQUEST === $reason->getResponse()->getStatusCode()) {
+                        // TODO remove when Hypothesis start returning 409 Conflict responses
                         return $this->update($user);
                     }
                 }
