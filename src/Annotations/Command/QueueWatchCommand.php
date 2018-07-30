@@ -15,7 +15,6 @@ use eLife\HypothesisClient\Model\User;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Throwable;
 
 final class QueueWatchCommand extends QueueCommand
 {
