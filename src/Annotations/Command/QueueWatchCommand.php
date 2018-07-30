@@ -10,6 +10,7 @@ use eLife\Bus\Queue\QueueItem;
 use eLife\Bus\Queue\QueueItemTransformer;
 use eLife\Bus\Queue\WatchableQueue;
 use eLife\HypothesisClient\ApiSdk;
+use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\Model\User;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
@@ -70,7 +71,7 @@ final class QueueWatchCommand extends QueueCommand
             try {
                 $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
                 $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
-            } catch (Throwable $e) {
+            } catch (BadResponse $e) {
                 // If upsert failures then log error but don't repeat.
                 $this->queue->commit($item);
                 $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()));
