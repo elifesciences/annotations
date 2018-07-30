@@ -131,49 +131,25 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             new EmptySequence(),
             new EmptySequence()
         );
-        $data = [
-            'authority' => $this->authority,
-            'username' => 'username',
-            'email' => 'username@blackhole.elifesciences.org',
-            'display_name' => 'PreferredName',
-        ];
         $this->transformer
             ->expects($this->once())
             ->method('transform')
             ->will($this->returnValue($profile));
-        $post_request = new Request(
-            'POST',
-            'users',
-            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
-            json_encode($data)
-        );
-        $post_response_mess = json_encode(['status' => 'failure', 'reason' => 'user with username username already exists.']);
-        $post_response = new Response(400, [], $post_response_mess);
-        $rejected_post_response = new RejectedPromise(new BadResponse($post_response_mess, $post_request, $post_response));
+        $rejected_post_response = new BadResponse('', new Request('POST', 'users'), new Response(400));
         $this->httpClient
             ->expects($this->at(0))
             ->method('send')
-            ->willReturn($rejected_post_response);
-        $patch_data = [
-            'email' => 'username@blackhole.elifesciences.org',
-            'display_name' => 'PreferredName',
-        ];
-        $patch_request = new Request(
-            'PATCH',
-            'users/username',
-            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
-            json_encode($patch_data)
-        );
-        $patch_response_mess = json_encode(['status' => 'failure', 'reason' => 'Either the resource you requested doesn\'t exist, or you are not currently authorized to see it.']);
-        $patch_response = new Response(404, [], $patch_response_mess);
-        $rejected_patch_response = new RejectedPromise(new BadResponse($patch_response_mess, $patch_request, $patch_response));
+            ->willReturn(new RejectedPromise($rejected_post_response));
+        $patch_request = new Request('PATCH', 'users/username');
+        $patch_response = new Response(404);
+        $rejected_patch_response = new BadResponse('', $patch_request, $patch_response);
         $this->httpClient
             ->expects($this->at(1))
             ->method('send')
-            ->willReturn($rejected_patch_response);
+            ->willReturn(new RejectedPromise($rejected_patch_response));
         $this->executeItemFromQueue($item);
         $actual_logs = $this->logger->cleanLogs();
-        $this->assertContains([LogLevel::ERROR, 'Hypothesis user "username" upsert failure.', []], $actual_logs);
+        $this->assertContains([LogLevel::ERROR, 'Hypothesis user "username" upsert failure.', ['exception' => $rejected_patch_response]], $actual_logs);
     }
 
     /**
