@@ -140,9 +140,7 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->expects($this->at(0))
             ->method('send')
             ->willReturn(new RejectedPromise($rejected_post_response));
-        $patch_request = new Request('PATCH', 'users/username');
-        $patch_response = new Response(404);
-        $rejected_patch_response = new BadResponse('', $patch_request, $patch_response);
+        $rejected_patch_response = new BadResponse('', new Request('PATCH', 'users/username'), new Response(404));
         $this->httpClient
             ->expects($this->at(1))
             ->method('send')
