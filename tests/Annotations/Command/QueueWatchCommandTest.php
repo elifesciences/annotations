@@ -140,7 +140,6 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->transformer
             ->expects($this->once())
             ->method('transform')
-            ->with($item)
             ->will($this->returnValue($profile));
         $post_request = new Request(
             'POST',
@@ -154,7 +153,6 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->httpClient
             ->expects($this->at(0))
             ->method('send')
-            ->with(RequestConstraint::equalTo($post_request))
             ->willReturn($rejected_post_response);
         $patch_data = [
             'email' => 'username@blackhole.elifesciences.org',
@@ -172,7 +170,6 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->httpClient
             ->expects($this->at(1))
             ->method('send')
-            ->with(RequestConstraint::equalTo($patch_request))
             ->willReturn($rejected_patch_response);
         $this->prepareCommandTester();
         $this->queue->enqueue($item);
