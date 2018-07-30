@@ -171,11 +171,7 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('send')
             ->willReturn($rejected_patch_response);
-        $this->prepareCommandTester();
-        $this->queue->enqueue($item);
-        $this->assertSame(1, $this->queue->count());
-        $this->commandTesterExecute();
-        $this->assertSame(0, $this->queue->count());
+        $this->executeItemFromQueue($item);
         $actual_logs = $this->logger->cleanLogs();
         $this->assertContains([LogLevel::ERROR, 'Hypothesis user "username" upsert failure.', []], $actual_logs);
     }
@@ -338,5 +334,14 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
 
             return false;
         });
+    }
+
+    private function executeItemFromQueue(QueueItem $item)
+    {
+        $this->prepareCommandTester();
+        $this->queue->enqueue($item);
+        $this->assertSame(1, $this->queue->count());
+        $this->commandTesterExecute();
+        $this->assertSame(0, $this->queue->count());
     }
 }
