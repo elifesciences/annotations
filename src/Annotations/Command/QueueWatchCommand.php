@@ -73,7 +73,7 @@ final class QueueWatchCommand extends QueueCommand
             } catch (BadResponse $e) {
                 // If upsert failures then log error but don't repeat.
                 $this->queue->commit($item);
-                $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()));
+                $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()), ['exception' => $e]);
             }
         }
     }
