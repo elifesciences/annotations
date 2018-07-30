@@ -14,6 +14,7 @@ use eLife\HypothesisClient\Model\User;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Throwable;
 
 final class QueueWatchCommand extends QueueCommand
 {
@@ -66,8 +67,14 @@ final class QueueWatchCommand extends QueueCommand
                 $sanitized_display_name = $display_name;
             }
             $user = new User($id, $email, $sanitized_display_name);
-            $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
-            $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
+            try {
+                $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
+                $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
+            } catch (Throwable $e) {
+                // If upsert failures then log error but don't repeat.
+                $this->queue->commit($item);
+                $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()));
+            }
         }
     }
 }

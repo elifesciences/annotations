@@ -18,12 +18,15 @@ use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
+use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use eLife\Logging\Monitoring;
 use Exception;
 use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Application;
@@ -103,7 +106,7 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_retries_failures()
+    public function it_retries_failures_retrieving_profile()
     {
         $this->transformer
             ->expects($this->once())
@@ -114,6 +117,70 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->assertSame(1, $this->queue->count());
         $this->commandTesterExecute();
         $this->assertSame(1, $this->queue->count());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_remove_queue_item_if_upsert_fails()
+    {
+        $item = new InternalSqsMessage('profile', 'username');
+        $profile = new Profile(
+            'username',
+            new PersonDetails('PreferredName', 'IndexName'),
+            new EmptySequence(),
+            new EmptySequence()
+        );
+        $data = [
+            'authority' => $this->authority,
+            'username' => 'username',
+            'email' => 'username@blackhole.elifesciences.org',
+            'display_name' => 'PreferredName',
+        ];
+        $this->transformer
+            ->expects($this->once())
+            ->method('transform')
+            ->with($item)
+            ->will($this->returnValue($profile));
+        $post_request = new Request(
+            'POST',
+            'users',
+            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
+            json_encode($data)
+        );
+        $post_response_mess = json_encode(['status' => 'failure', 'reason' => 'user with username username already exists.']);
+        $post_response = new Response(400, [], $post_response_mess);
+        $rejected_post_response = new RejectedPromise(new BadResponse($post_response_mess, $post_request, $post_response));
+        $this->httpClient
+            ->expects($this->at(0))
+            ->method('send')
+            ->with(RequestConstraint::equalTo($post_request))
+            ->willReturn($rejected_post_response);
+        $patch_data = [
+            'email' => 'username@blackhole.elifesciences.org',
+            'display_name' => 'PreferredName',
+        ];
+        $patch_request = new Request(
+            'PATCH',
+            'users/username',
+            ['Authorization' => $this->authorization, 'User-Agent' => 'HypothesisClient'],
+            json_encode($patch_data)
+        );
+        $patch_response_mess = json_encode(['status' => 'failure', 'reason' => 'Either the resource you requested doesn\'t exist, or you are not currently authorized to see it.']);
+        $patch_response = new Response(404, [], $patch_response_mess);
+        $rejected_patch_response = new RejectedPromise(new BadResponse($patch_response_mess, $patch_request, $patch_response));
+        $this->httpClient
+            ->expects($this->at(1))
+            ->method('send')
+            ->with(RequestConstraint::equalTo($patch_request))
+            ->willReturn($rejected_patch_response);
+        $this->prepareCommandTester();
+        $this->queue->enqueue($item);
+        $this->assertSame(1, $this->queue->count());
+        $this->commandTesterExecute();
+        $this->assertSame(0, $this->queue->count());
+        $actual_logs = $this->logger->cleanLogs();
+        $this->assertContains([LogLevel::ERROR, 'Hypothesis user "username" upsert failure.', []], $actual_logs);
     }
 
     /**
