@@ -15,6 +15,7 @@ use eLife\HypothesisClient\Model\User;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 final class QueueWatchCommand extends QueueCommand
 {
@@ -72,8 +73,12 @@ final class QueueWatchCommand extends QueueCommand
                 $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
             } catch (BadResponse $e) {
                 // If upsert fails, log error but don't repeat.
-                $this->queue->commit($item);
-                $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()), ['exception' => $e]);
+                if (in_array($e->getResponse()->getStatusCode(), [Response::HTTP_BAD_REQUEST, Response::HTTP_NOT_FOUND])) {
+                    $this->queue->commit($item);
+                    $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()), ['exception' => $e]);
+                } else {
+                    throw $e;
+                }
             }
         }
     }
