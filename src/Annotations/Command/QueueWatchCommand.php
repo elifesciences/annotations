@@ -72,8 +72,8 @@ final class QueueWatchCommand extends QueueCommand
                 $upsert = $this->hypothesisSdk->users()->upsert($user)->wait();
                 $this->logger->info(sprintf('Hypothesis user "%s" successfully %s.', $upsert->getUsername(), ($upsert->isNew() ? 'created' : 'updated')));
             } catch (BadResponse $e) {
-                // If upsert fails, log error but don't repeat.
-                if (in_array($e->getResponse()->getStatusCode(), [Response::HTTP_BAD_REQUEST, Response::HTTP_NOT_FOUND])) {
+                // If client error detected, log error and don't repeat.
+                if (in_array($e->getResponse()->getStatusCode(), range(Response::HTTP_BAD_REQUEST, 499))) {
                     $this->queue->commit($item);
                     $this->logger->error(sprintf('Hypothesis user "%s" upsert failure.', $user->getUsername()), ['exception' => $e]);
                 } else {
