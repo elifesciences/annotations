@@ -18,12 +18,15 @@ use eLife\HypothesisClient\ApiSdk as HypothesisSdk;
 use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
+use eLife\HypothesisClient\Exception\BadResponse;
 use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use eLife\Logging\Monitoring;
 use Exception;
 use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Application;
@@ -103,7 +106,7 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_retries_failures()
+    public function it_retries_failures_retrieving_profile()
     {
         $this->transformer
             ->expects($this->once())
@@ -114,6 +117,29 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
         $this->assertSame(1, $this->queue->count());
         $this->commandTesterExecute();
         $this->assertSame(1, $this->queue->count());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_remove_queue_item_if_upsert_fails()
+    {
+        $this->transformer
+            ->expects($this->once())
+            ->method('transform')
+            ->will($this->returnValue(new Profile('username', new PersonDetails('PreferredName', 'IndexName'), new EmptySequence(), new EmptySequence())));
+        $this->httpClient
+            ->expects($this->at(0))
+            ->method('send')
+            ->willReturn(new RejectedPromise(new BadResponse('', new Request('POST', 'users'), new Response(400))));
+        $patch_response = new BadResponse('', new Request('PATCH', 'users/username'), new Response(404));
+        $this->httpClient
+            ->expects($this->at(1))
+            ->method('send')
+            ->willReturn(new RejectedPromise($patch_response));
+        $this->executeItemFromQueue(new InternalSqsMessage('profile', 'username'));
+        $actual_logs = $this->logger->cleanLogs();
+        $this->assertContains([LogLevel::ERROR, 'Hypothesis user "username" upsert failure.', ['exception' => $patch_response]], $actual_logs);
     }
 
     /**
@@ -274,5 +300,14 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
 
             return false;
         });
+    }
+
+    private function executeItemFromQueue(QueueItem $item)
+    {
+        $this->prepareCommandTester();
+        $this->queue->enqueue($item);
+        $this->assertSame(1, $this->queue->count());
+        $this->commandTesterExecute();
+        $this->assertSame(0, $this->queue->count());
     }
 }
