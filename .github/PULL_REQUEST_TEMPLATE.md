@@ -1,8 +1,8 @@
-| Q             | A
-| ------------- | ---
-| Bug fix?      | yes/no
-| Tests pass?   | yes                             <!-- please add some, will be required by reviewers -->
-| Fixes tickets | elifesciences/jira-import#...   <!-- #-prefixed issue number(s), if any (see: https://help.github.com/articles/autolinked-references-and-urls/#issues-and-pull-requests) -->
+| Q                 | A
+| ----------------- | ---
+| Bug fix?          | yes/no
+| Test needed?      | yes/no
+| Issues progressed | elifesciences/jira-import#..
 
 <!--
 Write a short README entry for your feature/bugfix here (replace this comment block.)
