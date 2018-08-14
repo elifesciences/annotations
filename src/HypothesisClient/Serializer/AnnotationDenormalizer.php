@@ -18,10 +18,15 @@ final class AnnotationDenormalizer implements DenormalizerInterface, Denormalize
 
     public function denormalize($data, $class, $format = null, array $context = []) : Annotation
     {
-        if (isset($data['text']) && '' === trim($data['text'])) {
-            // Treat annotations of whitespace like page notes
-            unset($data['text']);
-            unset($data['target'][0]['selector']);
+        // Treat annotations of whitespace like page notes
+        foreach ($data['target'] as $i => $target) {
+            foreach ($target['selector'] ?? [] as $selector) {
+                if ('TextQuoteSelector' === $selector['type'] && '' === trim($selector['exact'])) {
+                    unset($data['target'][$i]['selector']);
+
+                    continue 2;
+                }
+            }
         }
 
         $data['document'] = $this->denormalizer->denormalize($data['document'], Document::class);

@@ -202,7 +202,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
             'whitespace only' => [
                 [
                     'id' => 'Ng1e2sTBEeegJt8a9q3zpQ',
-                    'text' => ' ',
+                    'text' => 'An annotation',
                     'created' => $created,
                     'updated' => $updated,
                     'document' => [
@@ -253,7 +253,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                 ],
                 new Annotation(
                     'Ng1e2sTBEeegJt8a9q3zpQ',
-                    null,
+                    'An annotation',
                     new DateTimeImmutable($created),
                     new DateTimeImmutable($updated),
                     new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
