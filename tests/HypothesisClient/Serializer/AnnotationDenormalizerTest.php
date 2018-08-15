@@ -199,6 +199,70 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                     new Annotation\Permissions('group:__world__')
                 ),
             ],
+            'whitespace only' => [
+                [
+                    'id' => 'Ng1e2sTBEeegJt8a9q3zpQ',
+                    'text' => 'An annotation',
+                    'created' => $created,
+                    'updated' => $updated,
+                    'document' => [
+                        'title' => [
+                            'Human Evolution: The many mysteries of Homo naledi',
+                        ],
+                    ],
+                    'target' => [
+                        [
+                            'source' => 'source',
+                            'selector' => [
+                                [
+                                    'type' => 'RangeSelector',
+                                    'startContainer' => '/div[4]',
+                                    'endContainer' => '/div[4]',
+                                    'startOffset' => 100,
+                                    'endOffset' => 200,
+                                ],
+                                [
+                                    'type' => 'TextPositionSelector',
+                                    'start' => 10000,
+                                    'end' => 10021,
+                                ],
+                                [
+                                    'type' => 'TextQuoteSelector',
+                                    'exact' => ' ',
+                                    'prefix' => 'have been assigned to ',
+                                    'suffix' => ', Homo naledi',
+                                ],
+                                [
+                                    'type' => 'FragmentSelector',
+                                    'conformsTo' => 'https://tools.ietf.org/html/rfc3236',
+                                    'value' => 'abstract',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'uri' => 'https://elifesciences.org/articles/10627',
+                    'references' => [
+                        'ancestor1',
+                        'ancestor2',
+                    ],
+                    'permissions' => [
+                        'read' => [
+                            'group:__world__',
+                        ],
+                    ],
+                ],
+                new Annotation(
+                    'Ng1e2sTBEeegJt8a9q3zpQ',
+                    'An annotation',
+                    new DateTimeImmutable($created),
+                    new DateTimeImmutable($updated),
+                    new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
+                    new Annotation\Target('https://elifesciences.org/articles/10627'),
+                    'https://elifesciences.org/articles/10627',
+                    ['ancestor1', 'ancestor2'],
+                    new Annotation\Permissions('group:__world__')
+                ),
+            ],
             'minimum' => [
                 [
                     'id' => 'M_FoqMTBEeerwYvINYO67Q',
