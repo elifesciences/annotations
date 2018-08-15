@@ -5,7 +5,7 @@ namespace eLife\HypothesisClient\Result;
 use Iterator;
 use IteratorAggregate;
 use Psr\Http\Message\ResponseInterface;
-use UnexpectedValueException;
+use function GuzzleHttp\json_decode;
 
 final class HttpResult implements IteratorAggregate, Result
 {
@@ -21,9 +21,6 @@ final class HttpResult implements IteratorAggregate, Result
     public static function fromResponse(ResponseInterface $response) : Result
     {
         $data = json_decode($response->getBody(), true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new UnexpectedValueException('Could not decode JSON: '.json_last_error_msg());
-        }
 
         return new self(new ArrayResult($data), $response);
     }
