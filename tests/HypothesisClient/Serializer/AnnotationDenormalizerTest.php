@@ -257,7 +257,7 @@ final class AnnotationDenormalizerTest extends PHPUnit_Framework_TestCase
                     new DateTimeImmutable($created),
                     new DateTimeImmutable($updated),
                     new Annotation\Document('Human Evolution: The many mysteries of Homo naledi'),
-                    new Annotation\Target('source'),
+                    new Annotation\Target('https://elifesciences.org/articles/10627'),
                     'https://elifesciences.org/articles/10627',
                     ['ancestor1', 'ancestor2'],
                     new Annotation\Permissions('group:__world__')

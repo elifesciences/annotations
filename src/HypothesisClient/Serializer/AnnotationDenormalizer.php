@@ -22,6 +22,7 @@ final class AnnotationDenormalizer implements DenormalizerInterface, Denormalize
         foreach ($data['target'] as $i => $target) {
             foreach ($target['selector'] ?? [] as $selector) {
                 if ('TextQuoteSelector' === $selector['type'] && '' === trim($selector['exact'])) {
+                    $data['target'][$i]['source'] = $data['uri'];
                     unset($data['target'][$i]['selector']);
 
                     continue 2;
