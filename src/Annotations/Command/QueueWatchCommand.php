@@ -15,6 +15,8 @@ use eLife\HypothesisClient\Model\User;
 use eLife\Logging\Monitoring;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use function mb_strlen;
+use function mb_substr;
 
 final class QueueWatchCommand extends QueueCommand
 {
@@ -60,8 +62,8 @@ final class QueueWatchCommand extends QueueCommand
                 $this->logger->info(sprintf('No email address for profile "%s", backup email address created.', $id));
                 $email = $id.'@blackhole.elifesciences.org';
             }
-            if (strlen($display_name) > User::DISPLAY_NAME_MAX_LENGTH) {
-                $sanitized_display_name = substr($display_name, 0, User::DISPLAY_NAME_MAX_LENGTH);
+            if (mb_strlen($display_name) > User::DISPLAY_NAME_MAX_LENGTH) {
+                $sanitized_display_name = mb_substr($display_name, 0, User::DISPLAY_NAME_MAX_LENGTH);
                 $this->logger->info(sprintf('The display name for profile "%s" is too long and has been truncated from "%s" to "%s".', $id, $display_name, $sanitized_display_name));
             } else {
                 $sanitized_display_name = $display_name;

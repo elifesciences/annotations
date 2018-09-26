@@ -205,17 +205,17 @@ final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
             new InternalSqsMessage('profile', 'username'),
             new Profile(
                 'username',
-                new PersonDetails('This display name is way too long', 'IndexName'),
+                new PersonDetails('This display name is way too łong', 'IndexName'),
                 new EmptySequence(),
                 new EmptySequence()
             ),
             [
                 'username' => 'username',
                 'email' => 'username@blackhole.elifesciences.org',
-                'display_name' => 'This display name is way too l',
+                'display_name' => 'This display name is way too ł',
             ],
             [
-                [LogLevel::INFO, 'The display name for profile "username" is too long and has been truncated from "This display name is way too long" to "This display name is way too l".', []],
+                [LogLevel::INFO, 'The display name for profile "username" is too long and has been truncated from "This display name is way too łong" to "This display name is way too ł".', []],
                 [LogLevel::INFO, 'No email address for profile "username", backup email address created.', []],
             ],
         ];
