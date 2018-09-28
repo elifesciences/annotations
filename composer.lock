@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06992d1b7115919da259f9f86a6a6611",
+    "content-hash": "fe98ef24a1796d4a7c75ac2b13dc1932",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1924,6 +1924,7 @@
             "keywords": [
                 "microframework"
             ],
+            "abandoned": "symfony/flex",
             "time": "2017-07-23T07:40:14+00:00"
         },
         {
@@ -4427,7 +4428,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

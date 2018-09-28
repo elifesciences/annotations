@@ -15,6 +15,7 @@
     "require": {
         "php": "^7.0",
         "ext-curl": "*",
+        "ext-mbstring": "*",
         "aws/aws-sdk-php": "^3.38",
         "beberlei/assert": "^2.7",
         "elife/api-client": "^1.0@dev",
