@@ -5,7 +5,6 @@ namespace tests\eLife\HypothesisClient;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsEqual;
-use PHPUnit\Framework\ExpectationFailedException;
 use function GuzzleHttp\Psr7\str;
 
 final class RequestConstraint extends Constraint
