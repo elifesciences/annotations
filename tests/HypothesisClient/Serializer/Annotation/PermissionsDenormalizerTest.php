@@ -4,13 +4,13 @@ namespace tests\eLife\HypothesisClient\Serializer\Annotation;
 
 use eLife\HypothesisClient\Model\Annotation\Permissions;
 use eLife\HypothesisClient\Serializer\Annotation\PermissionsDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\Annotation\PermissionsDenormalizer
  */
-final class PermissionsDenormalizerTest extends PHPUnit_Framework_TestCase
+final class PermissionsDenormalizerTest extends TestCase
 {
     /** @var PermissionsDenormalizer */
     private $normalizer;

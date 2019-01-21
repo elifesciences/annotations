@@ -6,7 +6,7 @@ use eLife\Annotations\Command\QueueImportCommand;
 use eLife\Annotations\Command\QueuePushCommand;
 use eLife\Bus\Queue\InternalSqsMessage;
 use eLife\Bus\Queue\Mock\WatchableQueueMock;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Application;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @covers \eLife\Annotations\Command\QueuePushCommand
  */
-final class QueuePushCommandTest extends PHPUnit_Framework_TestCase
+final class QueuePushCommandTest extends TestCase
 {
     /** @var Application */
     private $application;

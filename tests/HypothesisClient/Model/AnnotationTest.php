@@ -5,12 +5,12 @@ namespace tests\eLife\HypothesisClient\Model;
 use DateTimeImmutable;
 use DateTimeZone;
 use eLife\HypothesisClient\Model\Annotation;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Annotation
  */
-final class AnnotationTest extends PHPUnit_Framework_TestCase
+final class AnnotationTest extends TestCase
 {
     /** @var Annotation */
     private $annotation;

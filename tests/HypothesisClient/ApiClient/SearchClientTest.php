@@ -8,14 +8,14 @@ use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use tests\eLife\HypothesisClient\RequestConstraint;
 use TypeError;
 
 /**
  * @covers \eLife\HypothesisClient\ApiClient\SearchClient
  */
-final class SearchClientTest extends PHPUnit_Framework_TestCase
+final class SearchClientTest extends TestCase
 {
     private $httpClient;
     /** @var SearchClient */

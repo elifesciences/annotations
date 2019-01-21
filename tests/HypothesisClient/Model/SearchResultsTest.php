@@ -6,9 +6,9 @@ use DateTimeImmutable;
 use DateTimeZone;
 use eLife\HypothesisClient\Model\Annotation;
 use eLife\HypothesisClient\Model\SearchResults;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class SearchResultsTest extends PHPUnit_Framework_TestCase
+final class SearchResultsTest extends TestCase
 {
     /** @var Annotation[] */
     private $annotations;

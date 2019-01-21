@@ -5,12 +5,12 @@ namespace tests\eLife\HypothesisClient\Credentials;
 use eLife\HypothesisClient\Clock\FixedClock;
 use eLife\HypothesisClient\Credentials\JWTSigningCredentials;
 use Firebase\JWT\JWT;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Credentials\JWTSigningCredentials
  */
-final class JWTSigningCredentialsTest extends PHPUnit_Framework_TestCase
+final class JWTSigningCredentialsTest extends TestCase
 {
     /**
      * @test

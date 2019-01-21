@@ -7,12 +7,12 @@ use eLife\HypothesisClient\Exception\HttpProblem;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\BadResponse
  */
-final class BadResponseTest extends PHPUnit_Framework_TestCase
+final class BadResponseTest extends TestCase
 {
     /**
      * @test

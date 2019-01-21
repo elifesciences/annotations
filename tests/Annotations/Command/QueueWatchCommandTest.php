@@ -27,7 +27,7 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -37,7 +37,7 @@ use tests\eLife\HypothesisClient\RequestConstraint;
 /**
  * @covers \eLife\Annotations\Command\QueueWatchCommand
  */
-final class QueueWatchCommandTest extends PHPUnit_Framework_TestCase
+final class QueueWatchCommandTest extends TestCase
 {
     /** @var Application */
     private $application;

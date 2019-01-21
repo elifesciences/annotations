@@ -20,14 +20,14 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Traversable;
 use function GuzzleHttp\default_user_agent;
 
 /**
  * @covers \eLife\HypothesisClient\HttpClient\Guzzle6HttpClient
  */
-final class Guzzle6HttpClientTest extends PHPUnit_Framework_TestCase
+final class Guzzle6HttpClientTest extends TestCase
 {
     private $mock;
     private $history;

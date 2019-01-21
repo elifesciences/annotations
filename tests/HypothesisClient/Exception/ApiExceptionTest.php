@@ -4,13 +4,13 @@ namespace tests\eLife\HypothesisClient\Exception;
 
 use eLife\HypothesisClient\Exception\ApiException;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiException
  */
-final class ApiExceptionTest extends PHPUnit_Framework_TestCase
+final class ApiExceptionTest extends TestCase
 {
     /**
      * @test

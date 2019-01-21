@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Model;
 
 use eLife\HypothesisClient\Model\Token;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Token
  */
-final class TokenTest extends PHPUnit_Framework_TestCase
+final class TokenTest extends TestCase
 {
     /** @var Token */
     private $token;

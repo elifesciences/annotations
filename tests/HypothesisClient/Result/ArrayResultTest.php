@@ -8,12 +8,12 @@ use BadMethodCallException;
 use Countable;
 use eLife\HypothesisClient\Result\ArrayResult;
 use IteratorAggregate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Result\ArrayResult
  */
-final class ArrayResultTest extends PHPUnit_Framework_TestCase
+final class ArrayResultTest extends TestCase
 {
     private $data;
     /** @var ArrayResult */

@@ -4,12 +4,12 @@ namespace tests\eLife\HypothesisClient\Model;
 
 use eLife\HypothesisClient\Model\User;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\User
  */
-final class UserTest extends PHPUnit_Framework_TestCase
+final class UserTest extends TestCase
 {
     /**
      * @test

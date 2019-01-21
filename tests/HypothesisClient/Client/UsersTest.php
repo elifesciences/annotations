@@ -13,7 +13,7 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;
 use Traversable;
@@ -21,7 +21,7 @@ use Traversable;
 /**
  * @covers \eLife\HypothesisClient\Client\Users
  */
-final class UsersTest extends PHPUnit_Framework_TestCase
+final class UsersTest extends TestCase
 {
     private $authority;
     private $authorization;

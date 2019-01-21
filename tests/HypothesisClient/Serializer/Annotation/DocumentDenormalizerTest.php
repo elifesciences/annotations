@@ -4,13 +4,13 @@ namespace tests\eLife\HypothesisClient\Serializer\Annotation;
 
 use eLife\HypothesisClient\Model\Annotation\Document;
 use eLife\HypothesisClient\Serializer\Annotation\DocumentDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\Annotation\DocumentDenormalizer
  */
-final class DocumentDenormalizerTest extends PHPUnit_Framework_TestCase
+final class DocumentDenormalizerTest extends TestCase
 {
     /** @var DocumentDenormalizer */
     private $normalizer;

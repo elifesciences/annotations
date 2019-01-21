@@ -11,7 +11,7 @@ use eLife\Bus\Queue\Mock\WatchableQueueMock;
 use eLife\Logging\Monitoring;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -21,7 +21,7 @@ use Symfony\Component\Debug\BufferingLogger;
 /**
  * @covers \eLife\Annotations\Command\QueueImportCommand
  */
-final class QueueImportCommandTest extends PHPUnit_Framework_TestCase
+final class QueueImportCommandTest extends TestCase
 {
     /** @var ApiSdk */
     private $apiSdk;

@@ -10,14 +10,14 @@ use eLife\HypothesisClient\Result\HttpResult;
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use IteratorAggregate;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use TypeError;
 
 /**
  * @covers \eLife\HypothesisClient\Result\HttpResult
  */
-final class HttpResultTest extends PHPUnit_Framework_TestCase
+final class HttpResultTest extends TestCase
 {
     private $data;
     /** @var ResponseInterface */

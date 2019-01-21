@@ -3,19 +3,19 @@
 namespace tests\eLife\HypothesisClient;
 
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_Constraint;
-use PHPUnit_Framework_Constraint_IsEqual;
-use PHPUnit_Framework_ExpectationFailedException;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\ExpectationFailedException;
 use function GuzzleHttp\Psr7\str;
 
-final class RequestConstraint extends PHPUnit_Framework_Constraint
+final class RequestConstraint extends Constraint
 {
     public function __construct($value)
     {
         parent::__construct();
 
         $this->value = $value;
-        $this->wrapped = new PHPUnit_Framework_Constraint_IsEqual(str($this->value));
+        $this->wrapped = new IsEqual(str($this->value));
     }
 
     public static function equalTo(Request $expected)

@@ -8,7 +8,7 @@ use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use tests\eLife\HypothesisClient\RequestConstraint;
 use Throwable;
 use TypeError;
@@ -16,7 +16,7 @@ use TypeError;
 /**
  * @covers \eLife\HypothesisClient\ApiClient\UsersClient
  */
-final class UsersClientTest extends PHPUnit_Framework_TestCase
+final class UsersClientTest extends TestCase
 {
     private $credentials;
     private $httpClient;

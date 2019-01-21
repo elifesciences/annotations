@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Credentials;
 
 use eLife\HypothesisClient\Credentials\UserManagementCredentials;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Credentials\UserManagementCredentials
  */
-final class UserManagementCredentialsTest extends PHPUnit_Framework_TestCase
+final class UserManagementCredentialsTest extends TestCase
 {
     /**
      * @test
