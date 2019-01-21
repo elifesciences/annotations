@@ -285,7 +285,7 @@ final class UsersTest extends TestCase
             ->expects($this->once())
             ->method('send')
             ->willReturn($rejected_post_response);
-        $this->setExpectedException(BadResponse::class);
+        $this->expectException(BadResponse::class);
         $this->users->upsert($user)->wait();
     }
 }
