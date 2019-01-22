@@ -5,12 +5,12 @@ namespace tests\eLife\HypothesisClient\Exception;
 use eLife\HypothesisClient\Exception\HttpProblem;
 use eLife\HypothesisClient\Exception\NetworkProblem;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\NetworkProblem
  */
-final class NetworkProblemTest extends PHPUnit_Framework_TestCase
+final class NetworkProblemTest extends TestCase
 {
     /**
      * @test

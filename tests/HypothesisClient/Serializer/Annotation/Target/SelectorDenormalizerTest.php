@@ -5,14 +5,14 @@ namespace tests\eLife\HypothesisClient\Serializer\Annotation\Target;
 use eLife\HypothesisClient\Model\Annotation\Target\Selector;
 use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer
  */
-final class SelectorDenormalizerTest extends PHPUnit_Framework_TestCase
+final class SelectorDenormalizerTest extends TestCase
 {
     /** @var SelectorDenormalizer */
     private $normalizer;

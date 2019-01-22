@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Model\Annotation\Target\Selector;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector\TextQuote;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Annotation\Target\Selector\TextQuote
  */
-final class TextQuoteTest extends PHPUnit_Framework_TestCase
+final class TextQuoteTest extends TestCase
 {
     /** @var TextQuote */
     private $textQuote;

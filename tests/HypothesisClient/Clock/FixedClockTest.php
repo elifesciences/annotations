@@ -4,12 +4,12 @@ namespace tests\eLife\HypothesisClient\Clock;
 
 use eLife\HypothesisClient\Clock\Clock;
 use eLife\HypothesisClient\Clock\FixedClock;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Clock\FixedClock
  */
-final class FixedClockTest extends PHPUnit_Framework_TestCase
+final class FixedClockTest extends TestCase
 {
     /**
      * @test

@@ -9,13 +9,13 @@ use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use tests\eLife\HypothesisClient\RequestConstraint;
 
 /**
  * @covers \eLife\HypothesisClient\ApiClient\TokenClient
  */
-final class TokenClientTest extends PHPUnit_Framework_TestCase
+final class TokenClientTest extends TestCase
 {
     /** @var JWTSigningCredentials */
     private $credentials;

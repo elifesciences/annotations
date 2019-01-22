@@ -6,14 +6,14 @@ use eLife\HypothesisClient\Model\Annotation\Target;
 use eLife\HypothesisClient\Serializer\Annotation\Target\Selector\TextQuoteDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\Target\SelectorDenormalizer;
 use eLife\HypothesisClient\Serializer\Annotation\TargetDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\Annotation\TargetDenormalizer
  */
-final class TargetDenormalizerTest extends PHPUnit_Framework_TestCase
+final class TargetDenormalizerTest extends TestCase
 {
     /** @var TargetDenormalizer */
     private $normalizer;

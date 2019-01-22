@@ -6,14 +6,14 @@ use eLife\HypothesisClient\HttpClient\HttpClient;
 use eLife\HypothesisClient\HttpClient\NotifyingHttpClient;
 use eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Traversable;
 
 /**
  * @covers \eLife\HypothesisClient\HttpClient\UserAgentPrependingHttpClient
  */
-final class UserAgentPrependingHttpClientTest extends PHPUnit_Framework_TestCase
+final class UserAgentPrependingHttpClientTest extends TestCase
 {
     private $originalClient;
     private $requests;

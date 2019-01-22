@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Model\Annotation;
 
 use eLife\HypothesisClient\Model\Annotation\Permissions;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Annotation\Permissions
  */
-final class PermissionsTest extends PHPUnit_Framework_TestCase
+final class PermissionsTest extends TestCase
 {
     /** @var Permissions */
     private $permissions;

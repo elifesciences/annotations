@@ -11,14 +11,14 @@ use eLife\HypothesisClient\Model\SearchResults;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;
 
 /**
  * @covers \eLife\HypothesisClient\Client\Search
  */
-final class SearchTest extends PHPUnit_Framework_TestCase
+final class SearchTest extends TestCase
 {
     private $denormalizer;
     private $group;

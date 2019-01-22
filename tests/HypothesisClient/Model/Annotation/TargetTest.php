@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Model\Annotation;
 
 use eLife\HypothesisClient\Model\Annotation\Target;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Annotation\Target
  */
-final class TargetTest extends PHPUnit_Framework_TestCase
+final class TargetTest extends TestCase
 {
     /** @var Target */
     private $target;

@@ -6,12 +6,12 @@ use eLife\Annotations\Serializer\CommonMark\HtmlPurifierRenderer;
 use HTMLPurifier;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\ElementRendererInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\HtmlPurifierRenderer
  */
-final class HtmlPurifierRendererTest extends PHPUnit_Framework_TestCase
+final class HtmlPurifierRendererTest extends TestCase
 {
     private $abstractBlock;
     /** @var HtmlPurifierRenderer */

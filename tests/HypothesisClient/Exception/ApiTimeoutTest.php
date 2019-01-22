@@ -5,12 +5,12 @@ namespace tests\eLife\HypothesisClient\Exception;
 use eLife\HypothesisClient\Exception\ApiTimeout;
 use eLife\HypothesisClient\Exception\NetworkProblem;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Exception\ApiTimeout
  */
-final class ApiTimeoutTest extends PHPUnit_Framework_TestCase
+final class ApiTimeoutTest extends TestCase
 {
     /**
      * @test

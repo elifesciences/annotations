@@ -12,14 +12,14 @@ use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Result\ArrayResult;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use tests\eLife\HypothesisClient\RequestConstraint;
 
 /**
  * @covers \eLife\HypothesisClient\Client\Token
  */
-final class TokenTest extends PHPUnit_Framework_TestCase
+final class TokenTest extends TestCase
 {
     private $authority;
     private $clientId;

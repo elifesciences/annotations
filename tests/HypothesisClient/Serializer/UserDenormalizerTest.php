@@ -4,13 +4,13 @@ namespace tests\eLife\HypothesisClient\Serializer;
 
 use eLife\HypothesisClient\Model\User;
 use eLife\HypothesisClient\Serializer\UserDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\UserDenormalizer
  */
-final class UserDenormalizerTest extends PHPUnit_Framework_TestCase
+final class UserDenormalizerTest extends TestCase
 {
     /** @var UserDenormalizer */
     private $normalizer;

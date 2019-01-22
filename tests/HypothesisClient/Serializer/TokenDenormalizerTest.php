@@ -4,13 +4,13 @@ namespace tests\eLife\HypothesisClient\Serializer;
 
 use eLife\HypothesisClient\Model\Token;
 use eLife\HypothesisClient\Serializer\TokenDenormalizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * @covers \eLife\HypothesisClient\Serializer\TokenDenormalizer
  */
-final class TokenDenormalizerTest extends PHPUnit_Framework_TestCase
+final class TokenDenormalizerTest extends TestCase
 {
     /** @var TokenDenormalizer */
     private $normalizer;

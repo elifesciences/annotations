@@ -5,12 +5,12 @@ namespace tests\eLife\Annotations\Serializer\CommonMark;
 use eLife\Annotations\Serializer\CommonMark\MathEscapeRenderer;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\ElementRendererInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\Annotations\Serializer\CommonMark\MathEscapeRenderer
  */
-final class MathEscapeRendererTest extends PHPUnit_Framework_TestCase
+final class MathEscapeRendererTest extends TestCase
 {
     private $abstractBlock;
     /** @var MathEscapeRenderer */

@@ -6,7 +6,7 @@ use Aws\Result;
 use Aws\Sqs\Exception\SqsException;
 use Aws\Sqs\SqsClient;
 use eLife\Annotations\Command\QueueCreateCommand;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Console\Application;
@@ -16,7 +16,7 @@ use Symfony\Component\Debug\BufferingLogger;
 /**
  * @covers \eLife\Annotations\Command\QueueCreateCommand
  */
-final class QueueCreateCommandTest extends PHPUnit_Framework_TestCase
+final class QueueCreateCommandTest extends TestCase
 {
     /** @var Application */
     private $application;

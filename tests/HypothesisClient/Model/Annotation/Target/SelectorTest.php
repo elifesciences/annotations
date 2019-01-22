@@ -3,12 +3,12 @@
 namespace tests\eLife\HypothesisClient\Model\Annotation\Target;
 
 use eLife\HypothesisClient\Model\Annotation\Target\Selector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \eLife\HypothesisClient\Model\Annotation\Target\Selector
  */
-final class SelectorTest extends PHPUnit_Framework_TestCase
+final class SelectorTest extends TestCase
 {
     /** @var Selector */
     private $selector;
