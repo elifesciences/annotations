@@ -14,6 +14,7 @@
     },
     "require": {
         "php": "^7.0",
+        "ext-ctype": "*",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "aws/aws-sdk-php": "^3.38",
@@ -58,6 +59,7 @@
     },
     "replace": {
         "paragonie/random_compat": "*",
+        "symfony/polyfill-ctype": "*",
         "symfony/polyfill-mbstring": "*",
         "symfony/polyfill-php70": "*"
     },
