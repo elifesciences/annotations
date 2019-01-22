@@ -27,7 +27,7 @@ final class RequestConstraint extends Constraint
      *
      * @return bool
      *
-     * @throws PHPUnit_Framework_ExpectationFailedException
+     * @throws PHPUnit\Framework\ExpectationFailedException
      */
     public function evaluate($other, $description = '', $returnResult = false)
     {
