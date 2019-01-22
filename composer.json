@@ -48,7 +48,7 @@
         "csa/guzzle-cache-middleware": "^1.0",
         "elife/api": "dev-master",
         "elife/api-validator": "^1.0@dev",
-        "giorgiosironi/eris": "^0.9.0",
+        "giorgiosironi/eris": "^0.11.0",
         "justinrainbow/json-schema": "^5.2",
         "mindplay/composer-locator": "^2.1",
         "phpunit/phpunit": "^6.5",
