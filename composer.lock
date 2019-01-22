@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2814d7ac64262530cf2bd603e4a0f133",
+    "content-hash": "f37d8ed9e2c628999b4e7c850fae32ea",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2717,28 +2717,29 @@
         },
         {
             "name": "giorgiosironi/eris",
-            "version": "0.9.0",
+            "version": "0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giorgiosironi/eris.git",
-                "reference": "538bbdaeb5679d094a33864fd54f85d6a4ffaa74"
+                "reference": "fe03babc632c4e10961e98e2f62fb2b8250e6171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giorgiosironi/eris/zipball/538bbdaeb5679d094a33864fd54f85d6a4ffaa74",
-                "reference": "538bbdaeb5679d094a33864fd54f85d6a4ffaa74",
+                "url": "https://api.github.com/repos/giorgiosironi/eris/zipball/fe03babc632c4e10961e98e2f62fb2b8250e6171",
+                "reference": "fe03babc632c4e10961e98e2f62fb2b8250e6171",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "phpunit/phpunit": ">4,<7"
+                "php": ">=5.5"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "^1.11.2",
-                "icomefromthenet/reverse-regex": "v0.0.6.3"
+                "friendsofphp/php-cs-fixer": "^2.0",
+                "icomefromthenet/reverse-regex": "v0.0.6.3",
+                "phpunit/phpunit": ">4,<8"
             },
             "suggest": {
-                "icomefromthenet/reverse-regex": "v0.0.6.3 for the regex() Generator"
+                "icomefromthenet/reverse-regex": "v0.0.6.3 for the regex() Generator",
+                "phpunit/phpunit": "Standard way to run generated test cases"
             },
             "type": "library",
             "autoload": {
@@ -2768,7 +2769,7 @@
                 }
             ],
             "description": "PHP library for property-based testing. Integrates with PHPUnit.",
-            "time": "2017-03-12T17:39:53+00:00"
+            "time": "2018-09-16T08:41:41+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
