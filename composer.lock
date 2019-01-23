@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48c1a5ee5dcb228ac54b1d64caf69008",
+    "content-hash": "13b8b50285f227afd95c0eb7e1a2d842",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1294,16 +1294,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "0.17.0",
+            "version": "0.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "3b4c2224524776a584de663c7a04bc8eb2e1544d"
+                "reference": "e5029f74ba39e043ce4b3ca6c05dc719d8aafd94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/3b4c2224524776a584de663c7a04bc8eb2e1544d",
-                "reference": "3b4c2224524776a584de663c7a04bc8eb2e1544d",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/e5029f74ba39e043ce4b3ca6c05dc719d8aafd94",
+                "reference": "e5029f74ba39e043ce4b3ca6c05dc719d8aafd94",
                 "shasum": ""
             },
             "require": {
@@ -1318,10 +1318,10 @@
                 "commonmark/commonmark.js": "0.28",
                 "erusev/parsedown": "~1.0",
                 "michelf/php-markdown": "~1.4",
-                "mikehaertl/php-shellcommand": "~1.2.0",
-                "phpunit/phpunit": "~5.7|~6.5",
-                "scrutinizer/ocular": "~1.1",
-                "symfony/finder": "~3.0|~4.0"
+                "mikehaertl/php-shellcommand": "^1.2",
+                "phpunit/phpunit": "^5.7|^6.5",
+                "scrutinizer/ocular": "^1.1",
+                "symfony/finder": "^3.0|^4.0"
             },
             "suggest": {
                 "league/commonmark-extras": "Library of useful extensions including smart punctuation"
@@ -1332,7 +1332,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.18-dev"
+                    "dev-master": "0.19-dev"
                 }
             },
             "autoload": {
@@ -1352,14 +1352,14 @@
                     "role": "Lead Developer"
                 }
             ],
-            "description": "Markdown parser for PHP based on the CommonMark spec",
+            "description": "PHP Markdown parser based on the CommonMark spec",
             "homepage": "https://github.com/thephpleague/commonmark",
             "keywords": [
                 "commonmark",
                 "markdown",
                 "parser"
             ],
-            "time": "2017-12-30T22:08:48+00:00"
+            "time": "2018-12-30T01:55:29+00:00"
         },
         {
             "name": "monolog/monolog",
