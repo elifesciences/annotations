@@ -2510,16 +2510,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.4.24",
+            "version": "v3.4.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "c74469e1560e2d8926c068b319fcca66df8fdb4e"
+                "reference": "14b3221cc41dcfef404205f0060cda873f43a534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/c74469e1560e2d8926c068b319fcca66df8fdb4e",
-                "reference": "c74469e1560e2d8926c068b319fcca66df8fdb4e",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/14b3221cc41dcfef404205f0060cda873f43a534",
+                "reference": "14b3221cc41dcfef404205f0060cda873f43a534",
                 "shasum": ""
             },
             "require": {
@@ -2585,7 +2585,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-30T07:48:10+00:00"
+            "time": "2019-04-11T05:44:34+00:00"
         },
         {
             "name": "willdurand/negotiation",
