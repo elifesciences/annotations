@@ -4245,16 +4245,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v3.4.28",
+            "version": "v3.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "7f2b0843d5045468225f9a9b27a0cb171ae81828"
+                "reference": "53266c9a1536e2dc673eb1efb6a6142ef84c6282"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/7f2b0843d5045468225f9a9b27a0cb171ae81828",
-                "reference": "7f2b0843d5045468225f9a9b27a0cb171ae81828",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/53266c9a1536e2dc673eb1efb6a6142ef84c6282",
+                "reference": "53266c9a1536e2dc673eb1efb6a6142ef84c6282",
                 "shasum": ""
             },
             "require": {
@@ -4298,20 +4298,20 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2019-04-06T19:33:58+00:00"
+            "time": "2019-06-09T14:27:26+00:00"
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v3.4.28",
+            "version": "v3.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "d40023c057393fb25f7ca80af2a56ed948c45a09"
+                "reference": "adb96e63af6fb0cc721cc69861001d60d0133d0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/d40023c057393fb25f7ca80af2a56ed948c45a09",
-                "reference": "d40023c057393fb25f7ca80af2a56ed948c45a09",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/adb96e63af6fb0cc721cc69861001d60d0133d0c",
+                "reference": "adb96e63af6fb0cc721cc69861001d60d0133d0c",
                 "shasum": ""
             },
             "require": {
@@ -4355,7 +4355,7 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:06:07+00:00"
+            "time": "2019-05-30T15:47:52+00:00"
         },
         {
             "name": "symfony/filesystem",
