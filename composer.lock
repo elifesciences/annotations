@@ -2308,7 +2308,7 @@
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.4.29",
+            "version": "v3.4.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
@@ -2366,16 +2366,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.4.29",
+            "version": "v3.4.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "27959b5664694ad57e095fdce9f4ef9f144e63ab"
+                "reference": "30553e0eb2aee0b6092bff01c0d1bd5ad11655c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/27959b5664694ad57e095fdce9f4ef9f144e63ab",
-                "reference": "27959b5664694ad57e095fdce9f4ef9f144e63ab",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/30553e0eb2aee0b6092bff01c0d1bd5ad11655c7",
+                "reference": "30553e0eb2aee0b6092bff01c0d1bd5ad11655c7",
                 "shasum": ""
             },
             "require": {
@@ -2430,7 +2430,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2019-06-05T15:56:22+00:00"
+            "time": "2019-07-23T19:08:29+00:00"
         },
         {
             "name": "symfony/routing",
