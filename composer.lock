@@ -450,12 +450,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "1230ee8529eac59e51ee95d9a2e9add486d1580e"
+                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/1230ee8529eac59e51ee95d9a2e9add486d1580e",
-                "reference": "1230ee8529eac59e51ee95d9a2e9add486d1580e",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
+                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
                 "shasum": ""
             },
             "require": {
@@ -498,7 +498,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2018-09-19T16:14:15+00:00"
+            "time": "2019-08-06T08:48:30+00:00"
         },
         {
             "name": "elife/api-problem",
@@ -554,12 +554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "971b50f572ac071146c533ff05262e1313582f64"
+                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/971b50f572ac071146c533ff05262e1313582f64",
-                "reference": "971b50f572ac071146c533ff05262e1313582f64",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/d033683035531c2bf30601e7c3a9fff9914f9fe1",
+                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1",
                 "shasum": ""
             },
             "require": {
@@ -595,7 +595,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2019-07-29T08:18:46+00:00"
+            "time": "2019-08-06T08:56:34+00:00"
         },
         {
             "name": "elife/bus-sdk",
@@ -4562,16 +4562,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.8.6",
+            "version": "1.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "20da13beba0dde8fb648be3cc19765732790f46e"
+                "reference": "a85e67b86e9b8520d07e6415fcbcb8391b44a75b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/20da13beba0dde8fb648be3cc19765732790f46e",
-                "reference": "20da13beba0dde8fb648be3cc19765732790f46e",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/a85e67b86e9b8520d07e6415fcbcb8391b44a75b",
+                "reference": "a85e67b86e9b8520d07e6415fcbcb8391b44a75b",
                 "shasum": ""
             },
             "require": {
@@ -4591,9 +4591,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8.x-dev",
-                    "dev-develop": "1.9.x-dev",
-                    "dev-release-2.0": "2.0.x-dev"
+                    "dev-release-1.8": "1.8.x-dev"
                 }
             },
             "autoload": {
@@ -4622,7 +4620,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2018-09-05T19:29:37+00:00"
+            "time": "2019-08-06T17:53:53+00:00"
         }
     ],
     "aliases": [],
