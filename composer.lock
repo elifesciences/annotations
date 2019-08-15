@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.109.3",
+            "version": "3.109.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4da1e39c7a41c13eed8b7be47b7e47f43a0c80de"
+                "reference": "c3c6772a7e975d763a232af118da3eaef8bf96b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4da1e39c7a41c13eed8b7be47b7e47f43a0c80de",
-                "reference": "4da1e39c7a41c13eed8b7be47b7e47f43a0c80de",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c3c6772a7e975d763a232af118da3eaef8bf96b9",
+                "reference": "c3c6772a7e975d763a232af118da3eaef8bf96b9",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-08-13T18:13:20+00:00"
+            "time": "2019-08-14T18:14:46+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -4502,8 +4502,8 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "Developer"
+                    "role": "Developer",
+                    "email": "arne@blankerts.de"
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
