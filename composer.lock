@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.110.0",
+            "version": "3.110.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "39094b2d8e0424184fe9f12f5359d62ce8849b9d"
+                "reference": "994fc9368f7fb635385b910b9079486fefd666c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/39094b2d8e0424184fe9f12f5359d62ce8849b9d",
-                "reference": "39094b2d8e0424184fe9f12f5359d62ce8849b9d",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/994fc9368f7fb635385b910b9079486fefd666c6",
+                "reference": "994fc9368f7fb635385b910b9079486fefd666c6",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-08-21T18:23:39+00:00"
+            "time": "2019-08-22T18:31:50+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -554,12 +554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1"
+                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/d033683035531c2bf30601e7c3a9fff9914f9fe1",
-                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/9e8929f74a86412a437b7bafd4e57bc0f50f3468",
+                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468",
                 "shasum": ""
             },
             "require": {
@@ -576,6 +576,7 @@
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
                 "mindplay/composer-locator": "^2.1.1",
+                "mtdowling/jmespath.php": "^2.0",
                 "phpunit/phpunit": "^5.2",
                 "psr/http-message": "^1.0"
             },
@@ -595,7 +596,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2019-08-06T08:56:34+00:00"
+            "time": "2019-08-22T12:07:31+00:00"
         },
         {
             "name": "elife/bus-sdk",
@@ -2703,12 +2704,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "46a08f4d49e06c1159ad1b345fab5eb5767b93cf"
+                "reference": "fb9244b3175bc63c17c9da873febe763283837c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/46a08f4d49e06c1159ad1b345fab5eb5767b93cf",
-                "reference": "46a08f4d49e06c1159ad1b345fab5eb5767b93cf",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/fb9244b3175bc63c17c9da873febe763283837c4",
+                "reference": "fb9244b3175bc63c17c9da873febe763283837c4",
                 "shasum": ""
             },
             "conflict": {
@@ -2720,7 +2721,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2019-08-09T07:09:48+00:00"
+            "time": "2019-08-22T09:15:05+00:00"
         },
         {
             "name": "elife/api-validator",
