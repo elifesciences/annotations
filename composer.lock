@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.112.1",
+            "version": "3.112.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e2fc12e34732f61000f2592fc66807794d32fb7b"
+                "reference": "0d7a3ecb5dca10d1872ee5106cb154cbef52cf1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e2fc12e34732f61000f2592fc66807794d32fb7b",
-                "reference": "e2fc12e34732f61000f2592fc66807794d32fb7b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0d7a3ecb5dca10d1872ee5106cb154cbef52cf1c",
+                "reference": "0d7a3ecb5dca10d1872ee5106cb154cbef52cf1c",
                 "shasum": ""
             },
             "require": {
@@ -87,7 +87,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2019-09-16T18:09:39+00:00"
+            "time": "2019-09-17T18:07:57+00:00"
         },
         {
             "name": "beberlei/assert",
