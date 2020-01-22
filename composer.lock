@@ -2313,16 +2313,16 @@
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.4.36",
+            "version": "v3.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
-                "reference": "67e9285380dd1fa56b870929d0379f41b9c56e87"
+                "reference": "e6e0e45e70ec614e73e284eadb6268bc898cac01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/inflector/zipball/67e9285380dd1fa56b870929d0379f41b9c56e87",
-                "reference": "67e9285380dd1fa56b870929d0379f41b9c56e87",
+                "url": "https://api.github.com/repos/symfony/inflector/zipball/e6e0e45e70ec614e73e284eadb6268bc898cac01",
+                "reference": "e6e0e45e70ec614e73e284eadb6268bc898cac01",
                 "shasum": ""
             },
             "require": {
@@ -2367,7 +2367,7 @@
                 "symfony",
                 "words"
             ],
-            "time": "2019-09-17T08:36:34+00:00"
+            "time": "2020-01-01T11:03:25+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
@@ -2479,16 +2479,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.4.36",
+            "version": "v3.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "9ec5e220898a97b92b8784422396f4e244c04d29"
+                "reference": "54497400a11ace66731c5a6bb4f523aaa95c6d4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/9ec5e220898a97b92b8784422396f4e244c04d29",
-                "reference": "9ec5e220898a97b92b8784422396f4e244c04d29",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/54497400a11ace66731c5a6bb4f523aaa95c6d4b",
+                "reference": "54497400a11ace66731c5a6bb4f523aaa95c6d4b",
                 "shasum": ""
             },
             "require": {
@@ -2543,7 +2543,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2019-12-01T10:45:41+00:00"
+            "time": "2020-01-04T12:05:51+00:00"
         },
         {
             "name": "symfony/routing",
