@@ -555,12 +555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "1e14ec9267bd46b5d3ab33fc19e64dee0736564d"
+                "reference": "dff23fde2429b40a08ca548d801c39f7ae0ad2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/1e14ec9267bd46b5d3ab33fc19e64dee0736564d",
-                "reference": "1e14ec9267bd46b5d3ab33fc19e64dee0736564d",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/dff23fde2429b40a08ca548d801c39f7ae0ad2c9",
+                "reference": "dff23fde2429b40a08ca548d801c39f7ae0ad2c9",
                 "shasum": ""
             },
             "require": {
@@ -600,7 +600,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-02-21T10:55:16+00:00"
+            "time": "2020-02-28T13:33:16+00:00"
         },
         {
             "name": "elife/bus-sdk",
@@ -2630,16 +2630,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.4.37",
+            "version": "v3.4.38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "e85feee0d587c65713ec6d3e2a1d8782e6d219dc"
+                "reference": "f8b99832d016e2d2c77c797c3df561adecd33dd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/e85feee0d587c65713ec6d3e2a1d8782e6d219dc",
-                "reference": "e85feee0d587c65713ec6d3e2a1d8782e6d219dc",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/f8b99832d016e2d2c77c797c3df561adecd33dd3",
+                "reference": "f8b99832d016e2d2c77c797c3df561adecd33dd3",
                 "shasum": ""
             },
             "require": {
@@ -2705,7 +2705,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-01T11:03:25+00:00"
+            "time": "2020-02-24T14:33:45+00:00"
         },
         {
             "name": "willdurand/negotiation",
