@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.28",
+            "version": "3.133.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5ef2118011e39504484d70ed738eb8ede7f69287"
+                "reference": "ec8f628041e0d1de4fad76ac041c6025bd38d2da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5ef2118011e39504484d70ed738eb8ede7f69287",
-                "reference": "5ef2118011e39504484d70ed738eb8ede7f69287",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ec8f628041e0d1de4fad76ac041c6025bd38d2da",
+                "reference": "ec8f628041e0d1de4fad76ac041c6025bd38d2da",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-03-03T19:11:21+00:00"
+            "time": "2020-03-04T19:10:59+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -2847,12 +2847,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b87e36a48be01b1c466c506d7024f5558974245a",
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a",
                 "shasum": ""
             },
             "require": {
@@ -2883,7 +2883,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2018-03-15T10:16:56+00:00"
+            "time": "2020-03-05T04:54:17+00:00"
         },
         {
             "name": "giorgiosironi/eris",
