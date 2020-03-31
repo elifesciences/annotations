@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.46",
+            "version": "3.133.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "98d359e61b365f3040ca61c66ae8883334cf5d74"
+                "reference": "706082d6a0e53c7656eca61866b456178112daf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/98d359e61b365f3040ca61c66ae8883334cf5d74",
-                "reference": "98d359e61b365f3040ca61c66ae8883334cf5d74",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/706082d6a0e53c7656eca61866b456178112daf6",
+                "reference": "706082d6a0e53c7656eca61866b456178112daf6",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-03-27T18:15:32+00:00"
+            "time": "2020-03-30T18:15:57+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -608,12 +608,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/bus-sdk-php.git",
-                "reference": "053db81d8c410e75edd93d289525ab472228cc15"
+                "reference": "4db90f7b9819956a76c71e37f2d50f96e9bc39d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/bus-sdk-php/zipball/053db81d8c410e75edd93d289525ab472228cc15",
-                "reference": "053db81d8c410e75edd93d289525ab472228cc15",
+                "url": "https://api.github.com/repos/elifesciences/bus-sdk-php/zipball/4db90f7b9819956a76c71e37f2d50f96e9bc39d0",
+                "reference": "4db90f7b9819956a76c71e37f2d50f96e9bc39d0",
                 "shasum": ""
             },
             "require": {
@@ -651,7 +651,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences Bus SDK",
-            "time": "2020-02-19T13:12:03+00:00"
+            "time": "2020-03-30T15:50:06+00:00"
         },
         {
             "name": "elife/content-negotiator",
