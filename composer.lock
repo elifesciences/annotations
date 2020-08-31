@@ -2394,7 +2394,7 @@
         },
         {
             "name": "symfony/inflector",
-            "version": "v3.4.43",
+            "version": "v3.4.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
@@ -2610,16 +2610,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.4.43",
+            "version": "v3.4.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "0be88586f85142ab5f82ab14e5a04b17739ef7bd"
+                "reference": "27360cd40ea1c22142575de949d17583b739a877"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/0be88586f85142ab5f82ab14e5a04b17739ef7bd",
-                "reference": "0be88586f85142ab5f82ab14e5a04b17739ef7bd",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/27360cd40ea1c22142575de949d17583b739a877",
+                "reference": "27360cd40ea1c22142575de949d17583b739a877",
                 "shasum": ""
             },
             "require": {
@@ -2688,7 +2688,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T09:37:51+00:00"
+            "time": "2020-08-12T14:55:37+00:00"
         },
         {
             "name": "symfony/routing",
