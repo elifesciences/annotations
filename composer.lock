@@ -2145,16 +2145,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "a0f6858fbf7a524747e87a4c336cab7d0b67c802"
+                "reference": "0bb9ea263b39fce3a12ac9f78ef576bdd80dacb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a0f6858fbf7a524747e87a4c336cab7d0b67c802",
-                "reference": "a0f6858fbf7a524747e87a4c336cab7d0b67c802",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/0bb9ea263b39fce3a12ac9f78ef576bdd80dacb8",
+                "reference": "0bb9ea263b39fce3a12ac9f78ef576bdd80dacb8",
                 "shasum": ""
             },
             "require": {
@@ -2166,6 +2166,7 @@
             "require-dev": {
                 "psr/log": "~1.0",
                 "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/debug": "~3.4|~4.4",
                 "symfony/dependency-injection": "~3.3|~4.0",
                 "symfony/expression-language": "~2.8|~3.0|~4.0",
                 "symfony/stopwatch": "~2.8|~3.0|~4.0"
@@ -2218,7 +2219,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-12T14:55:37+00:00"
+            "time": "2020-09-18T12:06:50+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -2290,16 +2291,16 @@
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "27dcaa8c6b18c75df9f37badeb4d3564ffaa1326"
+                "reference": "1f09d9eec88dd6d141f4d37751bc035da6a47418"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/27dcaa8c6b18c75df9f37badeb4d3564ffaa1326",
-                "reference": "27dcaa8c6b18c75df9f37badeb4d3564ffaa1326",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/1f09d9eec88dd6d141f4d37751bc035da6a47418",
+                "reference": "1f09d9eec88dd6d141f4d37751bc035da6a47418",
                 "shasum": ""
             },
             "require": {
@@ -2390,7 +2391,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-31T05:53:42+00:00"
+            "time": "2020-09-27T03:46:58+00:00"
         },
         {
             "name": "symfony/inflector",
