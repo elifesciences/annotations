@@ -1989,16 +1989,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "71da881ad579f0cd66aef8677e4cf6217d8ecd0c"
+                "reference": "b28996bc0a3b08914b2a8609163ec35b36b30685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/71da881ad579f0cd66aef8677e4cf6217d8ecd0c",
-                "reference": "71da881ad579f0cd66aef8677e4cf6217d8ecd0c",
+                "url": "https://api.github.com/repos/symfony/console/zipball/b28996bc0a3b08914b2a8609163ec35b36b30685",
+                "reference": "b28996bc0a3b08914b2a8609163ec35b36b30685",
                 "shasum": ""
             },
             "require": {
@@ -2071,20 +2071,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-09T08:16:57+00:00"
+            "time": "2020-09-09T05:09:37+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.44",
+            "version": "v3.4.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "0893a0b07c499a1530614d65869ea6a7b1b8a164"
+                "reference": "9109e4414e684d0b75276ae203883467476d25d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/0893a0b07c499a1530614d65869ea6a7b1b8a164",
-                "reference": "0893a0b07c499a1530614d65869ea6a7b1b8a164",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/9109e4414e684d0b75276ae203883467476d25d0",
+                "reference": "9109e4414e684d0b75276ae203883467476d25d0",
                 "shasum": ""
             },
             "require": {
@@ -2141,7 +2141,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-09T08:13:48+00:00"
+            "time": "2020-09-08T22:19:14+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
