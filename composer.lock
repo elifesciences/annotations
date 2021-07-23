@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7d7b9b1150c4d27dfca138d45249238",
+    "content-hash": "1194e14dda2346d48b27ac52261605e9",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3007,16 +3007,16 @@
         },
         {
             "name": "giorgiosironi/eris",
-            "version": "0.11.0",
+            "version": "0.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giorgiosironi/eris.git",
-                "reference": "fe03babc632c4e10961e98e2f62fb2b8250e6171"
+                "reference": "e8c4ff4960c1df5115ffe17ecc9c485e12f96939"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giorgiosironi/eris/zipball/fe03babc632c4e10961e98e2f62fb2b8250e6171",
-                "reference": "fe03babc632c4e10961e98e2f62fb2b8250e6171",
+                "url": "https://api.github.com/repos/giorgiosironi/eris/zipball/e8c4ff4960c1df5115ffe17ecc9c485e12f96939",
+                "reference": "e8c4ff4960c1df5115ffe17ecc9c485e12f96939",
                 "shasum": ""
             },
             "require": {
@@ -3025,7 +3025,8 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.0",
                 "icomefromthenet/reverse-regex": "v0.0.6.3",
-                "phpunit/phpunit": ">4,<8"
+                "phpunit/phpunit": ">=4.1 <8",
+                "sebastian/comparator": ">=1.2.4"
             },
             "suggest": {
                 "icomefromthenet/reverse-regex": "v0.0.6.3 for the regex() Generator",
@@ -3046,20 +3047,20 @@
             ],
             "authors": [
                 {
-                    "name": "Gabriele Lana",
-                    "email": "gabriele.lana@gmail.com"
-                },
-                {
                     "name": "Giorgio Sironi",
                     "email": "info@giorgiosironi.com"
                 },
                 {
                     "name": "Mirko Bonadei",
                     "email": "mirko.bonadei@gmail.com"
+                },
+                {
+                    "name": "Gabriele Lana",
+                    "email": "gabriele.lana@gmail.com"
                 }
             ],
             "description": "PHP library for property-based testing. Integrates with PHPUnit.",
-            "time": "2018-09-16T08:41:41+00:00"
+            "time": "2021-03-25T12:22:38+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
