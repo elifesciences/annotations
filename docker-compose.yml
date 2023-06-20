@@ -10,7 +10,7 @@ services:
         image: elifesciences/annotations_composer:${IMAGE_TAG}
         command: /bin/bash
     web:
-        image: nginx:1.13.7
+        image: nginx:1.25.1
         ports:
             - "8080:80"
         volumes:
