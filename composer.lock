@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7d7b9b1150c4d27dfca138d45249238",
+    "content-hash": "9a50f1f4c8cad5345d4c47ca2bab01a2",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -60,12 +60,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Aws\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "Aws\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -712,33 +712,37 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/logging-sdk-php.git",
-                "reference": "dfdd87eb422d36f9e82c3066ad05abb2d199a68b"
+                "reference": "3e92733a25468417e1e1248fa6f553435201020f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/dfdd87eb422d36f9e82c3066ad05abb2d199a68b",
-                "reference": "dfdd87eb422d36f9e82c3066ad05abb2d199a68b",
+                "url": "https://api.github.com/repos/elifesciences/logging-sdk-php/zipball/3e92733a25468417e1e1248fa6f553435201020f",
+                "reference": "3e92733a25468417e1e1248fa6f553435201020f",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "^1.22",
-                "php": "^7.0",
-                "psr/log": "^1.0"
+                "monolog/monolog": "^1.22 || ^2.0 || ^3.0",
+                "php": "^7.1 || ^8.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0"
             },
             "require-dev": {
-                "crell/api-problem": "^2.0",
+                "crell/api-problem": "^2.0 || ^3.0",
                 "elife/api-problem": "^1.0",
-                "mikey179/vfsstream": "^1.6",
-                "phpunit/phpunit": "^5.7.7 || ^6.0",
+                "mikey179/vfsstream": "^1.6.11",
+                "phpunit/phpunit": "^7.5 || ^9.6",
                 "pimple/pimple": "^3.0",
-                "silex/silex": "^2.0",
-                "symfony/browser-kit": "^3.0",
-                "symfony/debug": "^2.8 || ^3.0",
-                "symfony/http-kernel": "^2.7 || ^3.0"
+                "silexandfriends/silex": "^2.2 || ^3.0",
+                "squizlabs/php_codesniffer": "^3.5",
+                "symfony/browser-kit": "^4.4 || ^5.0",
+                "symfony/debug": "^4.4 || ^5.0",
+                "symfony/http-foundation": "^4.4 || ^5.0",
+                "symfony/http-kernel": "^4.4 || ^5.0"
             },
             "suggest": {
-                "ext/newrelic": "Enables the Monitoring class",
-                "silex/silex": "^2.0, to use LoggerProvider"
+                "crell/api-problem": "^2.0 || ^3.0, to use LoggerProvider",
+                "elife/api-problem": "^1.0, to use LoggerProvider",
+                "silex/silex": "^2.0, to use LoggerProvider",
+                "symfony/http-kernel": "to use LoggerProvider"
             },
             "type": "library",
             "extra": {
@@ -756,7 +760,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences logging SDK",
-            "time": "2018-03-15T10:08:12+00:00"
+            "time": "2024-12-17T07:57:50+00:00"
         },
         {
             "name": "elife/ping",
@@ -997,12 +1001,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1053,12 +1057,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Psr7\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1311,6 +1315,7 @@
                 "console",
                 "silex"
             ],
+            "abandoned": true,
             "time": "2018-02-05T03:09:44+00:00"
         },
         {
@@ -2134,6 +2139,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": "symfony/error-handler",
             "time": "2020-10-24T10:57:07+00:00"
         },
         {
@@ -2436,7 +2442,7 @@
                     "type": "tidelift"
                 }
             ],
-            "abandoned": "use `EnglishInflector` from the String component instead",
+            "abandoned": "EnglishInflector from the String component",
             "time": "2020-10-24T10:57:07+00:00"
         },
         {
@@ -4903,7 +4909,7 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.0.29"
+        "php": "7.1.33"
     },
     "plugin-api-version": "1.1.0"
 }
