@@ -2,7 +2,7 @@
 
 namespace tests\eLife\Annotations;
 
-use eLife\ApiClient\ApiClient\ProfilesClient;
+use eLife\ApiSdk\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use EmptyIterator;
 use Traversable;

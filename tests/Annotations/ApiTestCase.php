@@ -4,7 +4,7 @@ namespace tests\eLife\Annotations;
 
 use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
 use eLife\Annotations\AppKernel;
-use eLife\ApiClient\ApiClient\ProfilesClient;
+use eLife\ApiSdk\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Model;
