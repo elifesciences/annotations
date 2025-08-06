@@ -19,12 +19,12 @@
         "ext-mbstring": "*",
         "aws/aws-sdk-php": "^3.38",
         "beberlei/assert": "^2.7",
-        "elife/api-client": "^1.0@dev",
+        "elife/api-client": "^1.0",
         "elife/api-problem": "^1.1",
         "elife/api-sdk": "^1.0@dev",
-        "elife/bus-sdk": "^1.0@dev",
+        "elife/bus-sdk": "^1.0",
         "elife/content-negotiator": "^1.0",
-        "elife/logging-sdk": "^1.0@dev",
+        "elife/logging-sdk": "^1.0",
         "elife/ping": "^1.0",
         "ezyang/htmlpurifier": "^4.9",
         "firebase/php-jwt": "^5.0",
@@ -70,8 +70,11 @@
     },
     "config": {
         "platform": {
-            "php": "7.0.29"
+            "php": "7.1.33"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "mindplay/composer-locator": true
+        }
     }
 }

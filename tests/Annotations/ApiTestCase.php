@@ -4,7 +4,7 @@ namespace tests\eLife\Annotations;
 
 use Csa\GuzzleHttp\Middleware\Cache\Adapter\StorageAdapterInterface;
 use eLife\Annotations\AppKernel;
-use eLife\ApiClient\ApiClient\ProfilesClient;
+use eLife\ApiSdk\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Model;
@@ -180,11 +180,11 @@ abstract class ApiTestCase extends TestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/profiles/{$profile->getId()}",
-                ['Accept' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)]
+                ['Accept' => (string)new MediaType(ProfilesClient::TYPE_PROFILE, 1)]
             ),
             new Response(
                 200,
-                ['Content-Type' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)],
+                ['Content-Type' => (string)new MediaType(ProfilesClient::TYPE_PROFILE, 1)],
                 json_encode($this->normalize($profile, false))
             )
         );

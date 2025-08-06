@@ -2,7 +2,7 @@
 
 namespace tests\eLife\Annotations;
 
-use eLife\ApiClient\ApiClient\ProfilesClient;
+use eLife\ApiSdk\ApiClient\ProfilesClient;
 use eLife\ApiClient\MediaType;
 use EmptyIterator;
 use Traversable;
@@ -46,7 +46,7 @@ final class AnnotationsTest extends WebTestCase
     public function it_returns_404_if_user_unknown()
     {
         $client = static::createClient();
-        $this->mockNotFound('profiles/1234', ['Accept' => new MediaType(ProfilesClient::TYPE_PROFILE, 1)]);
+        $this->mockNotFound('profiles/1234', ['Accept' => (string)new MediaType(ProfilesClient::TYPE_PROFILE, 1)]);
         $this->mockHypothesisSearchCall('1234', new EmptyIterator(), 0);
         $client->request('GET', '/annotations?by=1234');
         $response = $client->getResponse();
